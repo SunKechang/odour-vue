@@ -42,27 +42,20 @@
         },
         methods: {
             submitForm() {
-                let authForm=new FormData();
-                const v=this;
-                authForm.append("account",this.authForm.account);
-                authForm.append("password",this.authForm.password);
-
-                request.post('/admin/login',authForm)
-                    .then(function (res) {
-                        if(res.data.state===0) {
-                            let token=res.data.data;
-                            sessionStorage.setItem("Authorization",token);
-                            store.commit('changeLogin',token);
-                            v.$router.push("/admin");
-                            console.log(res.data)
+                this.$api.admin.login(this.authForm)
+                    .then( (res) => {
+                        if(res.state===0) {
+                            sessionStorage.setItem("Authorization",res.data);
+                            store.commit('changeLogin',res.data);
+                            this.$router.push("/admin");
                         }else{
-                            v.$alert("Incorrect account or password", "Message", {
+                          this.$alert("Incorrect account or password", "Message", {
                                 confirmButtonText: 'Confirm'
                             });
                         }
                 }).catch(err=>{
                     console.log(err);
-                    v.$alert("Error!", "Message", {
+                    this.$alert("Error!", "Message", {
                         confirmButtonText: 'Confirm'
                     });
                 });

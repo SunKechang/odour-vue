@@ -4,323 +4,325 @@
       <p>Add Compound</p>
       <img alt="" src="../../../assets/line.png" style="width: 100%">
     </div>
-    <el-form ref="compoundInfoForm" :model="compoundInfoForm" :rules="rules" label-width="200px">
-      <el-form-item label="Compound Name" prop="compoundName">
-        <el-input v-model="compoundInfoForm.compoundName" clearable style="width: 500px"></el-input>
+    <el-form ref="compoundInfoForm" :model="compoundInfoForm" :rules="rules" label-position="left" label-width="200px">
+      <el-divider content-position="left"><span class="span">Compound Info</span></el-divider>
+      <el-form-item label="Compound Name" label-width="135px" prop="compoundName" required>
+        <el-input v-model="compoundInfoForm.compoundName" clearable></el-input>
       </el-form-item>
-      <el-form-item label="Synonym" prop="synonym">
+      <el-form-item class="form-item" label="Synonym" label-width="135px" prop="synonym">
         <el-input v-model="compoundInfoForm.synonym" clearable type="textarea"></el-input>
       </el-form-item>
-      <el-form-item label="CAS NO." prop="casNo">
+      <el-form-item class="form-item" label="CAS NO." label-width="135px" prop="casNo">
         <el-input v-model="compoundInfoForm.casNo" clearable style="width: 200px"></el-input>
       </el-form-item>
       <!--极性-->
-      <el-form
-          ref="riForm"
-          :inline="true"
-          :model="compoundInfoForm"
-          label-width="200px">
-        <div v-for="(item, index) in compoundInfoForm.riList" :key="index">
-          <el-form-item
-              :prop="'riList.' + index + '.compoundRi'"
-              label="(polar)RI">
-            <el-input-number v-model="item.compoundRi" :controls="false"></el-input-number>
-          </el-form-item>
-          <el-form-item
-              :prop="'riList.' + index + '.chromatographicColumn'"
-              label="Chromatographic Column">
-            <el-input v-model="item.chromatographicColumn"></el-input>
-          </el-form-item>
-          <el-form-item
-              :prop="'riList.' + index + '.riResource'"
-              label="RI Resource">
-            <el-input v-model="item.riResource"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <i class="el-icon-delete" @click="removeRI(item, index)"></i>
-          </el-form-item>
-        </div>
-        <div style="text-align: center">
-          <el-button type="primary" @click="addRI">Add RI</el-button>
-        </div>
-      </el-form>
+      <el-divider content-position="left"><span class="span">RI (Polar)</span></el-divider>
+      <el-card v-for="(item, index) in compoundInfoForm.riList" :key="index" body-style="{ padding: '10px' !important }"
+               shadow="hover">
+        <el-row :gutter="10">
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="RI" label-width="100px">
+              <el-input v-model="item.compoundRi"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Chromatographic Column" label-width="175px">
+              <el-input v-model="item.chromatographicColumn"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="22">
+            <el-form-item class="form-item" label="RI Resource" label-width="100px">
+              <el-input v-model="item.riResource"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removeRI(item, index)"></i>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addRI">Add RI</el-button>
+      </div>
+
       <!--非极性-->
-      <el-form
-          ref="nriForm"
-          :inline="true"
-          :model="compoundInfoForm"
-          label-width="200px">
-        <div v-for="(item, index) in compoundInfoForm.nriList" :key="index">
-          <el-form-item
-              :prop="'nriList.' + index + '.compoundNri'"
-              label="(non-polar)RI">
-            <el-input-number v-model="item.compoundNri" :controls="false"></el-input-number>
-          </el-form-item>
-          <el-form-item
-              :prop="'nriList.' + index + '.chromatographicColumn'"
-              label="Chromatographic Column">
-            <el-input v-model="item.chromatographicColumn"></el-input>
-          </el-form-item>
-          <el-form-item
-              :prop="'nriList.' + index + '.nriResource'"
-              label="NRI Resource">
-            <el-input v-model="item.nriResource"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <i class="el-icon-delete" @click="removeNRI(item, index)"></i>
-          </el-form-item>
-        </div>
-        <div style="text-align: center">
-          <el-button type="primary" @click="addNRI">Add NRI</el-button>
-        </div>
-      </el-form>
+      <el-divider content-position="left"><span class="span">RI(Non-Polar)</span></el-divider>
+      <el-card v-for="(item, index) in compoundInfoForm.nriList" :key="index" shadow="hover">
+        <el-row :gutter="10">
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="RI" label-width="100px">
+              <el-input v-model="item.compoundNri"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Chromatographic Column" label-width="175px">
+              <el-input v-model="item.chromatographicColumn"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="22">
+            <el-form-item class="form-item" label="NRI Resource" label-width="100px">
+              <el-input v-model="item.nriResource"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removeNRI(item, index)"></i>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addNRI">Add NRI</el-button>
+      </div>
 
-      <!--            <el-form-item label="Odour Threshold" prop="odourThreshold" >-->
-      <!--                <el-input-number v-model="compoundInfoForm.odourThreshold" :controls="false" clearable style="width: 120px"></el-input-number>-->
-      <!--            </el-form-item>-->
-      <!--            <el-form-item label="Odour Threshold Reference" prop="odourThresholdReference" >-->
-      <!--                <el-input v-model="compoundInfoForm.odourThresholdReference" clearable ></el-input>-->
-      <!--            </el-form-item>-->
       <!--香气阈值-->
-      <el-form
-          ref="otForm"
-          :inline="true"
-          :model="compoundInfoForm"
-          label-width="200px">
-        <div v-for="(item, index) in compoundInfoForm.otList" :key="index">
-          <el-form-item
-              :prop="'otList.' + index + '.odourThreshold'"
-              label="Odour Threshold(μg/kg) ">
-            <el-input-number v-model="item.odourThreshold" :controls="false"></el-input-number>
-          </el-form-item>
-          <el-form-item
-              :prop="'otList.' + index + '.odourThresholdReference'"
-              label="Odour Threshold Reference">
-            <el-input v-model="item.odourThresholdReference"></el-input>
-          </el-form-item>
-          <el-form-item
-              :prop="'otList.' + index + '.odourBase'"
-              label="Odour Base">
-            <el-input v-model="item.odourBase"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <i class="el-icon-delete" @click="removeot(item, index)"></i>
-          </el-form-item>
-        </div>
-        <div style="text-align: center">
-          <el-button type="primary" @click="addot">Add Threshold</el-button>
-        </div>
-      </el-form>
+      <el-divider content-position="left"><span class="span">Odour Threshold</span></el-divider>
+      <el-card v-for="(item, index) in compoundInfoForm.otList" :key="index" shadow="hover">
+        <el-row :gutter="10">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Odour Threshold(μg/kg)">
+              <el-input v-model="item.odourThreshold"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Odour Base" label-width="90px">
+              <el-input v-model="item.odourBase"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="22">
+            <el-form-item class="form-item" label="Odour Threshold Reference">
+              <el-input v-model="item.odourThresholdReference"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removeot(item, index)"></i>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addot">Add Threshold</el-button>
+      </div>
 
-      <!--            <el-form-item label="Odour Description" prop="odourDescription">-->
-      <!--                <el-input type="textarea" v-model="compoundInfoForm.odourDescription" clearable></el-input>-->
-      <!--            </el-form-item>-->
-      <!--            <el-form-item label="Odour Description Reference" prop="odourDescriptionReference" >-->
-      <!--                <el-input v-model="compoundInfoForm.odourDescriptionReference" clearable></el-input>-->
-      <!--            </el-form-item>-->
+      <!--风味描述-->
+      <el-divider content-position="left"><span class="span">Odour Description</span></el-divider>
+      <el-card v-for="(item, index) in compoundInfoForm.odList" :key="index" shadow="hover">
+        <el-row :gutter="10" type="flex">
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Odour Description" label-width="130px">
+              <el-input v-model="item.odourDescription"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Odour Description Reference">
+              <el-input v-model="item.odourDescriptionReference"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removeod(item, index)"></i>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addod">Add Description</el-button>
+      </div>
 
-      <!--            风味描述-->
-      <el-form
-          ref="otForm"
-          :inline="true"
-          :model="compoundInfoForm"
-          label-width="200px">
-        <div v-for="(item, index) in compoundInfoForm.odList" :key="index">
-          <el-form-item
-              :prop="'otList.' + index + '.odourDescription'"
-              label="Odour Description">
-            <el-input v-model="item.odourDescription"></el-input>
-          </el-form-item>
-          <el-form-item
-              :prop="'odList.' + index + '.odourDescriptionReference'"
-              label="Odour Description Reference">
-            <el-input v-model="item.odourDescriptionReference"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <i class="el-icon-delete" @click="removeod(item, index)"></i>
-          </el-form-item>
-        </div>
-        <div style="text-align: center">
-          <el-button type="primary" @click="addod">Add Description</el-button>
-        </div>
-      </el-form>
+      <!--Chemical Structure-->
+      <el-divider content-position="left"><span class="span">Chemical Structure</span></el-divider>
+      <el-upload
+          ref="uploadChemicalStructure"
+          :auto-upload="false"
+          :limit="1"
+          :on-change="onChangeChemicalStructure"
+          accept=".jpeg,.jpg,.png"
+          action=""
+          class="upload-demo"
+          style="text-align: right;"
+      >
+        <el-button slot="trigger" size="small" type="primary">Select chemical structure</el-button>
+      </el-upload>
 
-      <el-form-item label="Chemical Structure">
-        <el-upload
-            ref="uploadChemicalStructure"
-            :auto-upload="false"
-            :limit="1"
-            :on-change="onChangeChemicalStructure"
-            accept=".jpeg,.jpg,.png"
-            action=""
-            class="upload-demo">
-          <el-button slot="trigger" size="small" type="primary">Select chemical structure</el-button>
-        </el-upload>
-      </el-form-item>
+      <!--Orbitrap-MS mass spectrometry-->
+      <el-divider content-position="left"><span class="span">Orbitrap-MS mass spectrometry</span></el-divider>
+      <el-upload
+          ref="uploadMassSpectrogram"
+          :auto-upload="false"
+          :limit="1"
+          :on-change="onChangeMassSpectrogram"
+          accept=".jpeg,.jpg,.png"
+          action=""
+          style="text-align: right"
+      >
+        <el-button slot="trigger" size="small" type="primary">Select Orbitrap-MS mass spectrometry</el-button>
+      </el-upload>
 
-      <el-form-item label="Orbitrap-MS mass spectrometry">
-        <el-upload
-            ref="uploadMassSpectrogram"
-            :auto-upload="false"
-            :limit="1"
-            :on-change="onChangeMassSpectrogram"
-            accept=".jpeg,.jpg,.png"
-            action="">
-          <el-button slot="trigger" size="small" type="primary">Select Orbitrap-MS mass spectrometry</el-button>
-        </el-upload>
-      </el-form-item>
+      <!--Low-resolution mass spectrometry-->
+      <el-divider content-position="left"><span class="span">Low-resolution mass spectrometry</span></el-divider>
+      <el-upload
+          ref="uploadMassSpectrogramNist"
+          :auto-upload="false"
+          :limit="1"
+          :on-change="onChangeMassSpectrogramNist"
+          accept=".jpeg,.jpg,.png"
+          action=""
+          style="text-align: right;"
+      >
+        <el-button slot="trigger" size="small" type="primary">Select Low-resolution mass spectrometry</el-button>
+      </el-upload>
 
-      <el-form-item label="Low-resolution mass spectrometry">
-        <el-upload
-            ref="uploadMassSpectrogramNist"
-            :auto-upload="false"
-            :limit="1"
-            :on-change="onChangeMassSpectrogramNist"
-            accept=".jpeg,.jpg,.png"
-            action="">
-          <el-button slot="trigger" size="small" type="primary">Select Low-resolution mass spectrometry</el-button>
-        </el-upload>
-      </el-form-item>
-
-      <!--            <el-form-item label="Wine" prop="wine" >-->
-      <!--                <el-input type="textarea" v-model="compoundInfoForm.wine" clearable></el-input>-->
-      <!--            </el-form-item>-->
       <!--高分辨率质谱-->
-      <el-form
-          ref="mrForm"
-          :inline="true"
-          :model="compoundInfoForm"
-          label-width="200px">
-        <el-form-item label="(High-resolution)Measured & Relative Abundance">
-          <el-upload
-              ref="uploadMRExcel"
-              :auto-upload="false"
-              :limit="1"
-              accept=".xlsx"
-              action="">
-            <el-button slot="trigger" size="small" type="primary">Select Excel</el-button>
-            &nbsp
-            <el-button size="small" type="primary" @click="readExcel">Read Excel</el-button>
-          </el-upload>
-        </el-form-item>
-        <br>
-        <div v-for="(item, index) in compoundInfoForm.mrList" :key="index">
-          <el-form-item
-              :prop="'mrList.' + index + '.measured'"
-              label="Measured">
-            <el-input-number v-model="item.measured" :controls="false"></el-input-number>
-          </el-form-item>
-          <el-form-item
-              :prop="'mrList.' + index + '.relativeAbundance'"
-              label="Relative Abundance">
-            <el-input-number v-model="item.relativeAbundance" :controls="false"></el-input-number>
-          </el-form-item>
-          <el-form-item>
-            <i class="el-icon-delete" @click="removeMR(item, index)"></i>
-          </el-form-item>
-        </div>
-        <div style="text-align: center">
-          <el-button type="primary" @click="addMR">Add measured and relative abundance</el-button>
-        </div>
-      </el-form>
+      <el-divider content-position="left"><span class="span">(High-resolution)Measured & Relative Abundance</span>
+      </el-divider>
+      <el-upload
+          ref="uploadMRExcel"
+          :auto-upload="false"
+          :limit="1"
+          accept=".xlsx"
+          action=""
+          style="text-align: right;margin-bottom: 20px;"
+      >
+        <el-button slot="trigger" size="small" type="primary">Select Excel</el-button>
+        &nbsp
+        <el-button size="small" type="primary" @click="readExcel">Read Excel</el-button>
+      </el-upload>
+
+
+      <el-card v-for="(item, index) in compoundInfoForm.mrList" :key="index" shadow="hover">
+        <el-row :gutter="10" type="flex">
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Measured" label-width="80px">
+              <el-input v-model="item.measured"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Relative Abundance" label-width="140px">
+              <el-input v-model="item.relativeAbundance"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removeMR(item, index)"></i>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addMR">Add measured and relative abundance</el-button>
+      </div>
+
       <!--低分辨率质谱-->
-      <el-form
-          ref="lowmrForm"
-          :inline="true"
-          :model="compoundInfoForm"
-          label-width="200px">
-        <el-form-item label="(Low-resolution)Measured & Relative Abundance">
-          <el-upload
-              ref="uploadlowMRExcel"
-              :auto-upload="false"
-              :limit="1"
-              accept=".xlsx"
-              action="">
-            <el-button slot="trigger" size="small" type="primary">Select Excel</el-button>
-            &nbsp
-            <el-button size="small" type="primary" @click="readLowExcel">Read Excel</el-button>
-          </el-upload>
-        </el-form-item>
-        <br>
-        <div v-for="(item, index) in compoundInfoForm.lowmrList" :key="index">
-          <el-form-item
-              :prop="'lowmrList.' + index + '.measured'"
-              label="Measured">
-            <el-input-number v-model="item.measured" :controls="false"></el-input-number>
-          </el-form-item>
-          <el-form-item
-              :prop="'lowmrList.' + index + '.relativeAbundance'"
-              label="Relative Abundance">
-            <el-input-number v-model="item.relativeAbundance" :controls="false"></el-input-number>
-          </el-form-item>
-          <el-form-item>
-            <i class="el-icon-delete" @click="removelowMR(item, index)"></i>
-          </el-form-item>
-        </div>
-        <div style="text-align: center">
-          <el-button type="primary" @click="addlowMR">Add measured and relative abundance</el-button>
-        </div>
-        <br>
-        <el-form-item label="Products">
-          <el-select v-model="compoundInfoForm.products" multiple @change="selectProduct" @remove-tag="removeProduct">
-            <el-option
-                v-for="{id, productName} in productOptions"
-                :key="id"
-                :label="productName"
-                :value="id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <br>
-        <div v-for="({id, productName}, productIndex) in compoundInfoForm.productList" :key="productName">
-          <div v-if="id">{{ productName }}
-            <div v-for="(item, otIndex) in compoundInfoForm.productList[productIndex].otList" :key="productIndex + 'threshold' +otIndex">
-              <el-form-item label="Odour Threshold(μg/kg) ">
-                <el-input-number v-model="item.odourThreshold" :controls="false"></el-input-number>
-              </el-form-item>
-              <el-form-item label="Odour Threshold Reference">
-                <el-input v-model="item.odourThresholdReference"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <i class="el-icon-delete" @click="removeProductThreshold(productIndex, otIndex)"></i>
-              </el-form-item>
-            </div>
-            <div style="text-align: center">
-              <el-button type="primary" @click="addProductThreshold(productIndex, id)">
-                {{ 'Add Threshold for ' + productName }}
-              </el-button>
-            </div>
-            <br>
-            <div v-for="(item, odIndex) in compoundInfoForm.productList[productIndex].odList" :key="productIndex + 'description' +odIndex">
-              <el-form-item label="Odour Description">
-                <el-input v-model="item.odourDescription"></el-input>
-              </el-form-item>
-              <el-form-item label="Odour Description Reference">
-                <el-input v-model="item.odourDescriptionReference"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <i class="el-icon-delete" @click="removeProductDescription(productIndex, odIndex)"></i>
-              </el-form-item>
-            </div>
-            <div style="text-align: center">
-              <el-button @click="addProductDescription(productIndex, id)" type="primary" >
-                {{ 'Add Description for ' + productName }}
-              </el-button>
-            </div>
+      <el-divider content-position="left"><span class="span">(Low-resolution)Measured & Relative Abundance</span>
+      </el-divider>
+      <el-upload
+          ref="uploadlowMRExcel"
+          :auto-upload="false"
+          :limit="1"
+          accept=".xlsx"
+          action=""
+          style="text-align: right;margin-bottom: 20px;"
+      >
+        <el-button slot="trigger" size="small" type="primary">Select Excel</el-button>
+        &nbsp
+        <el-button size="small" type="primary" @click="readLowExcel">Read Excel</el-button>
+      </el-upload>
+
+      <el-card v-for="(item, index) in compoundInfoForm.lowmrList" :key="index" shadow="hover">
+        <el-row :gutter="10" type="flex">
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Measured" label-width="80px">
+              <el-input v-model="item.measured"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Relative Abundance" label-width="140px">
+              <el-input v-model="item.relativeAbundance"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removelowMR(item, index)"></i>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addlowMR">Add measured and relative abundance</el-button>
+      </div>
+
+      <el-divider content-position="left"><span class="span">Products</span></el-divider>
+      <el-form-item class="form-item" label="Products" label-width="80px">
+        <el-select v-model="compoundInfoForm.products" multiple placeholder="" @change="selectProduct"
+                   @remove-tag="removeProduct">
+          <el-option
+              v-for="{id, productName} in productOptions"
+              :key="id"
+              :label="productName"
+              :value="id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <div v-for="({id, productName}, productIndex) in compoundInfoForm.productList" :key="productName">
+        <div v-if="id">
+          <el-divider content-position="center">{{ productName }}</el-divider>
+          <el-card v-for="(item, otIndex) in compoundInfoForm.productList[productIndex].otList"
+                   :key="productIndex + 'threshold' +otIndex" shadow="hover">
+            <el-row :gutter="10" type="flex">
+              <el-col :lg="11">
+                <el-form-item class="form-item" label="Odour Threshold(μg/kg) ">
+                  <el-input v-model="item.odourThreshold"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :lg="11">
+                <el-form-item class="form-item" label="Odour Threshold Reference">
+                  <el-input v-model="item.odourThresholdReference"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :lg="2">
+                <i class="el-icon-delete rowBtn" @click="removeProductThreshold(productIndex, otIndex)"></i>
+              </el-col>
+            </el-row>
+
+          </el-card>
+          <div style="text-align: right">
+            <el-button size="small" type="primary" @click="addProductThreshold(productIndex, id)">
+              {{ 'Add Threshold for ' + productName }}
+            </el-button>
+          </div>
+          <br>
+          <el-card v-for="(item, odIndex) in compoundInfoForm.productList[productIndex].odList"
+                   :key="productIndex + 'description' +odIndex" shadow="hover">
+            <el-row :gutter="10" type="flex">
+              <el-col :lg="11">
+                <el-form-item class="form-item" label="Odour Description">
+                  <el-input v-model="item.odourDescription"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :lg="11">
+                <el-form-item class="form-item" label="Odour Description Reference">
+                  <el-input v-model="item.odourDescriptionReference"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :lg="2">
+                <i class="el-icon-delete rowBtn" @click="removeProductDescription(productIndex, odIndex)"></i>
+              </el-col>
+            </el-row>
+          </el-card>
+          <div style="text-align: right">
+            <el-button size="small" type="primary" @click="addProductDescription(productIndex, id)">
+              {{ 'Add Description for ' + productName }}
+            </el-button>
           </div>
         </div>
-        <br>
-        <el-form-item label="Uploader" prop="uploader">
-          <el-input v-model="compoundInfoForm.uploader" :controls="false"></el-input>
-        </el-form-item>
-        <el-form-item label="Reviewer" prop="reviewer">
-          <el-input v-model="compoundInfoForm.reviewer" :controls="false"></el-input>
-        </el-form-item>
-      </el-form>
+      </div>
+      <el-divider content-position="left"><span class="span">Uploader & Reviewer</span></el-divider>
+      <el-row :gutter="10">
+        <el-col :lg="12">
+          <el-form-item class="form-item" label="Uploader" label-width="80px" prop="uploader">
+            <el-input v-model="compoundInfoForm.uploader"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :lg="12">
+          <el-form-item class="form-item" label="Reviewer" label-width="80px" prop="reviewer">
+            <el-input v-model="compoundInfoForm.reviewer"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
       <div style="text-align: right;margin-top: 10px">
-        <el-button type="primary" @click="submitForm('compoundInfoForm')">Add</el-button>
-        <el-button @click="resetForm('compoundInfoForm')">Reset</el-button>
+        <el-button type="primary" @click="submitForm">Add</el-button>
+        <el-button @click="resetForm">Reset</el-button>
       </div>
     </el-form>
   </div>
@@ -338,33 +340,12 @@ export default {
         compoundName: '',
         synonym: '',
         casNo: '',
-        otList: [{
-          id: '',
-          odourThreshold: 0,
-          odourThresholdReference: '',
-          odourBase: '',
-          compoundId: ''
-        }],
-        odList: [{
-          id: '',
-          odourDescription: '',
-          odourDescriptionReference: '',
-          compoundId: ''
-        }],
+        otList: [],
+        odList: [],
         riList: [],
         nriList: [],
-        mrList: [{
-          id: '',
-          measured: 0,
-          relativeAbundance: 0,
-          compoundId: ''
-        }],
-        lowmrList: [{
-          id: '',
-          measured: 0,
-          relativeAbundance: 0,
-          compoundId: ''
-        }],
+        mrList: [],
+        lowmrList: [],
         chemicalStructure: '',
         massSpectrogram: '',
         massSpectrogramNist: '',
@@ -382,10 +363,9 @@ export default {
     }
   },
   created() {
-    request.get('/product/all')
-        .then(res => {
-          this.productOptions = res.data.data
-        }).catch(err => {
+    this.$api.product.getAll().then(res => {
+      this.productOptions = res.data
+    }).catch(err => {
       console.error(err)
     })
   },
@@ -433,35 +413,32 @@ export default {
       // 产品风味列表移除该项即可
       this.compoundInfoForm.productList = this.compoundInfoForm.productList.filter(item => item.id !== val)
     },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          const v = this;
-          v.compoundInfoForm.casNo = v.compoundInfoForm.casNo.replace(new RegExp("-", "g"), "");
-          request.post('/compound/add', v.compoundInfoForm)
-              .then(res => {
-                if (res.data.state === 0) {
-                  v.$alert("Add " + v.compoundInfoForm.compoundName + " to database successfully!", "Message", {
-                    confirmButtonText: 'Confirm'
-                  });
-                } else {
-                  v.$alert("Failed!", "Message", {
-                    confirmButtonText: 'Confirm'
-                  });
-                }
-              }).catch(err => {
-            console.log(err);
-            v.$alert("Error!", "Message", {
-              confirmButtonText: 'Confirm'
-            });
-          });
-        } else {
-          return false;
-        }
-      });
+    submitForm() {
+      this.$refs.compoundInfoForm.validate((valid) => {
+        if (!valid) return
+        this.compoundInfoForm.casNo = this.compoundInfoForm.casNo.replace(new RegExp("-", "g"), "");
+        this.$api.compound.add(this.compoundInfoForm)
+            .then(({state}) => {
+              if (state === 0) {
+                this.$alert("Add " + this.compoundInfoForm.compoundName + " to database successfully!", "Message", {
+                  confirmButtonText: 'Confirm'
+                });
+              } else {
+                this.$alert("Failed!", "Message", {
+                  confirmButtonText: 'Confirm'
+                });
+              }
+            })
+            .catch(err => {
+              console.error(err);
+              this.$alert("Error!", "Message", {
+                confirmButtonText: 'Confirm'
+              })
+            })
+      })
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    resetForm() {
+      this.$refs.compoundInfoForm.resetFields();
     },
     onChangeChemicalStructure() {
       let chemicalStructure = this.$refs.uploadChemicalStructure.$refs['upload-inner'].$refs.input.files[0];
@@ -545,7 +522,7 @@ export default {
       });
     },
     removeMR(item, index) {
-      this.compoundInfoForm.lowmrList.splice(index, 1);
+      this.compoundInfoForm.mrList.splice(index, 1);
     },
     addlowMR() {
       this.compoundInfoForm.lowmrList.push({
@@ -600,6 +577,28 @@ export default {
 </script>
 
 <style scoped>
+.span {
+  color: #529287;
+  font-size: large
+}
+
+.form-item {
+  padding-left: 25px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  margin: 0;
+}
+
+.rowBtn {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #F56C6C;
+}
+
 .compound-info-form {
   text-align: left;
 }

@@ -80,7 +80,6 @@
 
 <script>
     import request from "@/network/request";
-    import jwtDecode from "jwt-decode";
     const CompoundInfo=()=>import("@/components/CompoundInfo");
 
     export default {
@@ -92,7 +91,6 @@
         data(){
 
             return{
-
                 downloadList:[],
                 compoundData:[],
                 viewDialogVisible:false,
@@ -125,14 +123,16 @@
                 this.compoundInfo=this.compoundData[(this.currentPage-1)*this.size+index];
             },
             getCompoundData(){
-                let v=this;
-                request.get('/compound/all')
-                    .then(res=>{
-                        v.compoundData=res.data.data;
-                        v.total=res.data.data.length;
-                    }).catch(err=>{
-                    console.log(err);
-                });
+              console.log(this)
+              this.$api.compound.getList({
+                page: this.currentPage,
+                size: this.size
+              }).then(res => {
+                console.log(res)
+                this.compoundData = res.data
+              }).catch(err=>{
+                console.log(err)
+              })
             },
 
             onSubmit() {
@@ -154,7 +154,8 @@
         },
 
         created() {
-            this.getCompoundData();
+          console.log("text")
+          this.getCompoundData();
 
         }
     }

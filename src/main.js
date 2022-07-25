@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import './assets/element-#5CB87A/index.css';
 import VueI18n from 'vue-i18n'
 import 'lib-flexible'
+import './network'
 
 Vue.use(ElementUI)
 Vue.use(VueI18n)
