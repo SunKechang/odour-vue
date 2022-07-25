@@ -11,6 +11,7 @@
                     <el-option label="NRI" value="compound_nri"></el-option>
                     <el-option label="Measured" value="measured"></el-option>
                     <el-option label="Low-resolution Measured" value="lowmeasured"></el-option>
+                    <el-option label="Product" value="product"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -27,6 +28,7 @@
         </el-form>
         <el-button  style="float:right"  @click="onDownload">下载化合物表单</el-button>
         <el-table
+            ref="table"
                 @row-click="on_select"
                 @selection-change="on_selectsion"
                 :row-key="getRowKey"
@@ -53,7 +55,7 @@
             </el-table-column>
 
             <el-table-column label="Operation">
-                <template slot-scope="scope">
+                <template v-slot="scope">
                     <el-button
                             size="mini"
                             @click="handleView(scope.$index)">View</el-button>

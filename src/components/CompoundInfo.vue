@@ -139,14 +139,14 @@
           <b>Uploader & Reviewer : </b>
           <br>
           <el-table
+              :data="[{
+                uploader: compoundInfo.uploader,
+                reviewer: compoundInfo.reviewer
+              }]"
               border
               style="width: 100%;margin-left: 100px">
-            <el-table-column label="Uploader">
-              {{compoundInfo.uploader}}
-            </el-table-column>
-            <el-table-column label="Reviewer">
-              {{compoundInfo.reviewer}}
-            </el-table-column>
+            <el-table-column prop="uploader" label="Uploader"></el-table-column>
+            <el-table-column prop="reviewer" label="Reviewer"></el-table-column>
           </el-table>
         </div>
     </el-dialog>
