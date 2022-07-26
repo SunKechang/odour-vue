@@ -62,12 +62,12 @@
           </el-button>
           <el-button
               size="mini"
-              @click="handleEdit(scope.$index)">Edit
+              @click="handleEdit(scope.$index, scope.row)">Edit
           </el-button>
           <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index)">Delete
+              @click="handleDelete(scope.$index, scope.row)">Delete
           </el-button>
         </template>
       </el-table-column>
@@ -92,8 +92,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-import request from "@/network/request"
 import CompoundInfo from "@/components/CompoundInfo"
 import CompoundInfoEdit from "../components/CompoundInfoEdit"
 
@@ -123,31 +121,38 @@ export default {
     getRowKey(val) {
       return val.id;
     },
-    on_select(val) {//点击行选中复选框
+    //点击行选中复选框
+    on_select(val) {
       this.$refs.table.toggleRowSelection(val);
     },
-    on_selectsion(val) {//选中复选框操作
-      // console.log(val)
+    //选中复选框操作
+    on_selectsion(val) {
       this.downloadList = val;
     },
     indexMethod(index) {
       index = (index + 1) + (this.currentPage - 1) * this.size
       return index;
     },
-    handleView(index ,row) {
+    handleView(index, row) {
       this.viewDialogVisible = !this.viewDialogVisible;
       this.$api.compound.getOne(row.id)
           .then(({data}) => {
             this.compoundInfo = data
-          })
+          }).catch(err => {
+        console.error(err)
+      })
     },
-    handleEdit(index) {
+    handleEdit(index, row) {
       this.editDialogVisible = !this.editDialogVisible;
-      this.compoundInfo = this.compoundData[(this.currentPage - 1) * this.size + index];
+      this.$api.compound.getOne(row.id)
+          .then(({data}) => {
+            this.compoundInfo = data
+          }).catch(err => {
+        console.error(err)
+      })
     },
-    handleDelete(index) {
-      let id = this.compoundData[(this.currentPage - 1) * this.size + index].id;
-      request.delete('/compound/delete/' + id)
+    handleDelete(index, row) {
+      this.$api.compound.delete(row.id)
           .then(({state}) => {
             if (state === 0) {
               this.getCompoundData();
@@ -164,20 +169,8 @@ export default {
       });
     },
     onDownload() {
-      let v = this;
-      console.log(v.downloadList)
-      const request1 = axios.create({
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        responseType: "blob",
-        baseURL: '/api',
-        withCredentials: true,
-        timeout: 5000
-      });
-      request1.post('/compound/download', v.downloadList)
+      this.$api.compound.download(this.downloadList)
           .then(res => {
-            // console.log(res.data)
             let blob = new Blob([res.data], {type: 'application/ms-excel;charset=utf-8'});
             let downloadElement = document.createElement('a');
             let href = window.URL.createObjectURL(blob); //创建下载的链接
@@ -187,7 +180,7 @@ export default {
             downloadElement.click(); //点击下载
             document.body.removeChild(downloadElement); //下载完成移除元素
             window.URL.revokeObjectURL(href); //释放掉blob对象
-            v.$alert("下载成功", "Message", {
+            this.$alert("下载成功", "Message", {
               confirmButtonText: 'Confirm'
             });
           }).catch(err => {
@@ -204,9 +197,11 @@ export default {
       this.$api.compound.getList({
         page: this.currentPage,
         size: this.size
-      }).then(res => {
-        ({totalSize: this.total} = res);
-        ({content: this.compoundData} = res.data);
+      }).then(({state, data: {content, totalSize}}) => {
+        if (state === 0) {
+          this.compoundData = content
+          this.total = totalSize
+        }
       }).catch(err => {
         console.log(err)
       })
@@ -214,14 +209,14 @@ export default {
     onSubmit() {
       this.$api.compound.search({
         ...this.searchForm,
-        page:this.currentPage,
+        page: this.currentPage,
         size: this.size
-      }).then(({state,data}) => {
-            if (state === 0) {
-              this.compoundData = data.content;
-              this.total = data.total;
-            }
-          }).catch(err => {
+      }).then(({state, data: {content, totalSize}}) => {
+        if (state === 0) {
+          this.compoundData = content
+          this.total = totalSize
+        }
+      }).catch(err => {
         console.log(err);
       });
     }

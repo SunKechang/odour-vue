@@ -6,33 +6,33 @@
     </div>
     <el-form ref="compoundInfoForm" :model="compoundInfoForm" :rules="rules" label-position="left" label-width="200px">
       <el-divider content-position="left"><span class="span">Compound Info</span></el-divider>
-      <el-form-item label="Compound Name" label-width="135px" prop="compoundName" required>
+      <el-form-item class="form-item" style="margin-bottom: 22px;" label="Compound Name" label-width="135px" prop="compoundName" required>
         <el-input v-model="compoundInfoForm.compoundName" clearable></el-input>
       </el-form-item>
       <el-form-item class="form-item" label="Synonym" label-width="135px" prop="synonym">
         <el-input v-model="compoundInfoForm.synonym" clearable type="textarea"></el-input>
       </el-form-item>
       <el-form-item class="form-item" label="CAS NO." label-width="135px" prop="casNo">
-        <el-input v-model="compoundInfoForm.casNo" clearable style="width: 200px"></el-input>
+        <el-input v-model="compoundInfoForm.casNo" clearable></el-input>
       </el-form-item>
       <!--极性-->
       <el-divider content-position="left"><span class="span">RI (Polar)</span></el-divider>
-      <el-card v-for="(item, index) in compoundInfoForm.riList" :key="index" body-style="{ padding: '10px' !important }"
+      <el-card v-for="(item, index) in compoundInfoForm.riList" :key="'RI' + index" body-style="{ padding: '10px' !important }"
                shadow="hover">
         <el-row :gutter="10">
           <el-col :lg="10">
             <el-form-item class="form-item" label="RI" label-width="100px">
-              <el-input v-model="item.compoundRi"></el-input>
+              <el-input v-model="item.compoundRi" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12">
             <el-form-item class="form-item" label="Chromatographic Column" label-width="175px">
-              <el-input v-model="item.chromatographicColumn"></el-input>
+              <el-input v-model="item.chromatographicColumn" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="22">
             <el-form-item class="form-item" label="RI Resource" label-width="100px">
-              <el-input v-model="item.riResource"></el-input>
+              <el-input v-model="item.riResource" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="2">
@@ -46,21 +46,21 @@
 
       <!--非极性-->
       <el-divider content-position="left"><span class="span">RI(Non-Polar)</span></el-divider>
-      <el-card v-for="(item, index) in compoundInfoForm.nriList" :key="index" shadow="hover">
+      <el-card v-for="(item, index) in compoundInfoForm.nriList" :key="'NRI' + index" shadow="hover">
         <el-row :gutter="10">
           <el-col :lg="10">
             <el-form-item class="form-item" label="RI" label-width="100px">
-              <el-input v-model="item.compoundNri"></el-input>
+              <el-input v-model="item.compoundNri" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12">
             <el-form-item class="form-item" label="Chromatographic Column" label-width="175px">
-              <el-input v-model="item.chromatographicColumn"></el-input>
+              <el-input v-model="item.chromatographicColumn" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="22">
             <el-form-item class="form-item" label="NRI Resource" label-width="100px">
-              <el-input v-model="item.nriResource"></el-input>
+              <el-input v-model="item.nriResource" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="2">
@@ -78,17 +78,17 @@
         <el-row :gutter="10">
           <el-col :lg="12">
             <el-form-item class="form-item" label="Odour Threshold(μg/kg)">
-              <el-input v-model="item.odourThreshold"></el-input>
+              <el-input v-model="item.odourThreshold" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="10">
             <el-form-item class="form-item" label="Odour Base" label-width="90px">
-              <el-input v-model="item.odourBase"></el-input>
+              <el-input v-model="item.odourBase" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="22">
             <el-form-item class="form-item" label="Odour Threshold Reference">
-              <el-input v-model="item.odourThresholdReference"></el-input>
+              <el-input v-model="item.odourThresholdReference" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="2">
@@ -102,16 +102,16 @@
 
       <!--风味描述-->
       <el-divider content-position="left"><span class="span">Odour Description</span></el-divider>
-      <el-card v-for="(item, index) in compoundInfoForm.odList" :key="index" shadow="hover">
+      <el-card v-for="(item, index) in compoundInfoForm.odList" :key="'od' + index" shadow="hover">
         <el-row :gutter="10" type="flex">
           <el-col :lg="10">
             <el-form-item class="form-item" label="Odour Description" label-width="130px">
-              <el-input v-model="item.odourDescription"></el-input>
+              <el-input v-model="item.odourDescription" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12">
             <el-form-item class="form-item" label="Odour Description Reference">
-              <el-input v-model="item.odourDescriptionReference"></el-input>
+              <el-input v-model="item.odourDescriptionReference" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="2">
@@ -183,16 +183,16 @@
       </el-upload>
 
 
-      <el-card v-for="(item, index) in compoundInfoForm.mrList" :key="index" shadow="hover">
+      <el-card v-for="(item, index) in compoundInfoForm.mrList" :key=" 'mr' + index" shadow="hover">
         <el-row :gutter="10" type="flex">
           <el-col :lg="10">
             <el-form-item class="form-item" label="Measured" label-width="80px">
-              <el-input v-model="item.measured"></el-input>
+              <el-input v-model="item.measured" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12">
             <el-form-item class="form-item" label="Relative Abundance" label-width="140px">
-              <el-input v-model="item.relativeAbundance"></el-input>
+              <el-input v-model="item.relativeAbundance" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="2">
@@ -220,16 +220,16 @@
         <el-button size="small" type="primary" @click="readLowExcel">Read Excel</el-button>
       </el-upload>
 
-      <el-card v-for="(item, index) in compoundInfoForm.lowmrList" :key="index" shadow="hover">
+      <el-card v-for="(item, index) in compoundInfoForm.lowmrList" :key="'lowmr' + index" shadow="hover">
         <el-row :gutter="10" type="flex">
           <el-col :lg="10">
             <el-form-item class="form-item" label="Measured" label-width="80px">
-              <el-input v-model="item.measured"></el-input>
+              <el-input v-model="item.measured" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12">
             <el-form-item class="form-item" label="Relative Abundance" label-width="140px">
-              <el-input v-model="item.relativeAbundance"></el-input>
+              <el-input v-model="item.relativeAbundance" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="2">
@@ -261,12 +261,12 @@
             <el-row :gutter="10" type="flex">
               <el-col :lg="11">
                 <el-form-item class="form-item" label="Odour Threshold(μg/kg) ">
-                  <el-input v-model="item.odourThreshold"></el-input>
+                  <el-input v-model="item.odourThreshold" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :lg="11">
                 <el-form-item class="form-item" label="Odour Threshold Reference">
-                  <el-input v-model="item.odourThresholdReference"></el-input>
+                  <el-input v-model="item.odourThresholdReference" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :lg="2">
@@ -286,12 +286,12 @@
             <el-row :gutter="10" type="flex">
               <el-col :lg="11">
                 <el-form-item class="form-item" label="Odour Description">
-                  <el-input v-model="item.odourDescription"></el-input>
+                  <el-input v-model="item.odourDescription" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :lg="11">
                 <el-form-item class="form-item" label="Odour Description Reference">
-                  <el-input v-model="item.odourDescriptionReference"></el-input>
+                  <el-input v-model="item.odourDescriptionReference" clearable></el-input>
                 </el-form-item>
               </el-col>
               <el-col :lg="2">
@@ -310,12 +310,12 @@
       <el-row :gutter="10">
         <el-col :lg="12">
           <el-form-item class="form-item" label="Uploader" label-width="80px" prop="uploader">
-            <el-input v-model="compoundInfoForm.uploader"></el-input>
+            <el-input v-model="compoundInfoForm.uploader" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :lg="12">
           <el-form-item class="form-item" label="Reviewer" label-width="80px" prop="reviewer">
-            <el-input v-model="compoundInfoForm.reviewer"></el-input>
+            <el-input v-model="compoundInfoForm.reviewer" clearable></el-input>
           </el-form-item>
         </el-col>
       </el-row>
