@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true" :model="searchForm" style="float: left;position: relative;top: 30%">
       <el-form-item>
-        <el-select v-model="searchForm.property">
+        <el-select v-model="searchForm.searchProperty">
           <el-option label="Compound Name" value="compound_name"></el-option>
           <el-option label="CAS NO." value="cas_no"></el-option>
           <el-option label="Odour Description" value="odour_description"></el-option>
@@ -16,7 +16,7 @@
       </el-form-item>
       <el-form-item>
         <el-input
-            v-model="searchForm.propertyDescription"
+            v-model="searchForm.searchValue"
             class="condition-description"
             clearable
             style="width: 200px">
@@ -58,7 +58,7 @@
         <template v-slot="scope">
           <el-button
               size="mini"
-              @click="handleView(scope.$index)">View
+              @click="handleView(scope.$index, scope.row)">View
           </el-button>
           <el-button
               size="mini"
@@ -93,10 +93,9 @@
 
 <script>
 import axios from 'axios'
-import request from "@/network/request";
-
-const CompoundInfo = () => import("@/components/CompoundInfo");
-const CompoundInfoEdit = () => import("../components/CompoundInfoEdit")
+import request from "@/network/request"
+import CompoundInfo from "@/components/CompoundInfo"
+import CompoundInfoEdit from "../components/CompoundInfoEdit"
 
 export default {
   name: "CompoundTable",
@@ -115,8 +114,8 @@ export default {
       currentPage: 1,
       total: 0,
       searchForm: {
-        property: 'compound_name',
-        propertyDescription: ''
+        searchProperty: 'compound_name',
+        searchValue: ''
       }
     }
   },
@@ -128,33 +127,35 @@ export default {
       this.$refs.table.toggleRowSelection(val);
     },
     on_selectsion(val) {//选中复选框操作
-      console.log(val)
+      // console.log(val)
       this.downloadList = val;
     },
     indexMethod(index) {
       index = (index + 1) + (this.currentPage - 1) * this.size
       return index;
     },
-    handleView(index) {
+    handleView(index ,row) {
       this.viewDialogVisible = !this.viewDialogVisible;
-      this.compoundInfo = this.compoundData[(this.currentPage - 1) * this.size + index];
+      this.$api.compound.getOne(row.id)
+          .then(({data}) => {
+            this.compoundInfo = data
+          })
     },
     handleEdit(index) {
       this.editDialogVisible = !this.editDialogVisible;
       this.compoundInfo = this.compoundData[(this.currentPage - 1) * this.size + index];
     },
     handleDelete(index) {
-      let v = this;
-      let id = v.compoundData[(this.currentPage - 1) * this.size + index].id;
+      let id = this.compoundData[(this.currentPage - 1) * this.size + index].id;
       request.delete('/compound/delete/' + id)
-          .then(res => {
-            if (res.data.state === 0) {
+          .then(({state}) => {
+            if (state === 0) {
               this.getCompoundData();
-              v.$alert("Delete " + " successfully!", "Message", {
+              this.$alert("Delete " + " successfully!", "Message", {
                 confirmButtonText: 'Confirm'
               });
             } else {
-              v.$alert("Error!", "Message", {
+              this.$alert("Error!", "Message", {
                 confirmButtonText: 'Confirm'
               });
             }
@@ -211,25 +212,19 @@ export default {
       })
     },
     onSubmit() {
-      let v = this;
-      let param = new FormData();
-      param.append("property", v.searchForm.property);
-      param.append("propertyDescription", v.searchForm.propertyDescription);
-      request.post('/compound/search', param)
-          .then(res => {
-            if (res.data.state === 0) {
-              v.compoundData = res.data.data;
-              v.total = res.data.data.length;
+      this.$api.compound.search({
+        ...this.searchForm,
+        page:this.currentPage,
+        size: this.size
+      }).then(({state,data}) => {
+            if (state === 0) {
+              this.compoundData = data.content;
+              this.total = data.total;
             }
           }).catch(err => {
         console.log(err);
       });
     }
-    // onSubmit() {
-    //     const _this = this;
-    //     console.log(_this.compoundData[0].compoundName);
-    //     _this.compoundData =_this.compoundData.filter(item => item.compoundName.toLowerCase().includes(_this.searchForm.propertyDescription))
-    // },
   },
   created() {
     this.getCompoundData();
