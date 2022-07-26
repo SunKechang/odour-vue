@@ -128,6 +128,7 @@
       <el-upload
           ref="uploadChemicalStructure"
           :auto-upload="false"
+          :multiple="false"
           :limit="1"
           :on-change="onChangeChemicalStructure"
           accept=".jpeg,.jpg,.png"
@@ -143,6 +144,7 @@
       <el-upload
           ref="uploadMassSpectrogram"
           :auto-upload="false"
+          :multiple="false"
           :limit="1"
           :on-change="onChangeMassSpectrogram"
           accept=".jpeg,.jpg,.png"
@@ -157,6 +159,7 @@
       <el-upload
           ref="uploadMassSpectrogramNist"
           :auto-upload="false"
+          :multiple="false"
           :limit="1"
           :on-change="onChangeMassSpectrogramNist"
           accept=".jpeg,.jpg,.png"
@@ -172,6 +175,7 @@
       <el-upload
           ref="uploadMRExcel"
           :auto-upload="false"
+          :multiple="false"
           :limit="1"
           accept=".xlsx"
           action=""
@@ -210,6 +214,7 @@
       <el-upload
           ref="uploadlowMRExcel"
           :auto-upload="false"
+          :multiple="false"
           :limit="1"
           accept=".xlsx"
           action=""

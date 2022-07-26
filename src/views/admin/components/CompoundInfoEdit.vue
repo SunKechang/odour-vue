@@ -127,10 +127,12 @@
 
       <!--Chemical Structure-->
       <el-divider content-position="left"><span class="span">Chemical Structure</span></el-divider>
+      <img width="50%" style="margin: auto" :src="$host+oldChemicalStructure" alt="">
       <el-upload
           ref="uploadChemicalStructure"
           :auto-upload="false"
           :limit="1"
+          :multiple="false"
           :on-change="onChangeChemicalStructure"
           accept=".jpeg,.jpg,.png"
           action=""
@@ -142,9 +144,11 @@
 
       <!--Orbitrap-MS mass spectrometry-->
       <el-divider content-position="left"><span class="span">Orbitrap-MS mass spectrometry</span></el-divider>
+      <img :src="$host+oldMassSpectrogram" width="50%" alt="">
       <el-upload
           ref="uploadMassSpectrogram"
           :auto-upload="false"
+          :multiple="false"
           :limit="1"
           :on-change="onChangeMassSpectrogram"
           accept=".jpeg,.jpg,.png"
@@ -156,9 +160,11 @@
 
       <!--Low-resolution mass spectrometry-->
       <el-divider content-position="left"><span class="span">Low-resolution mass spectrometry</span></el-divider>
+      <img :src="$host+oldMassSpectrogramNist" width="50%" alt="">
       <el-upload
           ref="uploadMassSpectrogramNist"
           :auto-upload="false"
+          :multiple="false"
           :limit="1"
           :on-change="onChangeMassSpectrogramNist"
           accept=".jpeg,.jpg,.png"
@@ -174,6 +180,7 @@
       <el-upload
           ref="uploadMRExcel"
           :auto-upload="false"
+          :multiple="false"
           :limit="1"
           accept=".xlsx"
           action=""
@@ -213,6 +220,7 @@
           ref="uploadlowMRExcel"
           :auto-upload="false"
           :limit="1"
+          :multiple="false"
           accept=".xlsx"
           action=""
           style="text-align: right;margin-bottom: 20px;"
@@ -582,6 +590,27 @@ export default {
 </script>
 
 <style scoped>
+.span {
+  color: #529287;
+  font-size: large
+}
+
+.form-item {
+  padding-left: 25px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  margin: 0;
+}
+
+.rowBtn {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #F56C6C;
+}
 .compound-info-form form {
   text-align: left;
   background-color: #ffffff;

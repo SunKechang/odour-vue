@@ -11,7 +11,7 @@
       <!--            </div>-->
       <div>
         <b>Chemical Structure: </b><br>
-        <img :src="compoundInfo.chemicalStructure" alt="" style="position: relative;" width="300">
+        <img :src="$host + compoundInfo.chemicalStructure" alt="" style="position: relative;" width="300">
       </div>
       <p><b>Synonym : </b>{{ compoundInfo.synonym }}</p>
       <p><b>CAS NO. : </b>{{ compoundInfo.casNo }}</p>
