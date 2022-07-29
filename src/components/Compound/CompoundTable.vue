@@ -1,9 +1,10 @@
 <template>
-  <div style="text-align: center">
+  <div>
+    <search-form @onSubmit="onSubmit" @onDownload="onDownload"></search-form>
     <el-scrollbar>
       <el-table
           ref="table"
-          :data="compoundData"
+          :data="compoundList"
           :max-height="$store.state.user.Authorization ? tableHeight : null"
           :row-key="getRowKey"
           style="width: 100%;"
@@ -62,12 +63,18 @@
         </el-table-column>
       </el-table>
     </el-scrollbar>
-    <el-pagination
-        :current-page="currentPage"
-        :page-size="size"
-        :total="total"
-        layout="prev, pager, next"
-        @current-change="handleCurrentChange"
+    <div style="text-align: center">
+      <el-pagination
+          :current-page="currentPage"
+          :page-size="size"
+          :total="total"
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+      />
+    </div>
+    <compound-info
+        :compoundInfo="compoundInfo"
+        :visible.sync="viewDialogVisible"
     />
     <compound-info-edit
         :compoundInfo="compoundInfo"
@@ -79,22 +86,25 @@
 
 <script>
 import {flexColumnWidth, flexTableHeight} from "@/utils/table";
-import CompoundInfo from "@/components/CompoundInfo"
-import CompoundInfoEdit from "@/views/admin/components/CompoundInfoEdit"
+import CompoundInfo from "@/components/Compound/CompoundInfoView"
+import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
+import SearchForm from "@/components/Compound/CompoundSearchForm";
 
 export default {
   name: "CompoundTable",
-  component: [CompoundInfo, CompoundInfoEdit],
+  component: [CompoundInfo, CompoundInfoEdit, SearchForm],
   components: {
     "compound-info": CompoundInfo,
-    "compound-info-edit": CompoundInfoEdit
+    "compound-info-edit": CompoundInfoEdit,
+    "search-form": SearchForm
   },
   data() {
     return {
       size: 10,
       total: 0,
       currentPage: 1,
-      compoundData: [],
+      downloadList: [],
+      compoundList: [],
       compoundInfo: {},
       viewDialogVisible: false,
       editDialogVisible: false,
@@ -112,15 +122,32 @@ export default {
         size: this.size
       }).then(({state, data: {content, totalSize}}) => {
         if (state === 0) {
-          this.compoundData = content
+          this.compoundList = content
           this.total = totalSize
         }
       }).catch(err => {
         console.error(err)
       })
     },
+    onSubmit(searchForm) {
+      this.$api.compound.search({
+        ...searchForm,
+        page: this.currentPage,
+        size: this.size
+      }).then(({state, data: {content, totalSize}}) => {
+        if (state === 0) {
+          this.compoundList = content
+          this.total = totalSize
+        }
+      }).catch(err => {
+        console.log(err);
+      });
+    },
+    onDownload() {
+      this.$api.compound.download(this.downloadList)
+    },
     getColumnWidth(prop, label) {
-      return flexColumnWidth(prop, this.compoundData, label)
+      return flexColumnWidth(prop, this.compoundList, label)
     },
     getRowKey(val) {
       return val.id;

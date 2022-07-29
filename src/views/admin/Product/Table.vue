@@ -114,8 +114,8 @@
 import axios from 'axios'
 import request from "@/network/request";
 import { flexColumnWidth, flexTableHeight } from '@/utils/table'
-const CompoundInfo = () => import("@/components/CompoundInfo");
-const CompoundInfoEdit = () => import("../components/CompoundInfoEdit")
+const CompoundInfo = () => import("@/components/Compound/CompoundInfoView");
+const CompoundInfoEdit = () => import("../../../components/Compound/CompoundInfoEdit")
 
 export default {
   name: "CompoundTable",

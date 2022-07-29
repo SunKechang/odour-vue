@@ -119,7 +119,7 @@ const routes = [
         children:[
             {
                 path: 'edit',
-                component: ()=>import("@/views/admin/Compound/Edit")
+                component: ()=>import("@/views/admin/Compound/Table")
             },
             {
                 path: 'add',
@@ -131,7 +131,7 @@ const routes = [
             },
             {
                 path: 'editproduct',
-                component: ()=>import("@/views/admin/components/ProductTable")
+                component: ()=>import("@/views/admin/Product/Table")
             },
             {
                 path: 'addoil',
@@ -139,7 +139,7 @@ const routes = [
             },
             {
                 path: 'addproduct',
-                component: ()=>import("@/views/admin/views/AddProduct")
+                component: ()=>import("@/views/admin/Product/Add")
             },
             {
                 path: 'security',

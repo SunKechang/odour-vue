@@ -13,7 +13,7 @@
 
 <script>
 import line from "@/assets/line.png"
-import CompoundTable from '@/components/CompoundTable'
+import CompoundTable from '@/components/Compound/CompoundTable'
     export default {
         name: "Compound",
         component:CompoundTable,
