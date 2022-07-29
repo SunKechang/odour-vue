@@ -17,4 +17,7 @@ export default {
     getNews(){
         return request.get("/product/news")
     },
+    delete(id) {
+        return request.delete('/product/delete/' + id)
+    },
 }

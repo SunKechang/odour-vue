@@ -73,6 +73,7 @@
     />
     <product-info-edit
         :productInfo="productInfo"
+        @getProductData="getProductData"
         :visible.sync="editDialogVisible"
     />
   </div>
@@ -82,7 +83,6 @@
 import ProductInfoView from "@/components/Product/ProductInfoView"
 import ProductInfoEdit from "@/components/Product/ProductInfoEdit"
 import {flexColumnWidth, flexTableHeight} from "@/utils/table";
-import request from "@/network/request";
 import SearchForm from "@/components/Compound/CompoundSearchForm";
 
 export default {
@@ -95,7 +95,7 @@ export default {
   },
   data() {
     return {
-      size: 4,
+      size: 5,
       total: 0,
       currentPage: 1,
       productInfo: {},
@@ -134,7 +134,8 @@ export default {
       //点击行选中复选框
       this.$refs.table.toggleRowSelection(val);
     },
-    on_selectsion(val) {//选中复选框操作
+    on_selectsion(val) {
+      //选中复选框操作
       this.downloadList = val;
     },
     getIndex(index) {
@@ -150,22 +151,26 @@ export default {
         console.error(err)
       })
     },
-    handleEdit(index) {
+    handleEdit(index, row) {
       this.editDialogVisible = !this.editDialogVisible;
-      this.productInfo = this.productData[(this.currentPage - 1) * this.size + index];
+      this.$api.product
+          .getOne(row.id)
+          .then(({data}) => {
+            this.productInfo = data
+          }).catch(err => {
+        console.error(err)
+      })
     },
-    handleDelete(index) {
-      let v = this;
-      let id = v.compoundData[(this.currentPage - 1) * this.size + index].id;
-      request.delete('/compound/delete/' + id)
+    handleDelete(index, row) {
+      this.$api.product.delete(row.id)
           .then(res => {
             if (res.data.state === 0) {
               this.getProductData();
-              v.$alert("Delete " + " successfully!", "Message", {
+              this.$alert("Delete " + " successfully!", "Message", {
                 confirmButtonText: 'Confirm'
               });
             } else {
-              v.$alert("Error!", "Message", {
+              this.$alert("Error!", "Message", {
                 confirmButtonText: 'Confirm'
               });
             }

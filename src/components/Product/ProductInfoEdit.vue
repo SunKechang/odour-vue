@@ -4,6 +4,7 @@
       :visible.sync="dialogVisible"
       top="20px"
       width="90%"
+      @close="getProductData"
   >
     <template v-slot:title>
       <div class="product-title">
@@ -20,6 +21,8 @@
           <el-input v-model="productInfoForm.productDescription" clearable type="textarea"></el-input>
         </el-form-item>
         <el-divider content-position="left"><span class="span">Product Picture</span></el-divider>
+        <img width="30%" style="margin: auto" :src="$store.state.config.host + oldProductPicture" alt="">
+
         <el-upload
             ref="uploadProductPicture"
             :auto-upload="false"
@@ -49,6 +52,9 @@ import {convertImgToBase64} from "@/utils/image";
 export default {
   name: "ProductInfoView",
   props: {
+    getProductData: {
+      type: Function
+    },
     visible: {
       type: Boolean,
       default: false
@@ -60,6 +66,7 @@ export default {
   },
   data() {
     return {
+      oldProductPicture: '',
       productInfoForm: {
         productName: '',
         productDescription: '',
@@ -128,6 +135,17 @@ export default {
 </script>
 
 <style scoped>
+.span {
+  color: #529287;
+  font-size: large
+}
+
+.form-item {
+  padding-left: 25px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  margin: 0;
+}
 >>> .el-dialog__header {
   border-bottom: #888888 solid 1px;
 }
