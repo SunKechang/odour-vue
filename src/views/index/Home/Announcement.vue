@@ -3,7 +3,7 @@
   <div class="compound-info-list">
     <div class="itemTitle">
       <p>{{ $t("home.notice") }}</p>
-      <el-image :src="lineUrl" alt="" width="100%"></el-image>
+      <el-image :src="lineUrl" alt="" style="width: 100%"></el-image>
     </div>
   </div>
   <el-carousel :interval="5000" indicator-position="outside">

@@ -2,7 +2,7 @@
   <div class="product-info-form">
     <div class="itemTitle">
       <p>Add Product</p>
-      <img alt="" src="../../../assets/line.png" width="1500">
+      <el-image :src="lineUrl" alt="lineUrl" style="width: 100%"></el-image>
     </div>
     <el-form ref="productInfoForm" :model="productInfoForm" :rules="rules" label-width="200px">
       <el-divider content-position="left"><span class="span">Product Info</span></el-divider>
@@ -24,7 +24,7 @@
           class="upload-demo"
           style="text-align: right"
       >
-        <el-button slot="trigger" size="small" type="primary">Select chemical structure</el-button>
+        <el-button slot="trigger" size="small" type="primary">Select product picture</el-button>
       </el-upload>
 
       <div style="text-align: right;margin-top: 10px">
@@ -37,11 +37,12 @@
 
 <script>
 import {convertImgToBase64} from "@/utils/image";
-
+import line from "@/assets/line.png"
 export default {
   name: "AddProduct",
   data() {
     return {
+      lineUrl: line,
       productInfoForm: {
         productName: '',
         productDescription: '',

@@ -72,7 +72,7 @@
           @current-change="handleCurrentChange"
       />
     </div>
-    <compound-info
+    <compound-info-view
         :compoundInfo="compoundInfo"
         :visible.sync="viewDialogVisible"
     />
@@ -86,15 +86,15 @@
 
 <script>
 import {flexColumnWidth, flexTableHeight} from "@/utils/table";
-import CompoundInfo from "@/components/Compound/CompoundInfoView"
+import CompoundInfoView from "@/components/Compound/CompoundInfoView"
 import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
 import SearchForm from "@/components/Compound/CompoundSearchForm";
 
 export default {
   name: "CompoundTable",
-  component: [CompoundInfo, CompoundInfoEdit, SearchForm],
+  component: [CompoundInfoView, CompoundInfoEdit, SearchForm],
   components: {
-    "compound-info": CompoundInfo,
+    "compound-info-view": CompoundInfoView,
     "compound-info-edit": CompoundInfoEdit,
     "search-form": SearchForm
   },

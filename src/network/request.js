@@ -12,8 +12,8 @@ const request = axios.create({
 
 // 添加请求拦截器
 request.interceptors.request.use(config => {
-    if (store.state.Authorization) {
-        config.headers.Authorization = store.state.Authorization;
+    if (store.state.user.Authorization) {
+        config.headers.Authorization = store.state.user.Authorization;
     }
     return config;
     },

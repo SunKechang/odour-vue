@@ -5,7 +5,11 @@ export default {
         return request.get("/product/all")
     },
     getList(param) {
-        return request.get("/product/list", { param })
+        console.log(param)
+        return request.get("/product/list?size=" + param.size + "&page=" + param.page)
+    },
+    getOne(id) {
+        return request.get("/product/" + id)
     },
     add(data) {
         return request.post("/product/add", data)
