@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t("home.title") }}</h2>
-    <el-row>
+    <el-row :gutter="20">
       <el-col :lg="24">
         <div class="compound-info-list">
           <div class="itemTitle">
@@ -29,8 +29,8 @@
 
 <script>
 
-import ProductOverview from "@/views/index/components/ProductOverview"
-import Announcement from "@/views/index/components/Announcement"
+import ProductOverview from "@/views/index/Home/ProductOverview"
+import Announcement from "@/views/index/Home/Announcement"
 import line from "@/assets/line.png"
 
 export default {

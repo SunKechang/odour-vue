@@ -14,7 +14,7 @@
         </a>
       </el-menu-item>
       <el-menu-item index="/home">{{ $t("nav.home") }}</el-menu-item>
-      <el-menu-item index="/database">{{ $t("nav.compounds") }}</el-menu-item>
+      <el-menu-item index="/compound">{{ $t("nav.compounds") }}</el-menu-item>
       <el-menu-item index="/downloadpro">{{ $t("nav.downloadpro") }}</el-menu-item>
       <el-menu-item index="/oildatabase">{{ $t("nav.oils") }}</el-menu-item>
       <el-menu-item index="/about">{{ $t("nav.about") }}</el-menu-item>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Language from "@/layout/Home/components/Language";
+import Language from "@/layout/index/components/Language";
 import bjfu from "@/assets/bjfu.png"
 export default {
   name: "TopNav",

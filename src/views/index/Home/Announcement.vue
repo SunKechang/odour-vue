@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import UpdateNews from "@/views/index/components/UpdateNews"
-import TeamNews from "@/views/index/components/TeamNews"
+import UpdateNews from "@/views/index/Home/UpdateNews"
+import TeamNews from "@/views/index/Home/TeamNews"
 import line from "@/assets/line.png"
 export default {
   name: "Announcement",

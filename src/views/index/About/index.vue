@@ -46,7 +46,7 @@
 
     .slideTitle{
         height: 100px;
-        background-image: url("../../assets/slideNavBg.png");
+        background-image: url("../../../assets/slideNavBg.png");
     }
 
     .slideTitle span{
@@ -54,6 +54,6 @@
         color: #ffffff;
         font-weight: normal;
         line-height: 64px;
-        background: url("../../assets/slideLine.png") left bottom no-repeat;
+        background: url("../../../assets/slideLine.png") left bottom no-repeat;
     }
 </style>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/index/Home.vue'
+import Home from '../views/index/Home'
 import store from "@/store"
 
 Vue.use(VueRouter)
@@ -9,7 +9,7 @@ const routes = [
     {
         path: '/',
         redirect:'/home',
-        component: ()=>import("@/layout/Home"),
+        component: ()=>import("@/layout/index"),
         children: [
             {
                 path: '/home',
@@ -25,12 +25,11 @@ const routes = [
                 meta: {
                     isLogin: false
                 },
-
                 component: () => import("@/views/index/AdvancedSearch")
             },
             {
-                path: '/database',
-                component: () => import("@/views/index/Database"),
+                path: '/compound',
+                component: () => import("@/views/index/Compound"),
                 meta: {
                     isLogin: false
                 }
@@ -51,15 +50,15 @@ const routes = [
                 children: [
                     {
                         path: 'team',
-                        component: () => import("@/views/index/components/AboutTeam")
+                        component: () => import("@/views/index/About/AboutTeam")
                     },
                     {
                         path: 'field',
-                        component: () => import("@/views/index/components/AboutField")
+                        component: () => import("@/views/index/About/AboutField")
                     },
                     {
                         path: 'paper',
-                        component: () => import("@/views/index/components/AboutPapers")
+                        component: () => import("@/views/index/About/AboutPapers")
                     }
                 ]
             },
@@ -110,7 +109,7 @@ const routes = [
         meta: {
             isLogin: false
         },
-        component:()=>import("@/views/admin/views/Login")
+        component:()=>import("@/views/admin/Login")
     },
     {
         path: '/admin',
@@ -120,11 +119,11 @@ const routes = [
         children:[
             {
                 path: 'edit',
-                component: ()=>import("@/views/admin/components/CompoundTable")
+                component: ()=>import("@/views/admin/Compound/Edit")
             },
             {
                 path: 'add',
-                component: ()=>import("@/views/admin/views/AddCompound")
+                component: ()=>import("@/views/admin/Compound/Add")
             },
             {
                 path: 'editoil',

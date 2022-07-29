@@ -58,9 +58,9 @@ export const flexColumnWidth = (str, tableData, title="", flag = 'max') => {
     if (title !== "") {
         titleWidth = getWidth(title)
     }
-    if (flexWidth < 80) {
+    if (flexWidth < 120) {
         // 设置最小宽度
-        flexWidth = 80
+        flexWidth = 120
     }
     // if (flexWidth > 250) {
     //   // 设置最大宽度

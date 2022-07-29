@@ -24,7 +24,6 @@
 <script>
 const AdminNav = () => import("./components/AdminNav")
 import jwtDecode from "jwt-decode"
-import store from "@/store"
 
 export default {
   name: "Admin",
@@ -43,14 +42,13 @@ export default {
     "admin-nav": AdminNav
   },
   created() {
-    let token = store.state.Authorization;
+    let token =this.$store.state.user.Authorization;
     const decode = jwtDecode(token);
     this.account = decode.account;
   },
   methods: {
     signOut() {
-      sessionStorage.setItem("Authorization", '');
-      store.commit('changeLogin', '');
+      this.$store.dispatch('user/signOut', '');
       this.$router.push("/");
     }
   }

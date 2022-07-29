@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import TopNav from "@/layout/Home/components/TopNav";
+import TopNav from "@/layout/index/components/TopNav";
 export default {
   name: "index",
   component: [TopNav],

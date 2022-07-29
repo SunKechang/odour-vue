@@ -11,7 +11,7 @@
       <!--            </div>-->
       <div>
         <b>Chemical Structure: </b><br>
-        <img :src="$store.state.host + compoundInfo.chemicalStructure" alt="" style="position: relative;" width="300">
+        <img :src="$store.state.config.host + compoundInfo.chemicalStructure" alt="" style="position: relative;" width="300">
       </div>
       <p><b>Synonym : </b>{{ compoundInfo.synonym }}</p>
       <p><b>CAS NO. : </b>{{ compoundInfo.casNo }}</p>
@@ -155,7 +155,7 @@
 <script>
 
 import jwtDecode from "jwt-decode";
-import store from "@/store"
+import {mapGetters} from "vuex";
 
 export default {
   name: "CompoundInfo",
@@ -164,10 +164,16 @@ export default {
       account: ''
     }
   },
+  computed: {
+    ...mapGetters({
+      authorization: 'user/Authorization',
+    })
+  },
   created() {
-    let token = store.state.Authorization;
-    const decode = jwtDecode(token);
-    this.account = decode.account;
+    if (this.authorization !== '') {
+      const decode = jwtDecode(this.authorization);
+      this.account = decode.account;
+    }
   },
   props: {
     visible: {

@@ -8,10 +8,10 @@
     </div>
     <el-carousel indicator-position="outside" :interval="5000">
       <el-carousel-item v-for="(carItem, carIndex) in carouselData" :key="carIndex">
-        <el-row gutter="20">
+        <el-row :gutter="20">
           <el-col v-for="(proItem, proIndex) in carItem" :key="proIndex" :span="12">
             <el-image
-                :src="$store.state.host + proItem.productPicture"
+                :src="$store.state.config.host + proItem.productPicture"
                 :alt="proItem.productName"
                 style="height: 150px"
             />

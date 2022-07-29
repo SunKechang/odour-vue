@@ -2,16 +2,16 @@ import request from './request'
 import axios from "axios";
 
 export default {
-    getList(params){
-        return request.get("/compound/all",{ params })
+    getList(params) {
+        return request.get("/compound/all", {params})
     },
     getOne(id) {
-        return request.get("/compound/"+id)
+        return request.get("/compound/" + id)
     },
-    add(data){
+    add(data) {
         return request.post("/compound/add", data)
     },
-    search(data){
+    search(data) {
         return request.post("/compound/search", data)
     },
     update(data) {
@@ -30,6 +30,25 @@ export default {
             withCredentials: true,
             timeout: 5000
         }).post('/compound/download', downloadList)
+            .then(res => {
+                let blob = new Blob(
+                    [res.data],
+                    {type: 'application/ms-excel;charset=utf-8'}
+                );
+                let downloadElement = document.createElement('a');
+                let href = window.URL.createObjectURL(blob); //创建下载的链接
+                downloadElement.href = href;
+                downloadElement.download = '化合物分页信息表.xls'; //下载后文件名
+                document.body.appendChild(downloadElement);
+                downloadElement.click(); //点击下载
+                document.body.removeChild(downloadElement); //下载完成移除元素
+                window.URL.revokeObjectURL(href); //释放掉blob对象
+                this.$alert("下载成功", "Message", {
+                    confirmButtonText: 'Confirm'
+                });
+            }).catch(err => {
+                console.log(err)
+            })
     },
     getNews() {
         return request.get("/compound/news")
