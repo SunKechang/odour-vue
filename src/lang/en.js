@@ -14,7 +14,8 @@ module.exports = {
         add:' has been added.',
         update:'has been updated.',
         compounds:'Compounds',
-        teamNews:'Team News'
+        teamNews:'Team News',
+        product: 'Product'
     },
     compounds:{
         title:'Compounds',

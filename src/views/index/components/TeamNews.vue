@@ -7,7 +7,7 @@
         <el-table-column
                 prop="content"
                 :label="$t('home.teamNews')">
-            <template scope="scope">
+            <template v-slot="scope">
                 <a  :href="scope.row.link" target="_blank">{{ scope.row.title }}</a>
             </template>
         </el-table-column>
@@ -21,8 +21,6 @@
 </template>
 
 <script>
-    import request from "@/network/request";
-
     export default {
         name: "TeamNews",
         data(){
@@ -31,10 +29,9 @@
             }
         },
         created() {
-            let v=this;
-            request.get('/team/news')
+            this.$api.team.getTeamNews()
                 .then(res=>{
-                    v.news=res.data.data;
+                  this.news=res.data
                 }).catch(err=>{
                 console.log(err);
             })

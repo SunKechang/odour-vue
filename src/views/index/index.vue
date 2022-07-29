@@ -22,7 +22,6 @@
 
 <script>
     import Nav from "./components/Nav";
-    import request from "../../network/request";
     export default {
         name: "index",
         component:Nav,
@@ -38,14 +37,13 @@
             }
         },
         created() {
-            // eslint-disable-next-line no-undef
-            let citySN=returnCitySN;
-            request.post('/city/citySN',citySN)
+            this.$api.city.add(returnCitySN)
                 .then(()=>{
                     console.log("Welcome！");
                 }).catch(err=>{
                 console.log(err);
             });
+            console.log(this.$store.state.footer)
         }
     }
 </script>

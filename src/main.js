@@ -2,17 +2,19 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import Global from './Global'
 import ElementUI from 'element-ui'
-import './assets/element-#5CB87A/index.css';
+import './assets/element-#5CB87A/index.css'
 import VueI18n from 'vue-i18n'
 import 'lib-flexible'
 import './network'
 
 Vue.use(ElementUI)
 Vue.use(VueI18n)
+Vue.use(Global)
 Vue.config.productionTip = false
 
-Vue.prototype.$host = 'http://localhost:8081' // 服务器路径常量
+
 
 const i18n = new VueI18n({
 

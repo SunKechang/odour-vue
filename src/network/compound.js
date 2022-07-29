@@ -30,5 +30,8 @@ export default {
             withCredentials: true,
             timeout: 5000
         }).post('/compound/download', downloadList)
+    },
+    getNews() {
+        return request.get("/compound/news")
     }
 }

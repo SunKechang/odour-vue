@@ -19,7 +19,8 @@ module.exports = {
         update:'信息已经更新',
         compounds:'化合物',
         oils:'食用油',
-        teamNews:'团队动态'
+        teamNews:'团队动态',
+        product: '产品总览'
     },
     compounds:{
         title:'化合物',

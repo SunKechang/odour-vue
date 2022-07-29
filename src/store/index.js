@@ -5,11 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-      Authorization:sessionStorage.getItem("Authorization")?sessionStorage.getItem("Authorization"):''
+      Authorization:sessionStorage.getItem("Authorization")?sessionStorage.getItem("Authorization"):'',
   },
   mutations: {
       changeLogin (state,token) {
-          state.Authorization = token;
+          state.Authorization = token
       }
   },
   actions: {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="table-container flex-a" ref="container">
     <el-form :inline="true" :model="searchForm" style="float: left;position: relative;top: 30%">
       <el-form-item>
         <el-select v-model="searchForm.searchProperty">
@@ -27,61 +27,66 @@
       </el-form-item>
     </el-form>
     <el-button style="float:right" @click="onDownload">下载化合物表单</el-button>
-    <el-table
-        ref="table"
-        :data="compoundData"
-        :row-key="getRowKey"
-        border
-        style="width: 100%"
-        @row-click="on_select"
-        @selection-change="on_selectsion">
-      <el-table-column
-          :index="indexMethod"
-          label="Index"
-          type="index"
-          width="60">
-      </el-table-column>
-      <el-table-column :reserve-selection="true" type="selection"></el-table-column>
+    <div class="table-container-inner">
+      <el-table
+          ref="table"
+          :data="compoundData"
+          :row-key="getRowKey"
+          height="100%"
+          border
+          style="width: 100%"
+          @row-click="on_select"
+          @selection-change="on_selectsion">
+        <el-table-column
+            :index="indexMethod"
+            label="Index"
+            type="index"
+            width="60">
+        </el-table-column>
+        <el-table-column :reserve-selection="true" type="selection"></el-table-column>
 
-      <el-table-column
-          label="Compound Name"
-          prop="compoundName"
-          width="250">
-      </el-table-column>
-      <el-table-column
-          label="CAS NO."
-          prop="casNo"
-          width="200">
-      </el-table-column>
+        <el-table-column
+            label="Compound Name"
+            prop="compoundName"
+            width="250">
+        </el-table-column>
+        <el-table-column
+            label="CAS NO."
+            prop="casNo"
+            width="200">
+        </el-table-column>
 
-      <el-table-column label="Operation">
-        <template v-slot="scope">
-          <el-button
-              size="mini"
-              @click="handleView(scope.$index, scope.row)">View
-          </el-button>
-          <el-button
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)">Edit
-          </el-button>
-          <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)">Delete
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="block">
-      <el-pagination
-          :current-page="currentPage"
-          :page-size="size"
-          :total="total"
-          layout="prev, pager, next"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange">
-      </el-pagination>
+        <el-table-column label="Operation">
+          <template v-slot="scope">
+            <el-button
+                size="mini"
+                @click="handleView(scope.$index, scope.row)">View
+            </el-button>
+            <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">Edit
+            </el-button>
+            <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)">Delete
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="block">
+        <el-pagination
+            :current-page="currentPage"
+            :page-size="size"
+            :total="total"
+            layout="prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange">
+        </el-pagination>
+      </div>
     </div>
+
+
     <compound-info :compoundInfo="compoundInfo" :visible.sync="viewDialogVisible"></compound-info>
     <compound-info-edit
         :compoundInfo="compoundInfo"
@@ -104,6 +109,7 @@ export default {
   },
   data() {
     return {
+      tableHeight: 0,
       compoundData: [],
       viewDialogVisible: false,
       editDialogVisible: false,
@@ -118,6 +124,13 @@ export default {
     }
   },
   methods: {
+    calHeight () {
+      this.$nextTick(() => {
+        const rect = this.$refs.container.getBoundingClientRect()
+        this.tableHeight = rect.height
+        console.log(rect.height)
+      })
+    },
     getRowKey(val) {
       return val.id;
     },
@@ -222,11 +235,21 @@ export default {
     }
   },
   created() {
-    this.getCompoundData();
+    this.getCompoundData()
+    this.calHeight()
   }
 }
 </script>
 
 <style scoped>
+.table-container {
+  position: relative;
+}
 
+.table-container-inner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 55px;
+}
 </style>

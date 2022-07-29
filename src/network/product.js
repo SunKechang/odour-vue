@@ -6,5 +6,11 @@ export default {
     },
     getList(param) {
         return request.get("/product/list", { param })
-    }
+    },
+    add(data) {
+        return request.post("/product/add", data)
+    },
+    getShow(){
+        return request.get("/product/show")
+    },
 }

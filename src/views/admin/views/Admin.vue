@@ -1,6 +1,8 @@
 <template>
     <el-container direction="horizontal">
-        <el-aside width="205px"><admin-nav class="admin-nav"></admin-nav></el-aside>
+        <el-aside style="height: 100vh" width="210px">
+          <admin-nav class="admin-nav"></admin-nav>
+        </el-aside>
         <el-container>
             <el-header class="admin-header">
                 <span style="float:left;padding-top: 20px">Compound Information Management System</span>
@@ -14,8 +16,6 @@
             <el-main style="background-color: #ffffff">
                 <router-view></router-view>
             </el-main>
-            <el-footer style="background-color:#f3f3f4">
-            </el-footer>
         </el-container>
     </el-container>
 

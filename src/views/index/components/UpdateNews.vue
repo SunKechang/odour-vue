@@ -7,7 +7,7 @@
         <el-table-column
                 prop="content"
                 :label="$t('home.compounds')">
-            <template scope="scope">
+            <template v-slot="scope">
                 <div class="content" @click="view(scope.row)">{{ scope.row.content }}</div>
             </template>
         </el-table-column>
@@ -31,24 +31,22 @@
             }
         },
         created() {
-            let v=this;
-            request.get('/compound/news')
+            this.$api.compound.getNews()
                 .then(res=>{
-                    v.news=res.data.data;
+                    this.news=res.data;
                 }).catch(err=>{
                 console.log(err);
             })
         },
         methods:{
             view(row){
-                const v=this;
                 request.get('/compound/'+row.compoundId)
-                    .then(res=>{
-                        if(res.data.state===0) {
-                            v.$router.push({
+                    .then(({state, data})=>{
+                        if(state===0) {
+                            this.$router.push({
                                 name: 'search',
                                 params: {
-                                    result: res.data.data
+                                    result: data
                                 }
                             });
                         }
