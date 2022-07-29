@@ -9,7 +9,7 @@ const routes = [
     {
         path: '/',
         redirect:'/home',
-        component: ()=>import("@/views/index/index"),
+        component: ()=>import("@/layout/Home"),
         children: [
             {
                 path: '/home',
@@ -116,7 +116,7 @@ const routes = [
         path: '/admin',
         name: 'admin',
         redirect: '/admin/edit',
-        component:()=>import("@/views/admin/views/Admin"),
+        component:()=>import("@/layout/Admin"),
         children:[
             {
                 path: 'edit',

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-const AdminNav = () => import("../components/AdminNav")
+const AdminNav = () => import("./components/AdminNav")
 import jwtDecode from "jwt-decode"
 import store from "@/store"
 
