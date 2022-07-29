@@ -10,7 +10,7 @@ export default {
     add(data) {
         return request.post("/product/add", data)
     },
-    getShow(){
-        return request.get("/product/show")
+    getNews(){
+        return request.get("/product/news")
     },
 }

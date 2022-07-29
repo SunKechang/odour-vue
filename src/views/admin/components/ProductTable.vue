@@ -1,103 +1,119 @@
 <template>
   <div>
-    <el-form :inline="true" :model="searchForm" style="float: left;position: relative;top: 30%">
-      <el-form-item>
-        <el-select v-model="searchForm.property">
-          <el-option label="Compound Name" value="compound_name"></el-option>
-          <el-option label="CAS NO." value="cas_no"></el-option>
-          <el-option label="Odour Description" value="odour_description"></el-option>
-          <el-option label="Odour Threshold" value="odour_threshold"></el-option>
-          <el-option label="RI" value="compound_ri"></el-option>
-          <el-option label="NRI" value="compound_nri"></el-option>
-          <el-option label="Measured" value="measured"></el-option>
-          <el-option label="Low-resolution Measured" value="lowmeasured"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-input
-            v-model="searchForm.propertyDescription"
-            class="condition-description"
-            clearable
-            style="width: 200px">
-        </el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button circle icon="el-icon-search" @click="onSubmit"></el-button>
-      </el-form-item>
-    </el-form>
-    <el-button style="float:right" @click="onDownload">下载化合物表单</el-button>
-    <el-table ref="table"
-              :data="productData"
-              :row-key="getRowKey"
-              border
-              style="width: 100%"
-              @row-click="on_select"
-              @selection-change="on_selectsion">
-      <el-table-column
-          :index="indexMethod"
-          label="Index"
-          type="index"
-          width="60">
-      </el-table-column>
-      <el-table-column :reserve-selection="true" type="selection"></el-table-column>
+    <div style="text-align: left;">
+      <el-form :inline="true" :model="searchForm">
+        <el-form-item>
+          <el-input
+              v-model="searchForm.propertyDescription"
+              clearable
+          >
+            <el-select slot="prepend" v-model="searchForm.property">
+              <el-option label="Compound Name" value="compound_name"></el-option>
+              <el-option label="CAS NO." value="cas_no"></el-option>
+              <el-option label="Odour Description" value="odour_description"></el-option>
+              <el-option label="Odour Threshold" value="odour_threshold"></el-option>
+              <el-option label="RI" value="compound_ri"></el-option>
+              <el-option label="NRI" value="compound_nri"></el-option>
+              <el-option label="Measured" value="measured"></el-option>
+              <el-option label="Low-resolution Measured" value="lowmeasured"></el-option>
+            </el-select>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button circle icon="el-icon-search" @click="onSubmit"></el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button style="float:right" @click="onDownload">Download</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
 
-      <el-table-column
-          label="Product Name"
-          prop="productName"
-          width="200">
-      </el-table-column>
-      <el-table-column
-          label="Picture"
-          width="200">
-        <template v-slot="scope">
-          <img :src="$host + scope.row['productPicture']" width="150" :alt="scope.row['productName']"/>
-        </template>
-      </el-table-column>
-      <el-table-column
-          label="Description"
-          prop="productDescription"
-          width="250">
-      </el-table-column>
-      <el-table-column label="Operation">
-        <template v-slot="scope">
-          <el-button
-              size="mini"
-              @click="handleView(scope.$index)">View
-          </el-button>
-          <el-button
-              size="mini"
-              @click="handleEdit(scope.$index)">Edit
-          </el-button>
-          <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index)">Delete
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-scrollbar>
+      <el-table
+          ref="table"
+          :data="productData"
+          :row-key="getRowKey"
+          :max-height="tableHeight"
+          style="width: 100%;"
+          @row-click="on_select"
+          @selection-change="on_selectsion">
+        <el-table-column :reserve-selection="true" type="selection"></el-table-column>
+        <el-table-column
+            :index="indexMethod"
+            label="Index"
+            type="index"
+            width="60"
+            align="center"
+        />
+        <el-table-column
+            label="Product Name"
+            prop="productName"
+            :width="getColumnWidth('productName', 'Product Name')"
+        >
+        </el-table-column>
+        <el-table-column
+            label="Picture"
+            width="200"
+        >
+          <template v-slot="scope">
+            <el-image
+                :alt="scope.row['productName']"
+                :src="$store.state.host + scope.row['productPicture']"
+                style="width: 100px"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column
+            label="Description"
+            prop="productDescription"
+        />
+        <el-table-column label="Operation" fixed="right" :width="220">
+          <template v-slot="scope">
+            <el-button
+                size="mini"
+                @click="handleView(scope.$index)">View
+            </el-button>
+            <el-button
+                size="mini"
+                @click="handleEdit(scope.$index)">Edit
+            </el-button>
+            <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index)">Delete
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-scrollbar>
+
     <div class="block">
       <el-pagination
           :current-page="currentPage"
           :page-size="size"
           :total="total"
           layout="prev, pager, next"
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange">
       </el-pagination>
     </div>
 
 
-    <compound-info :compoundInfo="compoundInfo" :visible.sync="viewDialogVisible"></compound-info>
-    <compound-info-edit :compoundInfo="compoundInfo" :getCompoundData="getProductData"
-                        :visible.sync="editDialogVisible"></compound-info-edit>
+    <compound-info
+        :compoundInfo="compoundInfo"
+        :visible.sync="viewDialogVisible"
+    />
+    <compound-info-edit
+        :compoundInfo="compoundInfo"
+        :getCompoundData="getProductData"
+        :visible.sync="editDialogVisible"
+    />
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import request from "@/network/request";
-
+import { flexColumnWidth, flexTableHeight } from '@/utils/table'
 const CompoundInfo = () => import("@/components/CompoundInfo");
 const CompoundInfoEdit = () => import("../components/CompoundInfoEdit")
 
@@ -110,11 +126,12 @@ export default {
   },
   data() {
     return {
+      tableHeight: flexTableHeight(),
       productData: [],
       viewDialogVisible: false,
       editDialogVisible: false,
       compoundInfo: {},
-      size: 10,
+      size: 5,
       currentPage: 1,
       total: 0,
       searchForm: {
@@ -124,6 +141,9 @@ export default {
     }
   },
   methods: {
+    getColumnWidth(prop, label) {
+      return flexColumnWidth(prop, this.compoundData, label)
+    },
     getRowKey(val) {
       return val.id;
     },
@@ -132,12 +152,10 @@ export default {
       this.$refs.table.toggleRowSelection(val);
     },
     on_selectsion(val) {//选中复选框操作
-      console.log(val)
       this.downloadList = val;
     },
     indexMethod(index) {
-      index = (index + 1) + (this.currentPage - 1) * this.size
-      return index;
+      return (index + 1) + (this.currentPage - 1) * this.size
     },
     handleView(index) {
       this.viewDialogVisible = !this.viewDialogVisible;
@@ -197,9 +215,6 @@ export default {
         console.log(err);
       });
     },
-    handleSizeChange(val) {
-      this.size = val;
-    },
     handleCurrentChange(val) {
       this.currentPage = val;
     },
@@ -231,18 +246,49 @@ export default {
         console.log(err);
       });
     }
-    // onSubmit() {
-    //     const _this = this;
-    //     console.log(_this.productData[0].compoundName);
-    //     _this.productData =_this.productData.filter(item => item.compoundName.toLowerCase().includes(_this.searchForm.propertyDescription))
-    // },
   },
   created() {
-    this.getProductData();
+    this.getProductData()
+  },
+  mounted() {
+    //挂载window.onresize事件(动态设置table高度)
+    window.onresize = () => {
+      if (this.resizeFlag) {
+        clearTimeout(this.resizeFlag)
+      }
+      this.resizeFlag = setTimeout(() => {
+        this.tableHeight = flexTableHeight()
+        this.resizeFlag = null
+      }, 100)
+    }
   }
 }
 </script>
 
 <style scoped>
+>>>.el-input-group__prepend {
+  background-color: transparent;
+  width: 120px;
+}
+>>>.el-form-item{
+  margin-bottom: 10px;
+}
+>>>.el-table__body-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 
+>>>.el-table__body-wrapper::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  border-radius: 3px;
+}
+
+>>>.el-table th.gutter {
+  display: none;
+  background-color: rgb(232, 232, 232);
+}
+
+>>>.el-table__body {
+  width: 100% !important;
+}
 </style>

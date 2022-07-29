@@ -36,7 +36,7 @@
             </div>
             <el-row gutter="20">
               <el-col v-for="(item, index) in productList" :key="index" :span="12">
-                <img :src="item.productPicture" width="100%" :alt="item.productName"/>
+                <el-image :src="$store.state.host + item.productPicture" width="100%" :alt="item.productName"/>
               </el-col>
             </el-row>
           </div>
@@ -65,13 +65,8 @@
             "team-news":TeamNews
         },
       created() {
-          this.$api.product.getShow().then(res=> {
-            this.productList = res.data.map((item) => {
-              return {
-                ...item,
-                productPicture: this.$host + item.productPicture
-              }
-            });
+          this.$api.product.getNews().then(res=> {
+            this.productList = res.data
           })
       }
     }

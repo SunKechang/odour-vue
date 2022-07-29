@@ -1,11 +1,12 @@
+const target = 'http://127.0.0.1:8081'
+// let target = 'http://8.141.162.63:8081'
 module.exports = {
     publicPath: './',
     lintOnSave:false,
     devServer: {
         proxy: {
             '/api': {
-                // target: 'http://8.141.162.63:8081',
-                target: 'http://localhost:8081',
+                target: target,
                 pathRewrite: {
                     '^/api': ''
                 }
@@ -15,5 +16,5 @@ module.exports = {
                 target: 'http://8.141.162.63'
             }
         }
-    }
+    },
 }

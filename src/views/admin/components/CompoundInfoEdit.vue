@@ -127,7 +127,7 @@
 
       <!--Chemical Structure-->
       <el-divider content-position="left"><span class="span">Chemical Structure</span></el-divider>
-      <img width="50%" style="margin: auto" :src="$host+oldChemicalStructure" alt="">
+      <img width="50%" style="margin: auto" :src="$store.state.host+oldChemicalStructure" alt="">
       <el-upload
           ref="uploadChemicalStructure"
           :auto-upload="false"
@@ -144,7 +144,7 @@
 
       <!--Orbitrap-MS mass spectrometry-->
       <el-divider content-position="left"><span class="span">Orbitrap-MS mass spectrometry</span></el-divider>
-      <img :src="$host+oldMassSpectrogram" width="50%" alt="">
+      <img :src="$store.state.host+oldMassSpectrogram" width="50%" alt="">
       <el-upload
           ref="uploadMassSpectrogram"
           :auto-upload="false"
@@ -160,7 +160,7 @@
 
       <!--Low-resolution mass spectrometry-->
       <el-divider content-position="left"><span class="span">Low-resolution mass spectrometry</span></el-divider>
-      <img :src="$host+oldMassSpectrogramNist" width="50%" alt="">
+      <img :src="$store.state.host+oldMassSpectrogramNist" width="50%" alt="">
       <el-upload
           ref="uploadMassSpectrogramNist"
           :auto-upload="false"

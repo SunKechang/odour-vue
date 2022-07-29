@@ -1,62 +1,63 @@
 <template>
-  <div class="table-container flex-a" ref="container">
-    <el-form :inline="true" :model="searchForm" style="float: left;position: relative;top: 30%">
-      <el-form-item>
-        <el-select v-model="searchForm.searchProperty">
-          <el-option label="Compound Name" value="compound_name"></el-option>
-          <el-option label="CAS NO." value="cas_no"></el-option>
-          <el-option label="Odour Description" value="odour_description"></el-option>
-          <el-option label="Odour Threshold" value="odour_threshold"></el-option>
-          <el-option label="RI" value="compound_ri"></el-option>
-          <el-option label="NRI" value="compound_nri"></el-option>
-          <el-option label="Measured" value="measured"></el-option>
-          <el-option label="Low-resolution Measured" value="lowmeasured"></el-option>
-          <el-option label="Product" value="product"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-input
-            v-model="searchForm.searchValue"
-            class="condition-description"
-            clearable
-            style="width: 200px">
-        </el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button circle icon="el-icon-search" @click="onSubmit"></el-button>
-      </el-form-item>
-    </el-form>
-    <el-button style="float:right" @click="onDownload">下载化合物表单</el-button>
-    <div class="table-container-inner">
+  <div ref="container">
+    <div style="text-align: left;">
+      <el-form :inline="true" :model="searchForm">
+        <el-form-item>
+          <el-input v-model="searchForm.searchValue" clearable>
+            <el-select slot="prepend" v-model="searchForm.searchProperty">
+              <el-option label="Compound Name" value="compound_name"></el-option>
+              <el-option label="CAS NO." value="cas_no"></el-option>
+              <el-option label="Odour Description" value="odour_description"></el-option>
+              <el-option label="Odour Threshold" value="odour_threshold"></el-option>
+              <el-option label="RI" value="compound_ri"></el-option>
+              <el-option label="NRI" value="compound_nri"></el-option>
+              <el-option label="Measured" value="measured"></el-option>
+              <el-option label="Low-resolution Measured" value="lowmeasured"></el-option>
+              <el-option label="Product" value="product"></el-option>
+            </el-select>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button circle icon="el-icon-search" @click="onSubmit"></el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button style="float:right" @click="onDownload">下载化合物表单</el-button>
+        </el-form-item>
+      </el-form>
+
+    </div>
+
+    <el-scrollbar>
       <el-table
           ref="table"
           :data="compoundData"
+          :max-height="tableHeight"
           :row-key="getRowKey"
-          height="100%"
-          border
-          style="width: 100%"
+          style="width: 100%;"
           @row-click="on_select"
           @selection-change="on_selectsion">
+        <el-table-column :reserve-selection="true" type="selection"></el-table-column>
         <el-table-column
             :index="indexMethod"
             label="Index"
             type="index"
-            width="60">
-        </el-table-column>
-        <el-table-column :reserve-selection="true" type="selection"></el-table-column>
-
+            width="60"/>
         <el-table-column
             label="Compound Name"
             prop="compoundName"
-            width="250">
-        </el-table-column>
+            min-width="120"
+        />
         <el-table-column
             label="CAS NO."
             prop="casNo"
-            width="200">
-        </el-table-column>
-
-        <el-table-column label="Operation">
+            :width="getColumnWidth('casNo', 'CAS NO.')"
+        />
+        <el-table-column
+            label="UpdateTime"
+            prop="updateTime"
+            :width="getColumnWidth('updateTime', 'UpdateTime')"
+        />
+        <el-table-column label="Operation" fixed="right" :width="220">
           <template v-slot="scope">
             <el-button
                 size="mini"
@@ -74,32 +75,31 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block">
-        <el-pagination
-            :current-page="currentPage"
-            :page-size="size"
-            :total="total"
-            layout="prev, pager, next"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange">
-        </el-pagination>
-      </div>
-    </div>
+    </el-scrollbar>
 
-
-    <compound-info :compoundInfo="compoundInfo" :visible.sync="viewDialogVisible"></compound-info>
+    <el-pagination
+        :current-page="currentPage"
+        :page-size="size"
+        :total="total"
+        layout="prev, pager, next"
+        @current-change="handleCurrentChange">
+    </el-pagination>
+    <compound-info
+        :compoundInfo="compoundInfo"
+        :visible.sync="viewDialogVisible"
+    />
     <compound-info-edit
         :compoundInfo="compoundInfo"
         :getCompoundData="getCompoundData"
         :visible.sync="editDialogVisible"
-    ></compound-info-edit>
+    />
   </div>
 </template>
 
 <script>
 import CompoundInfo from "@/components/CompoundInfo"
 import CompoundInfoEdit from "../components/CompoundInfoEdit"
-
+import { flexColumnWidth, flexTableHeight } from '@/utils/table'
 export default {
   name: "CompoundTable",
   component: [CompoundInfo, CompoundInfoEdit],
@@ -109,7 +109,7 @@ export default {
   },
   data() {
     return {
-      tableHeight: 0,
+      tableHeight: flexTableHeight(),
       compoundData: [],
       viewDialogVisible: false,
       editDialogVisible: false,
@@ -124,12 +124,8 @@ export default {
     }
   },
   methods: {
-    calHeight () {
-      this.$nextTick(() => {
-        const rect = this.$refs.container.getBoundingClientRect()
-        this.tableHeight = rect.height
-        console.log(rect.height)
-      })
+    getColumnWidth(prop, label) {
+      return flexColumnWidth(prop, this.compoundData, label)
     },
     getRowKey(val) {
       return val.id;
@@ -200,11 +196,9 @@ export default {
         console.log(err);
       });
     },
-    handleSizeChange(val) {
-      this.size = val;
-    },
     handleCurrentChange(val) {
-      this.currentPage = val;
+      this.currentPage = val
+      this.getCompoundData()
     },
     getCompoundData() {
       this.$api.compound.getList({
@@ -236,20 +230,48 @@ export default {
   },
   created() {
     this.getCompoundData()
-    this.calHeight()
+  },
+  mounted() {
+    //挂载window.onresize事件(动态设置table高度)
+    window.onresize = () => {
+      if (this.resizeFlag) {
+        clearTimeout(this.resizeFlag)
+      }
+      this.resizeFlag = setTimeout(() => {
+        this.tableHeight = flexTableHeight()
+        this.resizeFlag = null
+      }, 100)
+    }
   }
 }
 </script>
 
 <style scoped>
-.table-container {
-  position: relative;
+>>> .el-input-group__prepend {
+  background-color: transparent;
+  width: 170px;
 }
 
-.table-container-inner {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 55px;
+>>> .el-form-item {
+  margin-bottom: 10px;
+}
+
+>>>.el-table__body-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+>>>.el-table__body-wrapper::-webkit-scrollbar-thumb {
+  background-color: #ddd;
+  border-radius: 3px;
+}
+
+>>>.el-table th.gutter {
+  display: none;
+  background-color: rgb(232, 232, 232);
+}
+
+>>>.el-table__body {
+  width: 100% !important;
 }
 </style>
