@@ -130,7 +130,6 @@ export default {
     getRowKey(val) {
       return val.id;
     },
-
     on_select(val) {
       //点击行选中复选框
       this.$refs.table.toggleRowSelection(val);

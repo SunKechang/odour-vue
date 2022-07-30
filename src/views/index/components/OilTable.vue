@@ -74,7 +74,7 @@
 <script>
     import request from "@/network/request";
     import jwtDecode from "jwt-decode";
-    const OilInfo=()=>import("@/oils/OilInfo");
+    const OilInfo=()=>import("@/components/Oil/OilInfoView");
 
     export default {
         name: "OilTable",

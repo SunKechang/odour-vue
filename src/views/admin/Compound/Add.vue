@@ -2,7 +2,7 @@
   <div class="compound-info-form">
     <div class="itemTitle">
       <p>Add Compound</p>
-      <img alt="" src="../../../assets/line.png" style="width: 100%">
+      <img :src="lineUrl" style="width: 100%" alt="line">
     </div>
     <el-form ref="compoundInfoForm" :model="compoundInfoForm" :rules="rules" label-position="left" label-width="200px">
       <el-divider content-position="left"><span class="span">Compound Info</span></el-divider>
@@ -336,11 +336,12 @@
 <script>
 import request from "@/network/request";
 import {convertImgToBase64} from "@/utils/image";
-
+import line from "@/assets/line.png"
 export default {
   name: "AddCompound",
   data() {
     return {
+      lineUrl: line,
       compoundInfoForm: {
         compoundName: '',
         synonym: '',

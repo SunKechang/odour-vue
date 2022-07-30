@@ -127,7 +127,7 @@ const routes = [
             },
             {
                 path: 'editoil',
-                component: ()=>import("@/views/admin/components/OilTable")
+                component: ()=>import("@/views/admin/Oil/Table")
             },
             {
                 path: 'editproduct',
@@ -135,7 +135,7 @@ const routes = [
             },
             {
                 path: 'addoil',
-                component: ()=>import("@/views/admin/views/AddOil")
+                component: ()=>import("@/views/admin/Oil/Add")
             },
             {
                 path: 'addproduct',
