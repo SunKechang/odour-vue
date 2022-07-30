@@ -10,10 +10,11 @@ const getters = {
 const mutations = {
     setAccessToken(state, accessToken) {
         state.Authorization = accessToken
-        localStorage.setItem("Authorization",accessToken);
+        localStorage.setItem("Authorization",accessToken)
     },
     signOut(state) {
         state.Authorization = null
+        localStorage.setItem("Authorization",null)
     }
 }
 const actions = {

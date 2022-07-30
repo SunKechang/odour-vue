@@ -48,7 +48,7 @@
           </el-tab-pane>
           <el-tab-pane label="Structure" name="structure">
             <div>
-              <b>Chemical Structure: </b>
+              <b>Chemical Structure: </b><br/>
               <el-image
                   :src="$store.state.config.host + compoundInfo.chemicalStructure"
                   alt="Chemical Structure"

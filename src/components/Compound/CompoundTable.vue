@@ -77,8 +77,8 @@
         :visible.sync="viewDialogVisible"
     />
     <compound-info-edit
+        @close="closeEditDialog"
         :compoundInfo="compoundInfo"
-        :getCompoundData="getCompoundData"
         :visible.sync="editDialogVisible"
     />
   </div>
@@ -98,11 +98,28 @@ export default {
     "compound-info-edit": CompoundInfoEdit,
     "search-form": SearchForm
   },
+  props: {
+    compoundData: {
+      type: Array,
+      default: ()=> {
+        return []
+      }
+    },
+    currentPage: {
+      type: Number,
+      default: 1
+    },
+    size: {
+      type: Number,
+      default: 10
+    },
+    total: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
-      size: 10,
-      total: 0,
-      currentPage: 1,
       downloadList: [],
       compoundList: [],
       compoundInfo: {},
@@ -112,22 +129,12 @@ export default {
     }
   },
   methods: {
-    handleCurrentChange(val) {
-      this.currentPage = val
-      this.getCompoundData()
+    closeEditDialog(val) {
+      this.$emit('closeEditDialog', val)
     },
-    getCompoundData() {
-      this.$api.compound.getList({
-        page: this.currentPage,
-        size: this.size
-      }).then(({state, data: {content, totalSize}}) => {
-        if (state === 0) {
-          this.compoundList = content
-          this.total = totalSize
-        }
-      }).catch(err => {
-        console.error(err)
-      })
+    handleCurrentChange(val) {
+      this.$emit('update:currentPage', val)
+      this.$emit('pageChange', val)
     },
     onSubmit(searchForm) {
       this.$api.compound.search({
@@ -200,8 +207,12 @@ export default {
       })
     }
   },
-  created() {
-    this.getCompoundData()
+  watch: {
+    compoundData: {
+      handler(val) {
+        this.compoundList = val
+      }
+    }
   },
   mounted() {
     //挂载window.onresize事件(动态设置table高度)

@@ -13,7 +13,8 @@
             <el-image
                 :src="$store.state.config.host + proItem.productPicture"
                 :alt="proItem.productName"
-                style="height: 150px"
+                style="height: 150px;cursor:pointer;"
+                @click="clickProductPicture(proItem)"
             />
           </el-col>
         </el-row>
@@ -30,6 +31,14 @@ export default {
     return {
       lineUrl: line,
       carouselData: []
+    }
+  },
+  methods: {
+    clickProductPicture(proItem) {
+      this.$router.push({
+        path: '/product',
+        query: { product: proItem.id }
+      })
     }
   },
   created() {

@@ -14,7 +14,14 @@
         </a>
       </el-menu-item>
       <el-menu-item index="/home">{{ $t("nav.home") }}</el-menu-item>
-      <el-menu-item index="/compound">{{ $t("nav.compounds") }}</el-menu-item>
+      <el-submenu index="2">
+        <template slot="title">{{ $t("nav.compounds") }}</template>
+        <el-menu-item index="/compound">所有化合物</el-menu-item>
+        <el-menu-item v-for="(item) in productList" :index="'/product?product='+item.id">
+          {{item.productName}}
+        </el-menu-item>
+      </el-submenu>
+
       <el-menu-item index="/downloadpro">{{ $t("nav.downloadpro") }}</el-menu-item>
       <el-menu-item index="/oildatabase">{{ $t("nav.oils") }}</el-menu-item>
       <el-menu-item index="/about">{{ $t("nav.about") }}</el-menu-item>
@@ -38,8 +45,15 @@ export default {
   data() {
     return {
       url: 'http://www.bjfu.edu.cn/',
-      bjfu: bjfu
+      bjfu: bjfu,
+      productList: []
     }
+  },
+  created() {
+    this.$api.product.getAll()
+        .then(res => {
+          this.productList = res.data
+        })
   }
 }
 </script>

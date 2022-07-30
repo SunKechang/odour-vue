@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    const ChangePassword=()=>import("../components/ChangePassword")
+    const ChangePassword=()=>import("./ChangePassword")
     export default {
         name:'Security',
         component:ChangePassword,

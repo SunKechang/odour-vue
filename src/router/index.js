@@ -33,7 +33,13 @@ const routes = [
                 meta: {
                     isLogin: false
                 }
-
+            },
+            {
+                path: '/product',
+                component: () => import("@/views/index/Product"),
+                meta: {
+                    isLogin: false
+                }
             },
             {
                 path: '/oildatabase',
@@ -143,15 +149,15 @@ const routes = [
             },
             {
                 path: 'security',
-                component: ()=>import("@/views/admin/views/Security")
+                component: ()=>import("@/views/admin/Security/Security")
             },
             {
                 path: 'citySN',
-                component: ()=>import("@/views/admin/components/CitySNTable")
+                component: ()=>import("@/views/admin/Log/CitySNTable")
             },
             {
                 path: 'log',
-                component: ()=>import("@/views/admin/views/DatabaseLog")
+                component: ()=>import("@/views/admin/Log/DatabaseLog")
             },
             {
                 path: 'download',

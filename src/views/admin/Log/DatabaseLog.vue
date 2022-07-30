@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    const LogTable=()=>import("../components/LogTable")
+    const LogTable=()=>import("./LogTable")
     export default {
         name: "DatabaseLog",
         component:LogTable,

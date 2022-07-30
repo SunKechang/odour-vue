@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    const OilTable=()=>import("./components/OilTable")
+    const OilTable=()=>import("../../components/Oil/OilTable")
     export default {
         name: "OilDatabase",
         component:OilTable,

@@ -389,9 +389,6 @@ export default {
       type: Boolean,
       default: false
     },
-    getCompoundData: {
-      type: Function
-    },
     compoundInfo: {
       type: Object,
       default: function () {
@@ -431,6 +428,9 @@ export default {
     }
   },
   methods: {
+    getCompoundData() {
+      this.$emit('close', this.compoundInfoForm)
+    },
     // 移除产品描述
     removeProductDescription(productIndex, descriptionIndex) {
       this.compoundInfoForm.productList[productIndex].odList.splice(descriptionIndex, 1);
