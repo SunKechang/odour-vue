@@ -1,35 +1,6 @@
 <template>
   <div>
-    <div style="text-align: left;">
-      <el-form :inline="true" :model="searchForm">
-        <el-form-item>
-          <el-input
-              v-model="searchForm.propertyDescription"
-              clearable
-          >
-            <el-select slot="prepend" v-model="searchForm.property">
-              <el-option label="Compound Name" value="compound_name"></el-option>
-              <el-option label="CAS NO." value="cas_no"></el-option>
-              <el-option label="Odour Description" value="odour_description"></el-option>
-              <el-option label="Odour Threshold" value="odour_threshold"></el-option>
-              <el-option label="RI" value="compound_ri"></el-option>
-              <el-option label="NRI" value="compound_nri"></el-option>
-              <el-option label="Measured" value="measured"></el-option>
-              <el-option label="Low-resolution Measured" value="lowmeasured"></el-option>
-            </el-select>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button circle icon="el-icon-search" @click="onSubmit"></el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button style="float:right" @click="onDownload">Download</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
     <product-table/>
-
-
   </div>
 </template>
 
@@ -42,16 +13,6 @@ export default {
   component: [ProductTable],
   components: {
     "product-table": ProductTable
-  },
-  data() {
-    return {
-
-
-      searchForm: {
-        property: 'compound_name',
-        propertyDescription: ''
-      }
-    }
   },
   methods: {
 

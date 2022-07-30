@@ -102,7 +102,7 @@ export default {
     submitForm() {
       this.$refs.productInfoForm.validate((valid) => {
         if (!valid) return
-        this.$api.product.add(this.productInfoForm)
+        this.$api.product.update(this.productInfoForm)
             .then(({state}) => {
               if (state === 0) {
                 this.$alert("Add " + this.productInfoForm.productName + " to database successfully!", "Message", {

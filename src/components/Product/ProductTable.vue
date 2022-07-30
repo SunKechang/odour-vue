@@ -1,9 +1,10 @@
 <template>
   <div>
+    <search-form @onSubmit="onSubmit" @onDownload="onDownload"></search-form>
     <el-scrollbar>
       <el-table
           ref="table"
-          :data="productData"
+          :data="productList"
           :max-height="tableHeight"
           :row-key="getRowKey"
           style="width: 100%;"
@@ -73,7 +74,7 @@
     />
     <product-info-edit
         :productInfo="productInfo"
-        @getProductData="getProductData"
+        :getProductData="getProductList"
         :visible.sync="editDialogVisible"
     />
   </div>
@@ -83,7 +84,7 @@
 import ProductInfoView from "@/components/Product/ProductInfoView"
 import ProductInfoEdit from "@/components/Product/ProductInfoEdit"
 import {flexColumnWidth, flexTableHeight} from "@/utils/table";
-import SearchForm from "@/components/Compound/CompoundSearchForm";
+import SearchForm from "@/components/Product/ProductSearchForm";
 
 export default {
   name: "ProductTable",
@@ -99,20 +100,20 @@ export default {
       total: 0,
       currentPage: 1,
       productInfo: {},
-      productData: [],
+      productList: [],
       viewDialogVisible: false,
       editDialogVisible: false,
       tableHeight: flexTableHeight(),
     }
   },
   methods: {
-    getProductData() {
+    getProductList() {
       this.$api.product.getList({
         page: this.currentPage,
         size: this.size
       }).then(({state, data: {content, totalSize}}) => {
         if (state === 0) {
-          this.productData = content
+          this.productList = content
           this.total = totalSize
         }
       }).catch(err => {
@@ -121,7 +122,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val
-      this.getProductData()
+      this.getProductList()
     },
     getColumnWidth(prop, label) {
       return flexColumnWidth(prop, this.compoundData, label)
@@ -165,7 +166,7 @@ export default {
       this.$api.product.delete(row.id)
           .then(res => {
             if (res.data.state === 0) {
-              this.getProductData();
+              this.getProductList();
               this.$alert("Delete " + " successfully!", "Message", {
                 confirmButtonText: 'Confirm'
               });
@@ -178,9 +179,26 @@ export default {
         console.log(err);
       });
     },
+    onSubmit(searchForm) {
+      this.$api.product.search({
+        ...searchForm,
+        page: this.currentPage,
+        size: this.size
+      }).then(({state, data: {content, totalSize}}) => {
+        if (state === 0) {
+          this.productList = content
+          this.total = totalSize
+        }
+      }).catch(err => {
+        console.log(err);
+      });
+    },
+    onDownload() {
+      this.$api.product.download(this.downloadList)
+    }
   },
   created() {
-    this.getProductData()
+    this.getProductList()
   },
   mounted() {
     //挂载window.onresize事件(动态设置table高度)
