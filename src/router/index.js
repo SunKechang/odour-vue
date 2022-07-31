@@ -43,7 +43,7 @@ const routes = [
             },
             {
                 path: '/oildatabase',
-                component: () => import("@/views/index/OilDatabase"),
+                component: () => import("@/views/index/Oil"),
             },
             {
                 path: '/downloadpro',
@@ -71,7 +71,7 @@ const routes = [
             {
                 path: '/agency',
                 redirect:'/agency/tf',
-                component: () => import("@/views/index/CooperationAgency"),
+                component: () => import("@/views/index/Agency"),
                 children:[
                     {
                         path:'tf',

@@ -29,8 +29,8 @@
 
 <script>
 
-import ProductOverview from "@/views/index/Home/ProductOverview"
-import Announcement from "@/views/index/Home/Announcement"
+import ProductOverview from "@/components/Home/ProductOverview"
+import Announcement from "@/components/Home/Announcement"
 import line from "@/assets/line.png"
 
 export default {

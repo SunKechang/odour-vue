@@ -1,8 +1,9 @@
+<!--suppress ALL -->
 <template>
     <div class="advanced-search-form">
         <div class="itemTitle">
             <p>{{$t("search.title")}}</p>
-            <img src="../../assets/line.png" width="100%" alt="">
+          <el-image :src="lineUrl" alt="line" style="width: 100%"></el-image>
         </div>
         <el-form :model="advancedSearchForm" ref="advancedSearchForm" label-width="200px" >
             <el-form-item :label="$t('compound.compoundName')" prop="compound_name" >
@@ -88,14 +89,14 @@
 </template>
 
 <script>
-    import request from "../../network/request";
+    import request from "../../../network/request";
     import jwtDecode from "jwt-decode"
-    import store from "@/store"
-
+    import line from "@/assets/line.png"
     export default {
         name: "AdvancedSearch",
         data(){
             return {
+              lineUrl: line,
                 advancedSearchForm: {
                     compound_name:'',
                     cas_no:'',
@@ -108,9 +109,11 @@
             }
         },
         created() {
-            let token=store.state.Authorization;
-            const decode=jwtDecode(token);
-            this.account=decode.account;
+            let token=this.$store.state.user.Authorization;
+            if (token) {
+              const decode=jwtDecode(token);
+              this.account=decode.account;
+            }
         },
         mounted() {
             let params=this.$route.params;
@@ -133,11 +136,11 @@
                     param.append("compound_ri",v.advancedSearchForm.compound_ri);
                 if(v.advancedSearchForm.measured!==0&&v.advancedSearchForm.measured!==undefined)
                     param.append("measured",v.advancedSearchForm.measured);
-                request.post('/compound/advanced',param)
+                this.$api.compound.advanced(param)
                     .then(res=>{
-                        if(res.data.state===0) {
-                            v.result = res.data.data;
-                            v.total=res.data.data.length;
+                        if(res.state===0) {
+                            v.result = res.data;
+                            v.total=res.data.length;
                         }
                     }).catch(err=>{
                     console.log(err);

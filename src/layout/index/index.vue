@@ -2,8 +2,8 @@
   <div>
     <el-backtop></el-backtop>
     <top-nav></top-nav>
-    <div class=background style="width: 100%;overflow: hidden">
-      <img alt="" src="../../assets/oil.jpg">
+    <div class=background style="width: 100%;overflow: hidden;">
+      <el-image alt="oil" :src="oil"></el-image>
     </div>
     <el-container>
       <el-main>
@@ -17,12 +17,18 @@
 </template>
 
 <script>
-import TopNav from "@/layout/index/components/TopNav";
+import TopNav from "@/layout/index/components/TopNav"
+import oil from "@/assets/oil.jpg"
 export default {
   name: "index",
   component: [TopNav],
   components: {
     "top-nav": TopNav,
+  },
+  data() {
+    return{
+      oil: oil
+    }
   },
   methods: {},
   created() {
@@ -32,7 +38,6 @@ export default {
         }).catch(err => {
       console.log(err);
     });
-    console.log(this.$store.state.footer)
   }
 }
 </script>

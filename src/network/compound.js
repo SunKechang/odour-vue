@@ -21,6 +21,9 @@ export default {
     delete(id) {
         return request.delete('/compound/delete/' + id)
     },
+    advanced(param) {
+        return request.post('/compound/advanced',param)
+    },
     download(downloadList) {
         return axios.create({
             headers: {
