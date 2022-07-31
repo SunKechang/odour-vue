@@ -1,6 +1,5 @@
 <template>
   <div>
-    <search-form @onSubmit="onSubmit" @onDownload="onDownload"></search-form>
     <el-scrollbar>
       <el-table
           ref="table"
@@ -88,15 +87,14 @@
 import {flexColumnWidth, flexTableHeight} from "@/utils/table";
 import CompoundInfoView from "@/components/Compound/CompoundInfoView"
 import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
-import SearchForm from "@/components/Compound/CompoundSearchForm";
+
 
 export default {
   name: "CompoundTable",
-  component: [CompoundInfoView, CompoundInfoEdit, SearchForm],
+  component: [CompoundInfoView, CompoundInfoEdit],
   components: {
     "compound-info-view": CompoundInfoView,
     "compound-info-edit": CompoundInfoEdit,
-    "search-form": SearchForm
   },
   props: {
     compoundData: {
@@ -120,7 +118,6 @@ export default {
   },
   data() {
     return {
-      downloadList: [],
       compoundList: [],
       compoundInfo: {},
       viewDialogVisible: false,
@@ -135,20 +132,6 @@ export default {
     handleCurrentChange(val) {
       this.$emit('update:currentPage', val)
       this.$emit('pageChange', val)
-    },
-    onSubmit(searchForm) {
-      this.$api.compound.search({
-        ...searchForm,
-        page: this.currentPage,
-        size: this.size
-      }).then(({state, data: {content, totalSize}}) => {
-        if (state === 0) {
-          this.compoundList = content
-          this.total = totalSize
-        }
-      }).catch(err => {
-        console.log(err);
-      });
     },
     onDownload() {
       this.$api.compound.download(this.downloadList)
@@ -165,7 +148,7 @@ export default {
     },
     //选中复选框操作
     on_selectsion(val) {
-      this.downloadList = val;
+      this.$emit('select', val)
     },
     getIndex(index) {
       index = (index + 1) + (this.currentPage - 1) * this.size

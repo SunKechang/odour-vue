@@ -1,5 +1,6 @@
 <template>
   <div ref="container">
+    <search-form @onSubmit="onSearch"/>
     <compound-table
       :compound-data="compoundList"
       :current-page.sync="currentPage"
@@ -7,20 +8,24 @@
       :total="total"
       @closeEditDialog="getCompoundData"
       @pageChange="getCompoundData"
+      @select="onSelect"
     />
   </div>
 </template>
 
 <script>
 import CompoundTable from "@/components/Compound/CompoundTable"
+import CompoundSearchForm from "@/components/Compound/CompoundSearchForm"
 export default {
-  name: "EditCompound",
-  component: [CompoundTable],
+  name: "Compound",
+  component: [CompoundTable, CompoundSearchForm],
   components: {
-    "compound-table": CompoundTable
+    "compound-table": CompoundTable,
+    "search-form": CompoundSearchForm
   },
   data() {
     return {
+      downloadList: [],
       compoundList: [],
       currentPage: 1,
       size: 10,
@@ -28,6 +33,23 @@ export default {
     }
   },
   methods: {
+    onSelect(val) {
+      this.downloadList = val
+    },
+    onSearch(searchForm) {
+      this.$api.compound.search({
+        ...searchForm,
+        page: this.currentPage,
+        size: this.size
+      }).then(({state, data: {content, totalSize}}) => {
+        if (state === 0) {
+          this.compoundList = content
+          this.total = totalSize
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     getCompoundData() {
       this.$api.compound.getList({
         page: this.currentPage,

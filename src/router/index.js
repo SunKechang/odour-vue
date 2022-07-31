@@ -125,11 +125,11 @@ const routes = [
         children:[
             {
                 path: 'edit',
-                component: ()=>import("@/views/admin/Compound/Table")
+                component: ()=>import("@/views/admin/Compound")
             },
             {
                 path: 'add',
-                component: ()=>import("@/views/admin/Compound/Add")
+                component: ()=>import("@/views/admin/Compound/add")
             },
             {
                 path: 'editoil',

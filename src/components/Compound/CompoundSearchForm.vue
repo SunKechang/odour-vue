@@ -12,7 +12,7 @@
             <el-option label="NRI" value="compound_nri"></el-option>
             <el-option label="Measured" value="measured"></el-option>
             <el-option label="Low-resolution Measured" value="lowmeasured"></el-option>
-            <el-option label="Product" value="product"></el-option>
+            <el-option label="Product" value="product" v-if="product"></el-option>
           </el-select>
         </el-input>
       </el-form-item>
@@ -28,7 +28,13 @@
 
 <script>
 export default {
-  name: "SearchForm",
+  name: "CompoundSearchForm",
+  props: {
+    product: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       searchForm: {

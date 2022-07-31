@@ -12,6 +12,9 @@ export default {
     search(data) {
         return request.post("/product/search", data)
     },
+    searchCompound(data) {
+        return request.post("/product/searchcompound", data)
+    },
     getOne(id) {
         return request.get("/product/" + id)
     },
