@@ -47,7 +47,7 @@ const routes = [
             },
             {
                 path: '/downloadpro',
-                component: () => import("@/views/index/Downloadpro"),
+                component: () => import("@/views/index/DownloadPro"),
             },
             {
                 path: '/about',

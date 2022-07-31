@@ -24,6 +24,46 @@ export default {
     advanced(param) {
         return request.post('/compound/advanced',param)
     },
+    downloadpro(data) {
+        const request = axios.create({
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            responseType: "blob",
+            baseURL: '/api',
+            withCredentials: true,
+            timeout: 5000
+        })
+        request.post('/compound/downloadpro', data)
+            .then(res => {
+                console.log(res.data)
+                let blob = new Blob([res.data], {type: 'application/ms-excel;charset=utf-8'});
+                let downloadElement = document.createElement('a');
+                let href = window.URL.createObjectURL(blob); //创建下载的链接
+                downloadElement.href = href;
+                downloadElement.download = '化合物信息表.xls'; //下载后文件名
+                document.body.appendChild(downloadElement);
+                downloadElement.click(); //点击下载
+                document.body.removeChild(downloadElement); //下载完成移除元素
+                window.URL.revokeObjectURL(href); //释放掉blob对象
+                Vue.prototype.$alert("下载成功", "Message", {
+                    confirmButtonText: 'Confirm'
+                });
+                // }else{
+                //     v.$alert("Failed!", "Message", {
+                //         confirmButtonText: 'Confirm'
+                //     });
+                // }
+            }).catch(err => {
+            console.error(err)
+        })
+    },
+    downloadTemplate() {
+        return request.get('/compound/downloadTemplate', {
+            params: {},
+            responseType: 'blob',
+        })
+    },
     download(downloadList) {
         return axios.create({
             headers: {
