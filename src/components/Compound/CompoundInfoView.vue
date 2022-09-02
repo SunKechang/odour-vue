@@ -185,6 +185,45 @@
                 </el-table-column>
               </el-table>
             </div>
+          </el-tab-pane >
+          <el-tab-pane label="Production" name="Production">
+            <div v-for="product in compoundInfo.productList">
+              <b>{{product.productName}}</b>
+              <div>Product Threshold</div>
+              <el-table
+                  :data="product.otList"
+                  border
+                  style="width: 100%;margin-left: 100px">
+                <el-table-column
+                    label="Odour Threshold(μg/kg) "
+                    prop="odourThreshold">
+                </el-table-column>
+                <el-table-column
+                    label="Odour Threshold Reference"
+                    prop="odourThresholdReference">
+                </el-table-column>
+                <el-table-column
+                    label="Odour Threshold Base"
+                    prop="odourThresholdBase">
+                </el-table-column>
+              </el-table>
+              <div>Product Description</div>
+              <el-table
+                  :data="product.odList"
+                  border
+                  style="width: 100%;margin-left: 100px">
+                <el-table-column
+                    label="Odour Description"
+                    prop="odourDescription">
+                </el-table-column>
+                <el-table-column
+                    label="Odour Description Reference"
+                    prop="odourDescriptionReference">
+                </el-table-column>
+              </el-table>
+            </div>
+
+
           </el-tab-pane>
         </el-tabs>
         <br>

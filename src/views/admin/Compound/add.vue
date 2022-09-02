@@ -274,6 +274,11 @@
                   <el-input v-model="item.odourThresholdReference" clearable></el-input>
                 </el-form-item>
               </el-col>
+              <el-col :lg="11">
+                <el-form-item class="form-item" label="Odour Threshold Base">
+                  <el-input v-model="item.odourThresholdBase" clearable></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :lg="2">
                 <i class="el-icon-delete rowBtn" @click="removeProductThreshold(productIndex, otIndex)"></i>
               </el-col>
@@ -397,7 +402,8 @@ export default {
       this.compoundInfoForm.productList[productIndex].otList.push({
         odourThreshold: 0,
         odourThresholdReference: '',
-        productId: productId
+        productId: productId,
+        odourThresholdBase: ''
       })
     },
     // 选择产品-选中值发生变化时触发

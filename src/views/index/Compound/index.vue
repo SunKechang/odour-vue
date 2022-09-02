@@ -9,6 +9,7 @@
     <el-image :src="line" alt="line" style="margin: 50px 0;width: 100%"></el-image>
     <search-form @onSubmit="onSearch"/>
     <compound-table
+        :permission="false"
         :compound-data="compoundList"
         :current-page.sync="currentPage"
         :size="size"

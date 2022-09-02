@@ -48,12 +48,12 @@
                 @click="handleView(scope.$index, scope.row)">View
             </el-button>
             <el-button
-                v-if="$store.state.user.Authorization"
+                v-if="$store.state.user.Authorization && permission"
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)">Edit
             </el-button>
             <el-button
-                v-if="$store.state.user.Authorization"
+                v-if="$store.state.user.Authorization && permission"
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)">Delete
@@ -114,6 +114,10 @@ export default {
     total: {
       type: Number,
       default: 0
+    },
+    permission: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
