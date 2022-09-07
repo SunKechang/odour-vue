@@ -11,7 +11,7 @@
         <el-row :gutter="20">
           <el-col v-for="(proItem, proIndex) in carItem" :key="proIndex" :span="12">
             <el-image
-                :src="$store.state.config.host + proItem.productPicture"
+                :src="proItem.productPicture"
                 :alt="proItem.productName"
                 style="height: 150px;cursor:pointer;"
                 @click="clickProductPicture(proItem)"

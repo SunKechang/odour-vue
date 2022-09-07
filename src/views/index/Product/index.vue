@@ -15,6 +15,7 @@
         :currentPage.sync="currentPage"
         :size="size"
         :total="total"
+        :permission="false"
         @pageChange="getCompoundData"
     />
   </div>

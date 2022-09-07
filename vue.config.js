@@ -10,10 +10,6 @@ module.exports = {
                 pathRewrite: {
                     '^/api': ''
                 }
-            },
-            '/resource':{
-                // target: 'http://localhost',
-                target: 'http://8.141.162.63'
             }
         }
     },

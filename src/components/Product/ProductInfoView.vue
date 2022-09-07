@@ -26,7 +26,7 @@
         </el-table><br/>
         <b>Product Picture: </b><br/>
         <el-image
-            :src="$store.state.config.host + productInfo.productPicture"
+            :src="productInfo.productPicture"
             alt="Product Picture"
             style="position: relative;width: 300px;"
         />

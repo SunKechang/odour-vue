@@ -31,7 +31,7 @@
           <template v-slot="scope">
             <el-image
                 :alt="scope.row['productName']"
-                :src="$store.state.config.host + scope.row['productPicture']"
+                :src="scope.row['productPicture']"
                 style="width: 100px"
             />
           </template>

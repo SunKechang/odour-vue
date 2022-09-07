@@ -21,7 +21,7 @@
           <el-input v-model="productInfoForm.productDescription" clearable type="textarea"></el-input>
         </el-form-item>
         <el-divider content-position="left"><span class="span">Product Picture</span></el-divider>
-        <img width="30%" style="margin: auto" :src="$store.state.config.host + oldProductPicture" alt="">
+        <img width="30%" style="margin: auto" :src="oldProductPicture" alt="">
 
         <el-upload
             ref="uploadProductPicture"

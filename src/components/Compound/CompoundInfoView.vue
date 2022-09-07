@@ -50,7 +50,7 @@
             <div>
               <b>Chemical Structure: </b><br/>
               <el-image
-                  :src="$store.state.config.host + compoundInfo.chemicalStructure"
+                  :src="compoundInfo.chemicalStructure"
                   alt="Chemical Structure"
                   style="position: relative;width: 300px;"
               />
