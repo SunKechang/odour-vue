@@ -7,6 +7,7 @@ import city from "./city"
 import log from "./log"
 import team from "./team"
 import oil from "./oil"
+import article from "./article"
 
 const api = {
     compound,
@@ -15,7 +16,8 @@ const api = {
     city,
     log,
     team,
-    oil
+    oil,
+    article
 }
 
 Vue.prototype.$api = api

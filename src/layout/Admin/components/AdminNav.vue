@@ -55,6 +55,22 @@
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
+      <el-submenu index="4">
+        <template slot="title">
+          <i class="el-icon-menu"></i>
+          <span>Article</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item index="/admin/editarticle">
+            <i class="el-icon-edit-outline"></i>
+            <span>Edit Article</span>
+          </el-menu-item>
+          <el-menu-item index="/admin/addarticle">
+            <i class="el-icon-plus"></i>
+            <span>Add Article</span>
+          </el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
       <el-menu-item index="/admin/citySN">
         <i class="el-icon-location-outline"></i>
         <span slot="title">CitySN</span>

@@ -13,4 +13,5 @@ module.exports = {
             }
         }
     },
+    target: target
 }

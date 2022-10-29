@@ -162,6 +162,14 @@ const routes = [
             {
                 path: 'download',
                 component: ()=>import("@/views/admin/views/Download")
+            },
+            {
+                path: 'editarticle',
+                component: ()=>import("@/views/admin/Article/edit")
+            },
+            {
+                path: 'addarticle',
+                component: ()=>import("@/views/admin/Article/add")
             }
         ]
     }
