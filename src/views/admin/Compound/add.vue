@@ -316,6 +316,61 @@
           </div>
         </div>
       </div>
+      <el-divider content-position="left"><span class="span">Article</span></el-divider>
+      <el-row :gutter="10">
+        <el-col :lg="12">
+          <el-form-item class="form-item" label="Article" label-width="80px">
+            <el-switch
+              v-model="articleExisted"
+              active-text="使用已有文献"
+              inactive-text="上传新文献">
+            </el-switch>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10" v-show="articleExisted">
+        <el-col :lg="12">
+          <el-form-item class="form-item" label="Article" label-width="80px">
+            <el-select
+              filterable
+              :value="selectedArticle.name"
+              value-key="name"
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteSearch"
+              :loading="articleSearchLoading"
+              @change="selectChange">
+              <el-option
+                v-for="(item,index) in articleList"
+                :key="item.pk"
+                :label="item.name"
+                :value="index">
+              </el-option>
+            </el-select>
+            <el-button size="small" type="primary" style="margin-left: 20px;" @click="viewArticle">
+              View
+            </el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10" v-show="!articleExisted">
+        <el-col :lg="12">
+          <el-form-item label="Article Name">
+          <el-input v-model="uploadArticle.name" clearable style="width: 500px"></el-input>
+        </el-form-item>
+        <el-form-item label="Article File">
+            <el-upload
+                action="/"
+                :on-change="fileChange"
+                :file-list="[]"
+                :auto-upload="false"
+                :limit="1">
+                <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
+        </el-form-item>
+        </el-col>
+      </el-row>
       <el-divider content-position="left"><span class="span">Uploader & Reviewer</span></el-divider>
       <el-row :gutter="10">
         <el-col :lg="12">
@@ -363,14 +418,26 @@ export default {
         uploader: '',
         reviewer: '',
         products: [],
-        productList: []
+        productList: [],
+        article: null
       },
       rules: {
         compoundName: [
           {required: true, message: "Compound name can't be blank", trigger: 'blur'}
         ]
       },
-      productOptions: []
+      productOptions: [],
+      articleSearchLoading: false,
+      articleList: [],
+      selectedArticle: {
+        name: '',
+        pk: null
+      },
+      uploadArticle: {
+        name: '',
+        file : null
+      },
+      articleExisted: true
     }
   },
   created() {
@@ -425,8 +492,40 @@ export default {
       // 产品风味列表移除该项即可
       this.compoundInfoForm.productList = this.compoundInfoForm.productList.filter(item => item.id !== val)
     },
-    submitForm() {
-      this.$refs.compoundInfoForm.validate((valid) => {
+    async uploadOneArticle() {
+      if(this.articleExisted) {
+        return
+      }
+      let that = this
+      let form = new FormData();
+      form.append('name', this.uploadArticle.name)
+      form.append('file', this.uploadArticle.file)
+      await this.$api.article.add(form)
+        .then(({data, success})=> {
+          if (success) {
+            that.compoundInfoForm.article = data
+          }
+          that.uploadArticle.name = ''
+          that.uploadArticle.file = null
+        })
+    },
+    async submitForm() {
+      if(this.articleExisted) {
+        if(this.selectedArticle.name === undefined || this.selectedArticle.name === '') {
+          this.$message('未选择文献')
+          return
+        }
+        this.compoundInfoForm.article = this.selectedArticle.pk
+      } else {
+        if(this.uploadArticle.name === undefined || this.uploadArticle.name === '' ||
+        this.uploadArticle.file === undefined || this.uploadArticle.file === null) {
+          this.$message('未选择上传文献')
+          return
+        }
+      }
+      await this.uploadOneArticle()
+      console.log(this.compoundInfoForm.article)
+      await this.$refs.compoundInfoForm.validate((valid) => {
         if (!valid) return
         this.compoundInfoForm.casNo = this.compoundInfoForm.casNo.replace(new RegExp("-", "g"), "");
         this.$api.compound.add(this.compoundInfoForm)
@@ -583,6 +682,39 @@ export default {
           }).catch(err => {
         console.log(err);
       });
+    },
+    remoteSearch(query) {
+      let that = this
+      this.articleSearchLoading = true
+      this.$api.article.allSearch(query)
+        .then(({data, success}) => {
+          if(success) {
+            that.articleList = data.list
+          }else {
+            that.$message("查找失败")
+          }
+          that.articleSearchLoading = false
+        }).catch(err => {
+          console.log(err)
+          that.articleSearchLoading = false
+        })
+    },
+    selectChange(item) {
+      this.selectedArticle.name = this.articleList[item].name
+      this.selectedArticle.pk = this.articleList[item].pk
+    },
+    viewArticle() {
+      if(this.selectedArticle.name === undefined || this.selectedArticle.name === '') {
+        this.$message("未选择文献")
+        return
+      }
+      let _pk = this.selectedArticle.pk
+      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+    },
+    fileChange(file, fileList) {
+      if(fileList.length == 1) {
+          this.uploadArticle.file = fileList[0].raw
+      }
     }
   }
 }

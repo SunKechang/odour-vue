@@ -10,5 +10,8 @@ export const password = (param) => {
 
 export default {
     login,
-    password
+    password,
+    login(_account, _password) {
+        return request.post("/user/login?userEmail="+_account+"&userPassword="+_password)
+    },
 }

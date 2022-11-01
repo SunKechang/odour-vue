@@ -172,6 +172,22 @@ const routes = [
                 component: ()=>import("@/views/admin/Article/add")
             }
         ]
+    },
+    {
+        path: '/upload',
+        name: 'upload',
+        redirect: '/upload/list',
+        component:()=>import("@/layout/Upload"),
+        children:[
+            {
+                path: 'list',
+                component: ()=>import("@/views/upload/List")
+            },
+            {
+                path: 'add',
+                component: ()=>import("@/views/upload/Add")
+            }
+        ]
     }
 ];
 

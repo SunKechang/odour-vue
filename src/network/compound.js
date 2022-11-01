@@ -96,5 +96,20 @@ export default {
     },
     getNews() {
         return request.get("/compound/news")
+    },
+    allSearch(_name) {
+        if (_name === undefined) {
+            _name = ""
+        }
+        return request.get("/article/search", {params: {name: _name, pageNum: 1, pageSize: 99}})
+    },
+    userUpdate(data) {
+        return request.post("/user/compound/update", data)
+    },
+    userAddCompound(data) {
+        return request.post("/user/compound/add", data)
+    },
+    searchReviewer(name) {
+        return request.get("/admin/user_list", {params: {}})
     }
 }

@@ -75,7 +75,6 @@
   </template>
   
   <script>
-  import webApi from '@/../vue.config.js'
   export default {
     name: "articleEdit",
     data() {
@@ -109,7 +108,7 @@
       },
       handleView(index) {
         let _pk = this.articleData.list[index].pk
-         window.open(webApi.target + '/article/getFile?pk='+_pk, '_blank');
+         window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
       },
       fileChange(file, fileList) {
         this.articleData.list[this.curRowIndex].fileList = fileList

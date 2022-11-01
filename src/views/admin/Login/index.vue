@@ -3,6 +3,12 @@
     <el-header></el-header>
     <el-main class="auth-form">
       <h2 class="auth-form-header">Sign in to Compound Information Management System</h2>
+      <el-switch
+          style="margin-bottom: 20px;"
+          v-model="adminLogin"
+          active-text="管理员登录"
+          inactive-text="普通用户登录">
+        </el-switch>
       <el-form ref="authForm" :model="authForm" label-position="top">
         <div class="auth-form-body">
           <el-form-item label="Account" prop="account" style="margin-top:-15px">
@@ -28,6 +34,7 @@
 </template>
 
 <script>
+import jwtDecode from "jwt-decode"
 export default {
   name: "Login",
   data() {
@@ -35,20 +42,42 @@ export default {
       authForm: {
         account: '',
         password: '',
-      }
+      },
+      adminLogin: false
     }
   },
   methods: {
     submitForm() {
-      this.$store.dispatch('user/login', this.authForm)
-          .then(() => {
-            this.$router.push("/admin");
-          }).catch((err) => {
-        console.error(err)
-        this.$alert("Error!", "Message", {
-          confirmButtonText: 'Confirm'
+      if(this.adminLogin) {
+        this.$store.dispatch('user/login', this.authForm)
+        .then((data) => {
+          console.log(data)
+          this.$router.push("/admin");
+        }).catch((err) => {
+          console.log(err)
+          this.$alert("Error!", "Message", {
+              confirmButtonText: 'Confirm'
+          });
         });
-      });
+      } else {
+        let that = this
+        this.$api.admin.login(this.authForm.account, this.authForm.password)
+        .then(({data}) => {
+          if(data === "2" || data === "1") {
+            this.$message('用户名或密码错误')
+          } else {
+            let x = jwtDecode(data);
+            that.$store.state.user.Authorization = data
+            if (x.role === "1") {
+              this.$router.push("/upload");
+            }
+            
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      }
+      
     }
   }
 }

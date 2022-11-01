@@ -13,7 +13,7 @@ Vue.use(Plugin);
 Vue.use(ElementUI)
 Vue.use(VueI18n)
 Vue.config.productionTip = false
-
+Vue.prototype.$target = 'http://127.0.0.1:8081'
 
 
 const i18n = new VueI18n({

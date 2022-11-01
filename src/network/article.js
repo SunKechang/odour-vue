@@ -15,5 +15,11 @@ export default {
     },
     view(pk) {
         return request.get("/article/getFile", pk)
+    },
+    allSearch(_name) {
+        if (_name === undefined) {
+            _name = ""
+        }
+        return request.get("/article/search", {params: {name: _name, pageNum: 1, pageSize: 99}})
     }
 }
