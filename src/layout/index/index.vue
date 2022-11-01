@@ -11,6 +11,7 @@
       </el-main>
       <el-footer class="footer">
         <router-link class="admin-link" to="/login"><i class="el-icon-user"></i>{{ $t("footer.admin") }}</router-link>
+        <router-link class="admin-link" to="/Register" style="margin-right: 10px;"><i class="el-icon-edit-outline"></i>{{ $t("footer.regist") }}</router-link>
       </el-footer>
     </el-container>
   </div>
@@ -34,7 +35,6 @@ export default {
   created() {
     this.$api.city.add(returnCitySN)
         .then(() => {
-          console.log("Welcome！");
         }).catch(err => {
       console.log(err);
     });

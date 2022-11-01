@@ -3,12 +3,15 @@
         <el-header></el-header>
         <el-main class="auth-form">
             <h2 class="auth-form-header">用户注册</h2>
-            <el-form label-position="top" ref="authForm" :model="authForm" >
+            <el-form label-position="top">
                 <div class="auth-form-body">
-                    <el-form-item label="邮箱" prop="account" style="margin-top:-15px">
-                        <el-input v-model="authForm.userEmail" style="width: 250px" type="text" placeholder="邮箱" @input="userEmailLimit"></el-input>
+                    <el-form-item label="邮箱" style="margin-top:-15px">
+                        <el-input v-model="authForm.userEmail" style="width: 250px" type="text" placeholder="邮箱"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码" prop="password" style="margin-top:-25px">
+                    <el-form-item label="姓名" style="margin-top:-15px">
+                        <el-input v-model="authForm.name" style="width: 250px" type="text" placeholder="邮箱" @input="userNameLimit"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" style="margin-top:-25px">
                         <el-input v-model="authForm.userPassword" style="width: 250px"  type="password" placeholder="密码" @input="userPasswordLimit" ></el-input>
                     </el-form-item>
                     <el-form-item>
@@ -30,6 +33,7 @@
                 authForm: {
                     userEmail: '',
                     userPassword: '',
+                    name: '',
                 }
             }
         },
@@ -72,41 +76,44 @@
                 this.authForm.userPassword = this.authForm.userPassword.replace(/[^\a-\z\A-\Z0-9]/g, '')
             },
             // 限制输入特殊字符
-            userEmailLimit:function() {
-                this.authForm.userEmail = this.authForm.userEmail.replace(/[ `~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g, '')
+            userNameLimit:function() {
+                this.authForm.name = this.authForm.name.replace(/[ `~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]/g, '')
             },
             submitForm() {
 
                 if (this.authForm.userEmail.length <= 0) {
                     alert("用户名不能为空")
+                    return
                 }
-                else if(this.authForm.userPassword.length <= 0) {
-                    alert("密码不能为空")}
-
-                else {
-                    let authForm=new FormData();
-                    const v=this;
-                    authForm.append("userEmail",this.authForm.userEmail);
-                    authForm.append("userPassword",this.authForm.userPassword);
-                    console.log(this.authForm)
-                    request.post('/user/register',authForm)
-                    .then(function (res) {
-                        console.log(res);
-                        if(res.data=='1')
-                            alert("注册成功")
-
-                        else
-                            alert("注册失败")
-                            v.$router.replace('/userlogin')
-
-
-                    }).catch(err=>{
-                        console.log(err);
-                        v.$alert("Error!", "Message", {
-                            confirmButtonText: 'Confirm'
-                        });
-                    });}
-
+                if(this.authForm.userPassword.length <= 0) {
+                    alert("密码不能为空")
+                    return
+                }
+                if(this.authForm.name.length <= 0) {
+                    alert("姓名不能为空")
+                    return
+                }
+                let authForm=new FormData();
+                const v=this;
+                authForm.append("userEmail",this.authForm.userEmail);
+                authForm.append("userPassword",this.authForm.userPassword);
+                authForm.append("name",this.authForm.name);
+                request.post('/user/register',authForm)
+                .then(function (res) {
+                    console.log(res);
+                    if(res=='1') {
+                        alert("注册成功")
+                        v.$router.replace('/userlogin')
+                    }
+                    else {
+                        alert("注册失败")
+                    }
+                }).catch(err=>{
+                    console.log(err);
+                    v.$alert("Error!", "Message", {
+                        confirmButtonText: 'Confirm'
+                    });
+                });
             }
 
             // blur() {

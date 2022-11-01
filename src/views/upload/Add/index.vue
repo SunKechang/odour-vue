@@ -377,17 +377,17 @@
             <el-form-item class="form-item" label="Reviewer" label-width="80px" prop="reviewer">
               <el-select
               filterable
-              :value="compoundInfoForm.reviewer"
+              :value="selectedReviewer"
               value-key="email"
               remote
               reserve-keyword
               placeholder="请输入关键词"
-              :remote-method="remoteSearch"
-              :loading="articleSearchLoading"
-              @change="selectChange">
+              :remote-method="reviewerSearch"
+              :loading="reviewerSearchLoading"
+              @change="reviewerSelectChange">
               <el-option
-                v-for="(item,index) in articleList"
-                :key="item.pk"
+                v-for="(item,index) in reviewerList"
+                :key="item.email"
                 :label="item.name"
                 :value="index">
               </el-option>
@@ -448,7 +448,10 @@
           name: '',
           file : null
         },
-        articleExisted: true
+        articleExisted: true,
+        reviewerSearchLoading: false,
+        reviewerList: [],
+        selectedReviewer: '',
       }
     },
     created() {
@@ -535,6 +538,10 @@
           }
         }
         await this.uploadOneArticle()
+        if(this.compoundInfoForm.reviewer.length === 0) {
+          this.$message('未选择审核人')
+            return
+        }
         await this.$refs.compoundInfoForm.validate((valid) => {
           if (!valid) return
           this.compoundInfoForm.casNo = this.compoundInfoForm.casNo.replace(new RegExp("-", "g"), "");
@@ -725,7 +732,27 @@
         if(fileList.length == 1) {
             this.uploadArticle.file = fileList[0].raw
         }
-      }
+      },
+      reviewerSearch(query) {
+        let that = this
+        this.reviewerSearchLoading = true
+        this.$api.compound.searchReviewer(query)
+          .then(({data, success}) => {
+            if(success) {
+              that.reviewerList = data
+            }else {
+              that.$message("查找失败")
+            }
+            that.reviewerSearchLoading = false
+          }).catch(err => {
+            console.log(err)
+            that.reviewerSearchLoading = false
+          })
+        },
+        reviewerSelectChange(index) {
+          this.compoundInfoForm.reviewer = this.reviewerList[index].email
+          this.selectedReviewer = this.reviewerList[index].name
+        }
     }
   }
   </script>

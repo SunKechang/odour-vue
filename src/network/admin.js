@@ -8,10 +8,12 @@ export const password = (param) => {
     return  request.post('/admin/password',param)
 }
 
+export const userLogin = (account, password) => {
+    return request.post("/user/login?userEmail="+account+"&userPassword="+password)
+}
+
 export default {
     login,
+    userLogin,
     password,
-    login(_account, _password) {
-        return request.post("/user/login?userEmail="+_account+"&userPassword="+_password)
-    },
 }

@@ -71,7 +71,9 @@ module.exports = {
 
     },
     footer:{
-        admin:'INFORMATION SYSTEM'
+        admin:'INFORMATION SYSTEM',
+        regist: 'USER REGISTER',
+        login: "USER LOGIN"
     },
     view:'View',
     reset:'Reset',

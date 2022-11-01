@@ -1,4 +1,5 @@
 import {login} from '@/network/admin'
+import {userLogin} from '@/network/admin'
 import Vue from "vue";
 
 const state = () => ({
@@ -23,12 +24,20 @@ const actions = {
     },
     async login({ commit }, userInfo) {
         const { data, state } = await login(userInfo)
-        if (state === 0 && data) {
+        if (state === 0 && data.length > 2) {
             commit('setAccessToken', data)
+            return true
         } else {
-            await Vue.prototype.$alert("Incorrect account or password", "Message", {
-                confirmButtonText: 'Confirm'
-            });
+            return false
+        }
+    },
+    async userLogin({ commit }, userInfo) {
+        const { data, state } = await userLogin(userInfo.account, userInfo.password)
+        if (state === 0 && data.length > 2) {
+            commit('setAccessToken', data)
+            return true
+        } else {
+            return false
         }
     }
 }

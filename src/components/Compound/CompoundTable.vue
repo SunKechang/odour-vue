@@ -168,10 +168,11 @@ export default {
       })
     },
     handleEdit(index, row) {
+      let that = this
       this.editDialogVisible = !this.editDialogVisible;
       this.$api.compound.getOne(row.id)
           .then(({data}) => {
-            this.compoundInfo = data
+            that.compoundInfo = data
           }).catch(err => {
         console.error(err)
       })

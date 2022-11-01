@@ -18,7 +18,8 @@ const api = {
     log,
     team,
     oil,
-    upload
+    upload,
+    article
 }
 
 Vue.prototype.$api = api

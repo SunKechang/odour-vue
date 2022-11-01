@@ -71,12 +71,4 @@ export default {
 </script>
 
 <style scoped>
->>> .el-input-group__prepend {
-  background-color: transparent;
-  width: 170px;
-}
-
->>> .el-form-item {
-  margin-bottom: 10px;
-}
 </style>

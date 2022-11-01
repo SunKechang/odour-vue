@@ -109,7 +109,7 @@ export default {
     userAddCompound(data) {
         return request.post("/user/compound/add", data)
     },
-    searchReviewer(name) {
-        return request.get("/admin/user_list", {params: {}})
+    searchReviewer(_name) {
+        return request.get("/user/review/get_reviewers", {params: {name: _name}})
     }
 }

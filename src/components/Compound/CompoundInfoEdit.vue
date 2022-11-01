@@ -428,7 +428,7 @@
 
 <script>
 import {convertImgToBase64} from "@/utils/image";
-
+import jwtDecode from "jwt-decode"
 export default {
   name: "CompoundInfoEdit",
   data() {
@@ -590,13 +590,12 @@ export default {
         }
       }
       await this.uploadOneArticle()
-      console.log(this.$store.state.user.Authorization)
       let token=this.$store.state.user.Authorization;
-      let admin = true
+      let admin = false
       if (token) {
         const decode=jwtDecode(token);
         if (decode.role === undefined || decode.role === null) {
-          admin = false
+          admin = true
         }
       }
       await this.$refs.compoundInfoForm.validate((valid) => {

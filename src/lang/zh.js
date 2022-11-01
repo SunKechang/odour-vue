@@ -79,7 +79,9 @@ module.exports = {
         developer:'开发者团队'
     },
     footer:{
-        admin:'信息管理系统'
+        admin:'信息管理系统',
+        regist: '用户注册',
+        login: '用户登录'
     },
     view:'查看',
     reset:'重置',

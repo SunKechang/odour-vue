@@ -42,6 +42,9 @@
       "upload-nav": UploadNav
     },
     created() {
+      let token =this.$store.state.user.Authorization;
+      const decode = jwtDecode(token);
+      this.account = decode.account;
     },
     methods: {
       signOut() {

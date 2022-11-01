@@ -47,35 +47,21 @@ export default {
     }
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       if(this.adminLogin) {
-        this.$store.dispatch('user/login', this.authForm)
-        .then((data) => {
-          console.log(data)
-          this.$router.push("/admin");
-        }).catch((err) => {
-          console.log(err)
-          this.$alert("Error!", "Message", {
-              confirmButtonText: 'Confirm'
-          });
-        });
+        let res =  await this.$store.dispatch('user/login', this.authForm)
+        if(res) {
+          this.$router.push('/admin')
+        } else {
+          this.$message('用户名或密码错误')
+        }
       } else {
-        let that = this
-        this.$api.admin.login(this.authForm.account, this.authForm.password)
-        .then(({data}) => {
-          if(data === "2" || data === "1") {
-            this.$message('用户名或密码错误')
-          } else {
-            let x = jwtDecode(data);
-            that.$store.state.user.Authorization = data
-            if (x.role === "1") {
-              this.$router.push("/upload");
-            }
-            
-          }
-        }).catch(err=> {
-          console.log(err)
-        })
+        let res =  await this.$store.dispatch('user/userLogin', this.authForm)
+        if(res) {
+          this.$router.push('/upload')
+        } else {
+          this.$message('用户名或密码错误')
+        }
       }
       
     }

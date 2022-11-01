@@ -162,11 +162,6 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
       },
       GetComment(index) {
         this.approvalShow = true
-        for(let i=0;i<this.list.length;i++) {
-          if(i !== index) {
-            this.list[i].approShow = false
-          }
-        }
         let id = this.list[index].id
         let that = this
         this.$api.upload.getApproval(id)
@@ -192,24 +187,28 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
         let that = this;
         if(this.reviewed) {
             this.$api.upload.searchReviewed(this.currentPage)
-                .then(({data, success}) => {
-                if (success) {
-                  for(let i=0;i<data.list.length;i++) {
-                    data.list[i].approShow = false
-                    data.list[i].status = data.list[i].status === 0 ? '通过' : '不通过'
-                  }
-                    that.list = data.list
-                    that.total = data.total;
+              .then(({data, success}) => {
+              if (success) {
+                for(let i=0;i<data.list.length;i++) {
+                  if(data.list[i].status === 0) {
+                      data.list[i].status = '通过'
+                    } else if(data.list[i].status === 2) {
+                      data.list[i].status = '待审批'
+                    } else {
+                      data.list[i].status = '不通过'
+                    }
                 }
-                }).catch(err => {
-                    console.log(err);
-                }); 
+                  that.list = data.list
+                  that.total = data.total;
+              }
+              }).catch(err => {
+                  console.log(err);
+              }); 
         } else {
             this.$api.upload.searchCommitted(this.currentPage)
                 .then(({data, success}) => {
                 if (success) {
                     for(let i=0;i<data.list.length;i++) {
-                      data.list[i].approShow = false
                       if(data.list[i].status === 0) {
                         data.list[i].status = '通过'
                       } else if(data.list[i].status === 2) {
