@@ -58,7 +58,16 @@ export default {
       } else {
         let res =  await this.$store.dispatch('user/userLogin', this.authForm)
         if(res) {
-          this.$router.push('/upload')
+          let token=this.$store.state.user.Authorization
+          const decode=jwtDecode(token)
+          if(decode.role === '1') {
+            this.$router.push('/upload')
+          } else if(decode.role === '2'){
+            this.$router.push('/review')
+          } else {
+            this.$router.push('/')
+          }
+          
         } else {
           this.$message('用户名或密码错误')
         }

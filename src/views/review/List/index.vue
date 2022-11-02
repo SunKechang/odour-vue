@@ -5,7 +5,7 @@
             <el-switch
                 v-model="reviewed"
                 active-text="已审批"
-                inactive-text="已提交未审批"
+                inactive-text="未审批"
                 @change="searchList">
             </el-switch>
         </el-form-item>
@@ -40,6 +40,7 @@
             width="250">
         </el-table-column>
         <el-table-column
+            v-if="reviewed"
             label="审核状态"
             prop="status"
             width="150">
@@ -53,9 +54,9 @@
                     @click="handleView(scope.$index)">View
                 </el-button>
                 <el-button
-                    v-if="list[scope.$index].status !== '通过'"
+                    v-if="!reviewed"
                     size="mini"
-                    @click="handleEdit(scope.$index)">Edit
+                    @click="handleReview(scope.$index)">审批
                 </el-button>
                 <el-button
                     v-if="reviewed"
@@ -82,6 +83,19 @@
           <el-table-column  property="comment" label="意见"></el-table-column>
           <el-table-column  property="createTime" label="时间"></el-table-column>
         </el-table>
+      </el-dialog>
+      <el-dialog title="审批" :visible.sync="reviewShow">
+        <el-form label-position="left" label-width="200px">
+            <el-form-item class="form-item" style="margin-bottom: 22px;" label="Comment" label-width="135px" prop="name">
+            <el-input v-model="result.comment" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="form-item" style="margin-bottom: 22px;" label="Status" label-width="135px" prop="status">
+                <el-radio v-model="result.status" label="3" border>不通过</el-radio>
+                <el-radio v-model="result.status" label="0" border>通过</el-radio>
+            </el-form-item>
+            <el-button type="primary" @click="submitReview">提交</el-button>
+        </el-form>
+
       </el-dialog>
       <compound-info-view
         :compoundInfo="compoundInfo"
@@ -120,6 +134,12 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
           compoundName: '',
         },
         editDialogVisible: false,
+        reviewShow: false,
+        result: {
+            comId: '',
+            comment: '',
+            status: 3,
+        }
       }
     },
     methods: {
@@ -149,17 +169,13 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
           console.error(err)
         })
       },
-      handleEdit(index) {
-        this.editDialogVisible = !this.editDialogVisible;
-        if(!this.editDialogVisible) {
+      handleReview(index) {
+        this.reviewShow = !this.reviewShow;
+        if(!this.reviewShow) {
           return
         }
-        this.$api.compound.getOne(this.list[index].id)
-            .then(({data}) => {
-              this.compoundInfo = data
-            }).catch(err => {
-          console.error(err)
-        })
+        this.result.comId = this.list[index].id
+        
       },
       GetComment(index) {
         this.approvalShow = true
@@ -186,8 +202,9 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
       },
       getList() {
         let that = this;
+        this.list = []
         if(this.reviewed) {
-            this.$api.upload.searchReviewed(this.currentPage)
+            this.$api.review.getReviewed(this.currentPage)
               .then(({data, success}) => {
               if (success) {
                 for(let i=0;i<data.list.length;i++) {
@@ -206,7 +223,7 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
                   console.log(err);
               }); 
         } else {
-            this.$api.upload.searchCommitted(this.currentPage)
+            this.$api.review.getUnreviewed(this.currentPage)
                 .then(({data, success}) => {
                 if (success) {
                     for(let i=0;i<data.list.length;i++) {
@@ -229,6 +246,33 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
       searchList() {
         this.getList();
       },
+      submitReview() {
+        if(this.result.status === '3' && this.result.comment.length === 0) {
+            this.$message('未填写审批建议')
+        }
+        let that = this
+        if(this.result.status === '0' && this.result.comment.length === 0) {
+            this.$api.review.simpleApprove(this.result.comId, this.result.status)   
+                .then(({success})=> {
+                    if(success) {
+                        this.$message('操作成功')
+                    } else{
+                        this.$message('操作失败')
+                    }
+                    that.reviewShow = false
+                }) 
+        } else{
+            this.$api.review.approve(this.result)   
+                .then(({success})=> {
+                    if(success) {
+                        this.$message('操作成功')
+                    } else{
+                        this.$message('操作失败')
+                    }
+                    that.reviewShow = false
+                }) 
+        }
+      }
     },
     created() {
       this.getList();

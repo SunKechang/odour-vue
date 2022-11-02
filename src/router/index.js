@@ -188,6 +188,18 @@ const routes = [
                 component: ()=>import("@/views/upload/Add")
             }
         ]
+    },
+    {
+        path: '/review',
+        name: 'review',
+        redirect: '/review/list',
+        component:()=>import("@/layout/Review"),
+        children:[
+            {
+                path: 'list',
+                component: ()=>import("@/views/review/List")
+            }
+        ]
     }
 ];
 
