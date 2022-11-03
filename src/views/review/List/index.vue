@@ -138,7 +138,7 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
         result: {
             comId: '',
             comment: '',
-            status: 3,
+            status: "3",
         }
       }
     },
@@ -223,24 +223,24 @@ import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
                   console.log(err);
               }); 
         } else {
-            this.$api.review.getUnreviewed(this.currentPage)
-                .then(({data, success}) => {
-                if (success) {
-                    for(let i=0;i<data.list.length;i++) {
-                      if(data.list[i].status === 0) {
-                        data.list[i].status = '通过'
-                      } else if(data.list[i].status === 2) {
-                        data.list[i].status = '待审批'
-                      } else {
-                        data.list[i].status = '不通过'
-                      }
-                    }
-                    that.list = data.list
-                    that.total = data.total;
+          this.$api.review.getUnreviewed(this.currentPage)
+            .then(({data, success}) => {
+            if (success) {
+                for(let i=0;i<data.list.length;i++) {
+                  if(data.list[i].status === 0) {
+                    data.list[i].status = '通过'
+                  } else if(data.list[i].status === 2) {
+                    data.list[i].status = '待审批'
+                  } else {
+                    data.list[i].status = '不通过'
+                  }
                 }
-                }).catch(err => {
-                    console.log(err);
-                }); 
+                that.list = data.list
+                that.total = data.total;
+            }
+            }).catch(err => {
+                console.log(err);
+            }); 
         }
       },
       searchList() {

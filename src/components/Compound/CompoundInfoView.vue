@@ -41,7 +41,7 @@
                   style="width: 100%;"
               >
                 <el-table-column label="Uploader" prop="uploader"></el-table-column>
-                <el-table-column label="Reviewer" prop="reviewer"></el-table-column>
+                <el-table-column label="Reviewer" prop="reviewer">{{compoundInfo.reviewerName}}({{compoundInfo.reviewer}})</el-table-column>
               </el-table>
             </div>
           </el-tab-pane>
@@ -49,7 +49,7 @@
             <div>
               <b>Chemical Structure: </b><br/>
               <el-image
-                  :src="compoundInfo.chemicalStructure"
+                  :src="'/api'+compoundInfo.chemicalStructure"
                   alt="Chemical Structure"
                   style="position: relative;width: 300px;"
               />
@@ -142,12 +142,12 @@
           <el-tab-pane label="Mass Spectrometry" name="spectrometry">
             <div>
               <b>Orbitrap-MS mass spectrometry:</b><br>
-              <img :src="compoundInfo.massSpectrogram" alt="" style="position: relative;" width="700">
+              <img :src="'/api'+compoundInfo.massSpectrogram" alt="" style="position: relative;" width="700">
             </div>
             <br/>
             <div>
               <b>low-resolution mass spectrometry:</b><br>
-              <img :src="compoundInfo.massSpectrogramNist" alt="" style="position: relative;" width="700">
+              <img :src="'/api'+compoundInfo.massSpectrogramNist" alt="" style="position: relative;" width="700">
             </div>
           </el-tab-pane>
           <el-tab-pane label="Measured & Relative Abundance" name="abundance">
@@ -224,6 +224,19 @@
 
 
           </el-tab-pane>
+          <el-tab-pane label="Article" name="Article">
+            <div>
+              <b>Article : </b>
+              <el-form label-position="left" label-width="200px">
+                <el-form-item class="form-item" style="margin-bottom: 22px;" label="Name" label-width="135px">
+                  <span>{{compoundInfo.articleName}}</span>
+                </el-form-item>
+                <el-form-item class="form-item" style="margin-bottom: 22px;" label="Download" label-width="135px" prop="status">
+                  <el-button type="primary" @click="articleDownload">下载</el-button>
+                </el-form-item>
+              </el-form>
+            </div>
+          </el-tab-pane>
         </el-tabs>
         <br>
       </div>
@@ -249,6 +262,12 @@ export default {
   data() {
     return {
       activeName: 'info'
+    }
+  },
+  methods: {
+    articleDownload() {
+      let _pk = this.compoundInfo.article
+      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
     }
   },
   computed: {

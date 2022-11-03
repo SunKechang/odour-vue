@@ -71,14 +71,30 @@
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
+      <el-menu-item index="/admin/user">
+        <i class="el-icon-view"></i>
+        <span slot="title">User</span>
+      </el-menu-item>
       <el-menu-item index="/admin/citySN">
         <i class="el-icon-location-outline"></i>
         <span slot="title">CitySN</span>
       </el-menu-item>
-      <el-menu-item index="/admin/log">
-        <i class="el-icon-tickets"></i>
-        <span slot="title">Database Log</span>
-      </el-menu-item>
+      <el-submenu index="5">
+        <template slot="title">
+          <i class="el-icon-menu"></i>
+          <span>Log</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item index="/admin/log">
+            <i class="el-icon-data-line"></i>
+            <span>Admin Log</span>
+          </el-menu-item>
+          <el-menu-item index="/admin/userlog">
+            <i class="el-icon-data-analysis"></i>
+            <span>User Log</span>
+          </el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
       <el-menu-item index="/admin/security">
         <i class="el-icon-view"></i>
         <span slot="title">Account Security</span>

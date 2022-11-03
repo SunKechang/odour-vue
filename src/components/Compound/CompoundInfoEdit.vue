@@ -404,13 +404,41 @@
           <el-divider content-position="left"><span class="span">Uploader & Reviewer</span></el-divider>
           <el-row :gutter="10">
             <el-col :lg="12">
-              <el-form-item class="form-item" label="Uploader" label-width="80px" prop="uploader">
+              <el-form-item class="form-item" label="原上传人" label-width="80px" prop="uploader" v-if="admin">
+                <span>{{compoundInfoForm.uploader}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="12">
+              <el-form-item class="form-item" label="原审批人" label-width="80px" prop="reviewer">
+                <span>{{compoundInfo.reviewerName}}({{compoundInfo.reviewer}})</span>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :lg="12">
+              <el-form-item class="form-item" label="Uploader" label-width="80px" prop="uploader" v-if="admin">
                 <el-input v-model="compoundInfoForm.uploader" clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="12">
               <el-form-item class="form-item" label="Reviewer" label-width="80px" prop="reviewer">
-                <el-input v-model="compoundInfoForm.reviewer" clearable></el-input>
+                <el-select
+                  filterable
+                  :value="selectedReviewer"
+                  value-key="email"
+                  remote
+                  reserve-keyword
+                  placeholder="请输入关键词"
+                  :remote-method="reviewerSearch"
+                  :loading="reviewerSearchLoading"
+                  @change="reviewerSelectChange">
+                  <el-option
+                    v-for="(item,index) in reviewerList"
+                    :key="item.email"
+                    :label="item.name"
+                    :value="index">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -473,6 +501,10 @@ export default {
         name: '',
         file : null
       },
+      admin: false,
+      selectedReviewer: '',
+      reviewerSearchLoading: false,
+      reviewerList: [],
     }
   },
   props: {
@@ -498,8 +530,16 @@ export default {
     }
   },
   created() {
+    let token=this.$store.state.user.Authorization;
+    if (token) {
+      const decode=jwtDecode(token);
+      if (decode.role === undefined || decode.role === null) {
+        this.admin = true
+      }
+    }
+    let that = this
     this.$api.product.getAll().then(res => {
-      this.productOptions = res.data
+      that.productOptions = res.data
     }).catch(err => {
       console.error(err)
     })
@@ -774,6 +814,26 @@ export default {
       if(fileList.length == 1) {
           this.uploadArticle.file = fileList[0].raw
       }
+    },
+    reviewerSearch(query) {
+      let that = this
+      this.reviewerSearchLoading = true
+      this.$api.compound.searchReviewer(query)
+        .then(({data, success}) => {
+          if(success) {
+            that.reviewerList = data
+          }else {
+            that.$message("查找失败")
+          }
+          that.reviewerSearchLoading = false
+        }).catch(err => {
+          console.log(err)
+          that.reviewerSearchLoading = false
+        })
+    },
+    reviewerSelectChange(index) {
+      this.compoundInfoForm.reviewer = this.reviewerList[index].email
+      this.selectedReviewer = this.reviewerList[index].name
     }
   }
 }

@@ -16,4 +16,13 @@ export default {
     login,
     userLogin,
     password,
+    userSearch(_pageNum, _email, _name, _role) {
+        return request.get('/user/get_users', {params: {pageNum: _pageNum, pageSize: 20, email: _email, name: _name, role: _role}})
+    },
+    setRole(data) {
+        return request.post('/user/set_role', data)
+    },
+    userLogSearch(_pageNum, _email, _operation) {
+        return request.get('/log/user', {params: {pageNum: _pageNum, pageSize: 20, email: _email, operation: _operation}})
+    }
 }

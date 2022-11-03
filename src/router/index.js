@@ -170,6 +170,14 @@ const routes = [
             {
                 path: 'addarticle',
                 component: ()=>import("@/views/admin/Article/add")
+            },
+            {
+                path: 'user',
+                component: ()=>import("@/views/admin/User/list")
+            },
+            {
+                path: 'userlog',
+                component: ()=>import("@/views/admin/Log/UserLog")
             }
         ]
     },

@@ -103,7 +103,7 @@
                     console.log(res);
                     if(res=='1') {
                         alert("注册成功")
-                        v.$router.replace('/userlogin')
+                        v.$router.replace('/login')
                     }
                     else {
                         alert("注册失败")

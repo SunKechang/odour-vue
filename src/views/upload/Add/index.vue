@@ -376,22 +376,22 @@
           <el-col :lg="12">
             <el-form-item class="form-item" label="Reviewer" label-width="80px" prop="reviewer">
               <el-select
-              filterable
-              :value="selectedReviewer"
-              value-key="email"
-              remote
-              reserve-keyword
-              placeholder="请输入关键词"
-              :remote-method="reviewerSearch"
-              :loading="reviewerSearchLoading"
-              @change="reviewerSelectChange">
-              <el-option
-                v-for="(item,index) in reviewerList"
-                :key="item.email"
-                :label="item.name"
-                :value="index">
-              </el-option>
-            </el-select>
+                filterable
+                :value="selectedReviewer"
+                value-key="email"
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="reviewerSearch"
+                :loading="reviewerSearchLoading"
+                @change="reviewerSelectChange">
+                <el-option
+                  v-for="(item,index) in reviewerList"
+                  :key="item.email"
+                  :label="item.name"
+                  :value="index">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -748,11 +748,11 @@
             console.log(err)
             that.reviewerSearchLoading = false
           })
-        },
-        reviewerSelectChange(index) {
-          this.compoundInfoForm.reviewer = this.reviewerList[index].email
-          this.selectedReviewer = this.reviewerList[index].name
-        }
+      },
+      reviewerSelectChange(index) {
+        this.compoundInfoForm.reviewer = this.reviewerList[index].email
+        this.selectedReviewer = this.reviewerList[index].name
+      }
     }
   }
   </script>
