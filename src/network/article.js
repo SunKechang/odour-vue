@@ -21,5 +21,8 @@ export default {
             _name = ""
         }
         return request.get("/article/search", {params: {name: _name, pageNum: 1, pageSize: 99}})
+    },
+    judgeName(_name) {
+        return request.get("/article/judgeName", {params: {name: _name}})
     }
 }

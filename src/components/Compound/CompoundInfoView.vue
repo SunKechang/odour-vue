@@ -115,8 +115,10 @@
                     prop="odourBase">
                 </el-table-column>
                 <el-table-column
-                    label="Odour Reference"
-                    prop="odourThresholdReference">
+                    label="Odour Reference">
+                    <template slot-scope="scope">
+                      <el-button @click="viewArticle(scope.row)">{{scope.row.articleName}}</el-button>
+                    </template>
                 </el-table-column>
 
               </el-table>
@@ -133,8 +135,10 @@
                     prop="odourDescription">
                 </el-table-column>
                 <el-table-column
-                    label="Odour Description Reference"
-                    prop="odourDescriptionReference">
+                    label="Odour Description Reference">
+                  <template slot-scope="scope">
+                    <el-button @click="viewArticle(scope.row)">{{scope.row.articleName}}</el-button>
+                  </template>
                 </el-table-column>
               </el-table>
             </div>
@@ -186,7 +190,7 @@
             </div>
           </el-tab-pane >
           <el-tab-pane label="Production" name="Production">
-            <div v-for="product in compoundInfo.productList">
+            <div v-for="product in compoundInfo.productList" :key="'Proc' + product.id">
               <b>{{product.productName}}</b>
               <div>Product Threshold</div>
               <el-table
@@ -198,12 +202,14 @@
                     prop="odourThreshold">
                 </el-table-column>
                 <el-table-column
-                    label="Odour Threshold Reference"
-                    prop="odourThresholdReference">
-                </el-table-column>
-                <el-table-column
                     label="Odour Threshold Base"
                     prop="odourThresholdBase">
+                </el-table-column>
+                <el-table-column
+                    label="Odour Threshold Reference">
+                  <template slot-scope="scope">
+                    <el-button @click="viewArticle(scope.row)">{{scope.row.articleName}}</el-button>
+                  </template>
                 </el-table-column>
               </el-table>
               <div>Product Description</div>
@@ -216,26 +222,15 @@
                     prop="odourDescription">
                 </el-table-column>
                 <el-table-column
-                    label="Odour Description Reference"
-                    prop="odourDescriptionReference">
+                    label="Odour Description Reference">
+                  <template slot-scope="scope">
+                    <el-button @click="viewArticle(scope.row)">{{scope.row.articleName}}</el-button>
+                  </template>
                 </el-table-column>
               </el-table>
             </div>
 
 
-          </el-tab-pane>
-          <el-tab-pane label="Article" name="Article">
-            <div>
-              <b>Article : </b>
-              <el-form label-position="left" label-width="200px">
-                <el-form-item class="form-item" style="margin-bottom: 22px;" label="Name" label-width="135px">
-                  <span>{{compoundInfo.articleName}}</span>
-                </el-form-item>
-                <el-form-item class="form-item" style="margin-bottom: 22px;" label="Download" label-width="135px" prop="status">
-                  <el-button type="primary" @click="articleDownload">下载</el-button>
-                </el-form-item>
-              </el-form>
-            </div>
           </el-tab-pane>
         </el-tabs>
         <br>
@@ -265,8 +260,8 @@ export default {
     }
   },
   methods: {
-    articleDownload() {
-      let _pk = this.compoundInfo.article
+    viewArticle(row) {
+      let _pk = row.articleId
       window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
     }
   },

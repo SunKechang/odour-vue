@@ -86,13 +86,64 @@
               <el-input v-model="item.odourBase" clearable></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="22">
-            <el-form-item class="form-item" label="Odour Threshold Reference">
-              <el-input v-model="item.odourThresholdReference" clearable></el-input>
-            </el-form-item>
-          </el-col>
           <el-col :lg="2">
             <i class="el-icon-delete rowBtn" @click="removeot(item, index)"></i>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-switch
+                v-model="item.article.useExist"
+                active-text="使用已有文献"
+                inactive-text="上传新文献"
+                @change="(val)=>otArticleChanged(val, index)">
+              </el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-select
+                filterable
+                :value="item.article.name"
+                value-key="name"
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="remoteSearch"
+                :loading="articleSearchLoading"
+                @change="(item)=>selectChange(item, index)">
+                <el-option
+                  v-for="(item1,index1) in articleList"
+                  :key="item1.pk"
+                  :label="item1.name"
+                  :value="index1">
+                </el-option>
+              </el-select>
+              <el-button size="small" type="primary" style="margin-left: 20px;" @click="viewArticle(index)">
+                View
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="!item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item label="Article Name">
+            <el-input v-model="item.article.name" clearable style="width: 500px" @blur="otAddArticleBlur(index)"></el-input>
+          </el-form-item>
+          <el-form-item label="Article File">
+              <el-upload
+                accept=".pdf"
+                action="/"
+                :on-change="(file, fileList) => otfileChange(file, fileList, index)"
+                :file-list="[]"
+                :auto-upload="false"
+                :limit="1">
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
+          </el-form-item>
           </el-col>
         </el-row>
       </el-card>
@@ -109,13 +160,64 @@
               <el-input v-model="item.odourDescription" clearable></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="12">
-            <el-form-item class="form-item" label="Odour Description Reference">
-              <el-input v-model="item.odourDescriptionReference" clearable></el-input>
-            </el-form-item>
-          </el-col>
           <el-col :lg="2">
             <i class="el-icon-delete rowBtn" @click="removeod(item, index)"></i>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-switch
+                v-model="item.article.useExist"
+                active-text="使用已有文献"
+                inactive-text="上传新文献"
+                @change="(val)=>odArticleChanged(val, index)">
+              </el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-select
+                filterable
+                :value="item.article.name"
+                value-key="name"
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="remoteSearch"
+                :loading="articleSearchLoading"
+                @change="(item)=>odSelectChange(item, index)">
+                <el-option
+                  v-for="(item1,index1) in articleList"
+                  :key="item1.pk"
+                  :label="item1.name"
+                  :value="index1">
+                </el-option>
+              </el-select>
+              <el-button size="small" type="primary" style="margin-left: 20px;" @click="odViewArticle(index)">
+                View
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="!item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item label="Article Name">
+            <el-input v-model="item.article.name" clearable style="width: 500px" @blur="odAddArticleBlur(index)"></el-input>
+          </el-form-item>
+          <el-form-item label="Article File">
+              <el-upload
+                accept=".pdf"
+                action="/"
+                :on-change="(file, fileList) => odFileChange(file, fileList, index)"
+                :file-list="[]"
+                :auto-upload="false"
+                :limit="1">
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
+          </el-form-item>
           </el-col>
         </el-row>
       </el-card>
@@ -270,11 +372,6 @@
                 </el-form-item>
               </el-col>
               <el-col :lg="11">
-                <el-form-item class="form-item" label="Odour Threshold Reference">
-                  <el-input v-model="item.odourThresholdReference" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :lg="11">
                 <el-form-item class="form-item" label="Odour Threshold Base">
                   <el-input v-model="item.odourThresholdBase" clearable></el-input>
                 </el-form-item>
@@ -283,7 +380,62 @@
                 <i class="el-icon-delete rowBtn" @click="removeProductThreshold(productIndex, otIndex)"></i>
               </el-col>
             </el-row>
-
+            <el-row :gutter="10">
+              <el-col :lg="12">
+                <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-switch
+                    v-model="item.article.useExist"
+                    active-text="使用已有文献"
+                    inactive-text="上传新文献"
+                    @change="(val)=>procOtArticleChanged(val, productIndex, otIndex)">
+                  </el-switch>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" v-show="item.article.useExist">
+              <el-col :lg="12">
+                <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-select
+                    filterable
+                    :value="item.article.name"
+                    value-key="name"
+                    remote
+                    reserve-keyword
+                    placeholder="请输入关键词"
+                    :remote-method="remoteSearch"
+                    :loading="articleSearchLoading"
+                    @change="(item)=>procOtSelectChange(productIndex, otIndex, item)">
+                    <el-option
+                      v-for="(item1,index1) in articleList"
+                      :key="item1.pk"
+                      :label="item1.name"
+                      :value="index1">
+                    </el-option>
+                  </el-select>
+                  <el-button size="small" type="primary" style="margin-left: 20px;" @click="viewProcArticle(productIndex, otIndex)">
+                    View
+                  </el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" v-show="!item.article.useExist">
+              <el-col :lg="12">
+                <el-form-item label="Article Name">
+                <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOtAddArticleBlur(productIndex, otIndex)"></el-input>
+              </el-form-item>
+              <el-form-item label="Article File">
+                <el-upload
+                  accept=".pdf"
+                  action="/"
+                  :on-change="(file, fileList) => procOtFileChange(file, fileList, productIndex, otIndex)"
+                  :file-list="[]"
+                  :auto-upload="false"
+                  :limit="1">
+                  <el-button size="small" type="primary">点击上传</el-button>
+                </el-upload>
+              </el-form-item>
+              </el-col>
+            </el-row>
           </el-card>
           <div style="text-align: right">
             <el-button size="small" type="primary" @click="addProductThreshold(productIndex, id)">
@@ -308,6 +460,62 @@
                 <i class="el-icon-delete rowBtn" @click="removeProductDescription(productIndex, odIndex)"></i>
               </el-col>
             </el-row>
+            <el-row :gutter="10">
+              <el-col :lg="12">
+                <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-switch
+                    v-model="item.article.useExist"
+                    active-text="使用已有文献"
+                    inactive-text="上传新文献"
+                    @change="(val)=>procOdArticleChanged(val, productIndex, odIndex)">
+                  </el-switch>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" v-show="item.article.useExist">
+              <el-col :lg="12">
+                <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-select
+                    filterable
+                    :value="item.article.name"
+                    value-key="name"
+                    remote
+                    reserve-keyword
+                    placeholder="请输入关键词"
+                    :remote-method="remoteSearch"
+                    :loading="articleSearchLoading"
+                    @change="(item)=>procOdSelectChange(productIndex, odIndex, item)">
+                    <el-option
+                      v-for="(item1,index1) in articleList"
+                      :key="item1.pk"
+                      :label="item1.name"
+                      :value="index1">
+                    </el-option>
+                  </el-select>
+                  <el-button size="small" type="primary" style="margin-left: 20px;" @click="viewProcOdArticle(productIndex, odIndex)">
+                    View
+                  </el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" v-show="!item.article.useExist">
+              <el-col :lg="12">
+                <el-form-item label="Article Name">
+                  <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOdAddArticleBlur(productIndex, odIndex)"></el-input>
+                </el-form-item>
+                <el-form-item label="Article File">
+                  <el-upload
+                    accept=".pdf"
+                    action="/"
+                    :on-change="(file, fileList) => procOdFileChange(file, fileList, productIndex, odIndex)"
+                    :file-list="[]"
+                    :auto-upload="false"
+                    :limit="1">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                  </el-upload>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-card>
           <div style="text-align: right">
             <el-button size="small" type="primary" @click="addProductDescription(productIndex, id)">
@@ -316,61 +524,6 @@
           </div>
         </div>
       </div>
-      <el-divider content-position="left"><span class="span">Article</span></el-divider>
-      <el-row :gutter="10">
-        <el-col :lg="12">
-          <el-form-item class="form-item" label="Article" label-width="80px">
-            <el-switch
-              v-model="articleExisted"
-              active-text="使用已有文献"
-              inactive-text="上传新文献">
-            </el-switch>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10" v-show="articleExisted">
-        <el-col :lg="12">
-          <el-form-item class="form-item" label="Article" label-width="80px">
-            <el-select
-              filterable
-              :value="selectedArticle.name"
-              value-key="name"
-              remote
-              reserve-keyword
-              placeholder="请输入关键词"
-              :remote-method="remoteSearch"
-              :loading="articleSearchLoading"
-              @change="selectChange">
-              <el-option
-                v-for="(item,index) in articleList"
-                :key="item.pk"
-                :label="item.name"
-                :value="index">
-              </el-option>
-            </el-select>
-            <el-button size="small" type="primary" style="margin-left: 20px;" @click="viewArticle">
-              View
-            </el-button>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10" v-show="!articleExisted">
-        <el-col :lg="12">
-          <el-form-item label="Article Name">
-          <el-input v-model="uploadArticle.name" clearable style="width: 500px"></el-input>
-        </el-form-item>
-        <el-form-item label="Article File">
-            <el-upload
-                action="/"
-                :on-change="fileChange"
-                :file-list="[]"
-                :auto-upload="false"
-                :limit="1">
-                <el-button size="small" type="primary">点击上传</el-button>
-            </el-upload>
-        </el-form-item>
-        </el-col>
-      </el-row>
       <el-divider content-position="left"><span class="span">Uploader & Reviewer</span></el-divider>
       <el-row :gutter="10">
         <el-col :lg="12">
@@ -418,8 +571,7 @@ export default {
         uploader: '',
         reviewer: '',
         products: [],
-        productList: [],
-        article: null
+        productList: []
       },
       rules: {
         compoundName: [
@@ -456,8 +608,15 @@ export default {
     addProductDescription(productIndex, productId) {
       this.compoundInfoForm.productList[productIndex].odList.push({
         odourDescription: '',
-        odourDescriptionReference: '',
-        productId: productId
+        productId: productId,
+        articleId: '0',
+        article: {
+          pk: '0',
+          name: '',
+          file: File,
+          useExist: true,
+          judgeName: false,
+        }
       })
     },
     // 移除产品阈值
@@ -468,9 +627,16 @@ export default {
     addProductThreshold(productIndex, productId) {
       this.compoundInfoForm.productList[productIndex].otList.push({
         odourThreshold: 0,
-        odourThresholdReference: '',
         productId: productId,
-        odourThresholdBase: ''
+        odourThresholdBase: '',
+        articleId: '0',
+        article: {
+          pk: '0',
+          name: '',
+          file: File,
+          useExist: true,
+          judgeName: false,
+        }
       })
     },
     // 选择产品-选中值发生变化时触发
@@ -492,39 +658,127 @@ export default {
       // 产品风味列表移除该项即可
       this.compoundInfoForm.productList = this.compoundInfoForm.productList.filter(item => item.id !== val)
     },
-    async uploadOneArticle() {
-      if(this.articleExisted) {
-        return
-      }
-      let that = this
+    async uploadOneArticle(name, file) {
       let form = new FormData();
-      form.append('name', this.uploadArticle.name)
-      form.append('file', this.uploadArticle.file)
+      let res = null
+      form.append('name', name)
+      form.append('file', file)
       await this.$api.article.add(form)
         .then(({data, success})=> {
           if (success) {
-            that.compoundInfoForm.article = data
+            res = data
           }
-          that.uploadArticle.name = ''
-          that.uploadArticle.file = null
         })
+      return res
     },
     async submitForm() {
-      if(this.articleExisted) {
-        if(this.selectedArticle.name === undefined || this.selectedArticle.name === '') {
-          this.$message('未选择文献')
-          return
-        }
-        this.compoundInfoForm.article = this.selectedArticle.pk
-      } else {
-        if(this.uploadArticle.name === undefined || this.uploadArticle.name === '' ||
-        this.uploadArticle.file === undefined || this.uploadArticle.file === null) {
-          this.$message('未选择上传文献')
-          return
+      let that = this
+      // 检查化合物阈值文献索引
+      for(let i=0;i<this.compoundInfoForm.otList.length;i++) {
+        let article = this.compoundInfoForm.otList[i].article
+        if(!article.useExist) {
+          if(article.file === null) {
+            this.$message({
+              type: 'error',
+              message: '未选择文献'
+            })
+            return
+          }
+          if(!article.judgeName) {
+            this.$message({
+              type: 'error',
+              message: '文献文件名已存在，请修改'
+            })
+            return
+          }
+          await this.uploadOneArticle(article.name, article.file).then(res=> {
+            that.compoundInfoForm.otList[i].articleId = res
+          })
+        } else {
+          this.compoundInfoForm.otList[i].articleId = article.pk
         }
       }
-      await this.uploadOneArticle()
-      console.log(this.compoundInfoForm.article)
+
+      // 检查化合物香气描述文献索引
+      for(let i=0;i<this.compoundInfoForm.odList.length;i++) {
+        let article = this.compoundInfoForm.odList[i].article
+        if(!article.useExist) {
+          if(article.file === null) {
+            this.$message({
+              type: 'error',
+              message: '未选择文献'
+            })
+            return
+          }
+          if(!article.judgeName) {
+            this.$message({
+              type: 'error',
+              message: '文献文件名已存在，请修改'
+            })
+            return
+          }
+          await this.uploadOneArticle(article.name, article.file).then(res=> {
+            that.compoundInfoForm.odList[i].articleId = res
+          })
+        } else {
+          this.compoundInfoForm.odList[i].articleId = article.pk
+        }
+      }
+
+      //检查产品阈值的文献（名称是否合法，文件是否存在）
+      for(let procIndex = 0; procIndex<this.compoundInfoForm.productList.length;procIndex++) {
+        for(let i=0;i<this.compoundInfoForm.productList[procIndex].otList.length;i++) {
+          let article = this.compoundInfoForm.productList[procIndex].otList[i].article
+          if(!article.useExist) {
+            if(article.file === null) {
+              this.$message({
+                type: 'error',
+                message: '未选择文献'
+              })
+              return
+            }
+            if(!article.judgeName) {
+              this.$message({
+                type: 'error',
+                message: '文献文件名已存在，请修改'
+              })
+              return
+            }
+            await this.uploadOneArticle(article.name, article.file).then(res=> {
+              that.compoundInfoForm.productList[procIndex].otList[i].articleId = res
+            })
+          } else {
+            this.compoundInfoForm.productList[procIndex].otList[i].articleId = article.pk
+          }
+        }
+      }
+      //检查产品香气描述的文献（名称是否合法，文件是否存在）
+      for(let procIndex = 0; procIndex<this.compoundInfoForm.productList.length;procIndex++) {
+        for(let i=0;i<this.compoundInfoForm.productList[procIndex].odList.length;i++) {
+          let article = this.compoundInfoForm.productList[procIndex].odList[i].article
+          if(!article.useExist) {
+            if(article.file === null) {
+              this.$message({
+                type: 'error',
+                message: '未选择文献'
+              })
+              return
+            }
+            if(!article.judgeName) {
+              this.$message({
+                type: 'error',
+                message: '文献文件名已存在，请修改'
+              })
+              return
+            }
+            await this.uploadOneArticle(article.name, article.file).then(res=> {
+              that.compoundInfoForm.productList[procIndex].odList[i].articleId = res
+            })
+          } else {
+            this.compoundInfoForm.productList[procIndex].odList[i].articleId = article.pk
+          }
+        }
+      }
       await this.$refs.compoundInfoForm.validate((valid) => {
         if (!valid) return
         this.compoundInfoForm.casNo = this.compoundInfoForm.casNo.replace(new RegExp("-", "g"), "");
@@ -581,9 +835,16 @@ export default {
       this.compoundInfoForm.otList.push({
         id: '',
         odourThreshold: 0,
-        odourThresholdReference: '',
         odourBase: '',
-        compoundId: ''
+        compoundId: '',
+        articleId: '0',
+        article: {
+          pk: '0',
+          name: '',
+          file: null,
+          useExist: true,
+          judgeName: false,
+        }
       });
     },
     removeot(item, index) {
@@ -594,7 +855,15 @@ export default {
         id: '',
         odourDescription: '',
         odourDescriptionReference: '',
-        compoundId: ''
+        compoundId: '',
+        articleId: '0',
+        article: {
+          pk: '0',
+          name: '',
+          file: File,
+          useExist: true,
+          judgeName: false,
+        }
       });
     },
     removeod(item, index) {
@@ -699,22 +968,161 @@ export default {
           that.articleSearchLoading = false
         })
     },
-    selectChange(item) {
-      this.selectedArticle.name = this.articleList[item].name
-      this.selectedArticle.pk = this.articleList[item].pk
+    selectChange(item, index) {
+      this.compoundInfoForm.otList[index].article.name = this.articleList[item].name
+      this.compoundInfoForm.otList[index].article.pk = this.articleList[item].pk
     },
-    viewArticle() {
-      if(this.selectedArticle.name === undefined || this.selectedArticle.name === '') {
+    procOtSelectChange(productIndex, otIndex, item) {
+      this.compoundInfoForm.productList[productIndex].otList[otIndex].article.name = this.articleList[item].name
+      this.compoundInfoForm.productList[productIndex].otList[otIndex].article.pk = this.articleList[item].pk
+    },
+    odSelectChange(item, index) {
+      this.compoundInfoForm.odList[index].article.name = this.articleList[item].name
+      this.compoundInfoForm.odList[index].article.pk = this.articleList[item].pk
+    },
+    procOdSelectChange(productIndex, odIndex, item) {
+      this.compoundInfoForm.productList[productIndex].odList[odIndex].article.name = this.articleList[item].name
+      this.compoundInfoForm.productList[productIndex].odList[odIndex].article.pk = this.articleList[item].pk
+    },
+    viewArticle(index) {
+      let selectArticle = this.compoundInfoForm.otList[index].article
+      
+      if(selectArticle.name === undefined || selectArticle.name === '') {
         this.$message("未选择文献")
         return
       }
-      let _pk = this.selectedArticle.pk
+      let _pk = selectArticle.pk
       window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
     },
-    fileChange(file, fileList) {
-      if(fileList.length == 1) {
-          this.uploadArticle.file = fileList[0].raw
+    viewProcArticle(productIndex, otIndex) {
+      let selectArticle = this.compoundInfoForm.productList[productIndex].otList[otIndex].article
+      
+      if(selectArticle.name === undefined || selectArticle.name === '') {
+        this.$message("未选择文献")
+        return
       }
+      let _pk = selectArticle.pk
+      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+    },
+    odViewArticle(index) {
+      let selectArticle = this.compoundInfoForm.odList[index].article
+      
+      if(selectArticle.name === undefined || selectArticle.name === '') {
+        this.$message("未选择文献")
+        return
+      }
+      let _pk = selectArticle.pk
+      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+    },
+    viewProcOdArticle(productIndex, otIndex) {
+      let selectArticle = this.compoundInfoForm.productList[productIndex].odList[otIndex].article
+      
+      if(selectArticle.name === undefined || selectArticle.name === '') {
+        this.$message("未选择文献")
+        return
+      }
+      let _pk = selectArticle.pk
+      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+    },
+    otfileChange(file, fileList, index) {
+      if(fileList.length == 1) {
+        this.compoundInfoForm.otList[index].article.file = fileList[0].raw
+      }
+    },
+    odFileChange(file, fileList, index) {
+      if(fileList.length == 1) {
+        this.compoundInfoForm.odList[index].article.file = fileList[0].raw
+      }
+    },
+    procOtFileChange(file, fileList, productIndex, otIndex) {
+      if(fileList.length == 1) {
+        this.compoundInfoForm.productList[productIndex].otList[otIndex].article.file = fileList[0].raw
+      }
+    },
+    procOdFileChange(file, fileList, productIndex, odIndex) {
+      if(fileList.length == 1) {
+        this.compoundInfoForm.productList[productIndex].odList[odIndex].article.file = fileList[0].raw
+      }
+    },
+    otAddArticleBlur(index) {
+      let name = this.compoundInfoForm.otList[index].article.name
+      if(name === '') {
+        return
+      }
+      let that = this
+      this.$api.article.judgeName(name)
+      .then(({data}) => {
+        that.compoundInfoForm.otList[index].article.judgeName = data
+        if(!data) {
+          that.$message({
+            message: "文献文件名已存在，请修改",
+            type: 'error'
+          })
+        }
+      })
+    },
+    odAddArticleBlur(index) {
+      let name = this.compoundInfoForm.odList[index].article.name
+      if(name === '') {
+        return
+      }
+      let that = this
+      this.$api.article.judgeName(name)
+      .then(({data}) => {
+        that.compoundInfoForm.odList[index].article.judgeName = data
+        if(!data) {
+          that.$message({
+            message: "文献文件名已存在，请修改",
+            type: 'error'
+          })
+        }
+      })
+    },
+    procOtAddArticleBlur(productIndex, otIndex) {
+      let name = this.compoundInfoForm.productList[productIndex].otList[otIndex].article.name
+      if(name === '') {
+        return
+      }
+      let that = this
+      this.$api.article.judgeName(name)
+      .then(({data}) => {
+        that.compoundInfoForm.productList[productIndex].otList[otIndex].article.judgeName = data
+        if(!data) {
+          that.$message({
+            message: "文献文件名已存在，请修改",
+            type: 'error'
+          })
+        }
+      })
+    },
+    procOdAddArticleBlur(productIndex, odIndex) {
+      let name = this.compoundInfoForm.productList[productIndex].odList[odIndex].article.name
+      if(name === '') {
+        return
+      }
+      let that = this
+      this.$api.article.judgeName(name)
+      .then(({data}) => {
+        that.compoundInfoForm.productList[productIndex].odList[odIndex].article.judgeName = data
+        if(!data) {
+          that.$message({
+            message: "文献文件名已存在，请修改",
+            type: 'error'
+          })
+        }
+      })
+    },
+    otArticleChanged(val, index) {
+      this.compoundInfoForm.otList[index].article.name = ''
+    },
+    odArticleChanged(val, index) {
+      this.compoundInfoForm.odList[index].article.name = ''
+    },
+    procOtArticleChanged(val, productIndex, otIndex) {
+      this.compoundInfoForm.productList[productIndex].otList[otIndex].article.name = ''
+    },
+    procOdArticleChanged(val, productIndex, odIndex) {
+      this.compoundInfoForm.productList[productIndex].odList[odIndex].article.name = ''
     }
   }
 }
