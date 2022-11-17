@@ -159,10 +159,12 @@ export default {
       return index;
     },
     handleView(index, row) {
+      let that = this
       this.viewDialogVisible = !this.viewDialogVisible;
       this.$api.compound.getOne(row.id)
           .then(({data}) => {
-            this.compoundInfo = data
+            data = that.addExtraParam(data)
+            that.compoundInfo = data
           }).catch(err => {
         console.error(err)
       })
@@ -171,7 +173,8 @@ export default {
       let that = this
       this.editDialogVisible = !this.editDialogVisible;
       this.$api.compound.getOne(row.id)
-          .then(({data}) => {
+          .then(({data}) => {          
+            data = that.addExtraParam(data)
             that.compoundInfo = data
           }).catch(err => {
         console.error(err)
@@ -193,6 +196,59 @@ export default {
           }).catch(err => {
         console.error(err);
       })
+    },
+    addExtraParam(data) {
+      for(let i=0;i<data.otList.length;i++) {
+        data.otList[i].article = {
+          pk: '0',
+          name: '',
+          file: null,
+          useExist: true,
+          judgeName: false,
+          articleChanged: false,
+          originParam: true
+        }
+      }
+      for(let i=0;i<data.odList.length;i++) {
+        data.odList[i].article = 
+        {
+          pk: '0',
+          name: '',
+          file: null,
+          useExist: true,
+          judgeName: false,
+          articleChanged: false,
+          originParam: true
+        }
+      }
+      for(let i=0;i<data.productList.length;i++) {
+        for(let j=0;j<data.productList[i].otList.length;j++) {
+          data.productList[i].otList[j].article = 
+          {
+            pk: '0',
+            name: '',
+            file: null,
+            useExist: true,
+            judgeName: false,
+            articleChanged: false,
+            originParam: true
+          }
+        }
+
+        for(let j=0;j<data.productList[i].odList.length;j++) {
+          data.productList[i].odList[j].article = 
+          {
+            pk: '0',
+            name: '',
+            file: null,
+            useExist: true,
+            judgeName: false,
+            articleChanged: false,
+            originParam: true
+          }
+        }
+      }
+      return data
     }
   },
   watch: {

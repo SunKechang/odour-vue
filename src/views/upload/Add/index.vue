@@ -601,7 +601,6 @@
           name: '',
           file : null
         },
-        articleExisted: true,
         reviewerSearchLoading: false,
         reviewerList: [],
         selectedReviewer: '',
@@ -673,22 +672,18 @@
         // 产品风味列表移除该项即可
         this.compoundInfoForm.productList = this.compoundInfoForm.productList.filter(item => item.id !== val)
       },
-      async uploadOneArticle() {
-        if(this.articleExisted) {
-          return
-        }
-        let that = this
+      async uploadOneArticle(name, file) {
         let form = new FormData();
-        form.append('name', this.uploadArticle.name)
-        form.append('file', this.uploadArticle.file)
+        let res = null
+        form.append('name', name)
+        form.append('file', file)
         await this.$api.article.add(form)
           .then(({data, success})=> {
             if (success) {
-              that.compoundInfoForm.article = data
+              res = data
             }
-            that.uploadArticle.name = ''
-            that.uploadArticle.file = null
           })
+        return res
       },
       async submitForm() {
         if(this.compoundInfoForm.reviewer.length === 0) {
