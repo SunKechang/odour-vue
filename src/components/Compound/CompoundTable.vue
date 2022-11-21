@@ -221,6 +221,19 @@ export default {
           originParam: true
         }
       }
+      for(let i=0;i<data.functionList.length;i++) {
+        data.functionList[i].newImg = ''
+        data.functionList[i].article = 
+        {
+          pk: '0',
+          name: '',
+          file: null,
+          useExist: true,
+          judgeName: false,
+          articleChanged: false,
+          originParam: true
+        }
+      }
       for(let i=0;i<data.productList.length;i++) {
         for(let j=0;j<data.productList[i].otList.length;j++) {
           data.productList[i].otList[j].article = 

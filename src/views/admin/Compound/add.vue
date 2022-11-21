@@ -225,6 +225,96 @@
         <el-button size="small" type="primary" @click="addod">Add Description</el-button>
       </div>
 
+      <!--强度函数-->
+      <el-divider content-position="left"><span class="span">Intensity Function</span></el-divider>
+      <el-card v-for="(item, index) in compoundInfoForm.functionList" :key="'function' + index" shadow="hover">
+        <el-row :gutter="10" type="flex">
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Odour Base" label-width="130px">
+              <el-input v-model="item.odourBase" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Odour Function" label-width="130px">
+              <el-upload
+                  :auto-upload="false"
+                  :multiple="false"
+                  :limit="1"
+                  :on-change="(file, fileList) => onChangeFunction(file, fileList, index)"
+                  accept=".jpeg,.jpg,.png"
+                  action=""
+                  class="upload-demo"
+                  style="text-align: right;"
+              >
+                <el-button slot="trigger" size="small" type="primary">Select Function</el-button>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removeFunction(item, index)"></i>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-switch
+                v-model="item.article.useExist"
+                active-text="使用已有文献"
+                inactive-text="上传新文献"
+                @change="(val)=>funcArticleChanged(val, index)">
+              </el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-select
+                filterable
+                :value="item.article.name"
+                value-key="name"
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="remoteSearch"
+                :loading="articleSearchLoading"
+                @change="(item)=>funcSelectChange(item, index)">
+                <el-option
+                  v-for="(item1,index1) in articleList"
+                  :key="item1.pk"
+                  :label="item1.name"
+                  :value="index1">
+                </el-option>
+              </el-select>
+              <el-button size="small" type="primary" style="margin-left: 20px;" @click="funcViewArticle(index)">
+                View
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="!item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item label="Article Name">
+            <el-input v-model="item.article.name" clearable style="width: 500px" @blur="funcAddArticleBlur(index)"></el-input>
+          </el-form-item>
+          <el-form-item label="Article File">
+              <el-upload
+                accept=".pdf"
+                action="/"
+                :on-change="(file, fileList) => funcFileChange(file, fileList, index)"
+                :file-list="[]"
+                :auto-upload="false"
+                :limit="1">
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
+          </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addFunction">Add Intensity Function</el-button>
+      </div>
+
       <!--Chemical Structure-->
       <el-divider content-position="left"><span class="span">Chemical Structure</span></el-divider>
       <el-upload
@@ -571,7 +661,8 @@ export default {
         uploader: '',
         reviewer: '',
         products: [],
-        productList: []
+        productList: [],
+        functionList: [],
       },
       rules: {
         compoundName: [
@@ -779,6 +870,27 @@ export default {
           }
         }
       }
+      //检查强度函数的文献
+      for(let i=0;i<this.compoundInfoForm.functionList.length;i++) {
+        let article = this.compoundInfoForm.functionList[i].article
+        if(!article.useExist) {
+          if(article.file === null) {
+            continue
+          }
+          if(!article.judgeName) {
+            this.$message({
+              type: 'error',
+              message: '文献文件名已存在，请修改'
+            })
+            return
+          }
+          await this.uploadOneArticle(article.name, article.file).then(res=> {
+            that.compoundInfoForm.functionList[i].articleId = res
+          })
+        } else {
+          this.compoundInfoForm.functionList[i].articleId = article.pk
+        }
+      }
       await this.$refs.compoundInfoForm.validate((valid) => {
         if (!valid) return
         this.compoundInfoForm.casNo = this.compoundInfoForm.casNo.replace(new RegExp("-", "g"), "");
@@ -805,9 +917,19 @@ export default {
     resetForm() {
       this.$refs.compoundInfoForm.resetFields();
     },
+    onChangeFunction(file, fileList, index) {
+      if(fileList.length === 1) {
+        let file = fileList[0].raw
+        convertImgToBase64(file, (base64Str) => {
+          this.compoundInfoForm.functionList[index].functionImg = base64Str;
+        }, () => {
+          console.log("convert error");
+        });
+      }
+    },
     onChangeChemicalStructure() {
       let chemicalStructure = this.$refs.uploadChemicalStructure.$refs['upload-inner'].$refs.input.files[0];
-
+      console.log(chemicalStructure)
       convertImgToBase64(chemicalStructure, (base64Str) => {
         this.compoundInfoForm.chemicalStructure = base64Str;
       }, () => {
@@ -915,6 +1037,25 @@ export default {
     removelowMR(item, index) {
       this.compoundInfoForm.lowmrList.splice(index, 1);
     },
+    addFunction() {
+      this.compoundInfoForm.functionList.push({
+        id: '',
+        odourBase: '',
+        functionImg: '',
+        compoundId: '',
+        articleId: '-1',
+        article: {
+          pk: '-1',
+          name: '',
+          file: File,
+          useExist: true,
+          judgeName: false,
+        }
+      });
+    },
+    removeFunction(item, index) {
+      this.compoundInfoForm.functionList.splice(index, 1);
+    },
     readExcel() {
       const v = this;
       let param = new FormData();
@@ -984,6 +1125,10 @@ export default {
       this.compoundInfoForm.productList[productIndex].odList[odIndex].article.name = this.articleList[item].name
       this.compoundInfoForm.productList[productIndex].odList[odIndex].article.pk = this.articleList[item].pk
     },
+    funcSelectChange(item, index) {
+      this.compoundInfoForm.functionList[index].article.name = this.articleList[item].name
+      this.compoundInfoForm.functionList[index].article.pk = this.articleList[item].pk
+    },
     viewArticle(index) {
       let selectArticle = this.compoundInfoForm.otList[index].article
       
@@ -1006,6 +1151,16 @@ export default {
     },
     odViewArticle(index) {
       let selectArticle = this.compoundInfoForm.odList[index].article
+      
+      if(selectArticle.name === undefined || selectArticle.name === '') {
+        this.$message("未选择文献")
+        return
+      }
+      let _pk = selectArticle.pk
+      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+    },
+    funcViewArticle(index) {
+      let selectArticle = this.compoundInfoForm.functionList[index].article
       
       if(selectArticle.name === undefined || selectArticle.name === '') {
         this.$message("未选择文献")
@@ -1042,6 +1197,11 @@ export default {
     procOdFileChange(file, fileList, productIndex, odIndex) {
       if(fileList.length == 1) {
         this.compoundInfoForm.productList[productIndex].odList[odIndex].article.file = fileList[0].raw
+      }
+    },
+    funcFileChange(file, fileList, index) {
+      if(fileList.length == 1) {
+        this.compoundInfoForm.functionList[index].article.file = fileList[0].raw
       }
     },
     otAddArticleBlur(index) {
@@ -1112,6 +1272,24 @@ export default {
         }
       })
     },
+    funcAddArticleBlur(index) {
+      let name = this.compoundInfoForm.functionList[index].article.name
+      if(name === '') {
+        return
+      }
+      let that = this
+      this.$api.article.judgeName(name)
+      .then(({data}) => {
+        that.compoundInfoForm.functionList[index].article.judgeName = data
+        console.log(that.compoundInfoForm.functionList[index].article.judgeName)
+        if(!data) {
+          that.$message({
+            message: "文献文件名已存在，请修改",
+            type: 'error'
+          })
+        }
+      })
+    },
     otArticleChanged(val, index) {
       this.compoundInfoForm.otList[index].article.name = ''
     },
@@ -1123,6 +1301,9 @@ export default {
     },
     procOdArticleChanged(val, productIndex, odIndex) {
       this.compoundInfoForm.productList[productIndex].odList[odIndex].article.name = ''
+    },
+    funcArticleChanged(val, index) {
+      this.compoundInfoForm.functionList[index].article.name = ''
     }
   }
 }

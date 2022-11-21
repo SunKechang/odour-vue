@@ -143,6 +143,37 @@
               </el-table>
             </div>
           </el-tab-pane>
+          <el-tab-pane label="Intensity Function" name="intensity function">
+            <div>
+              <b>Odour Intensity Function: </b>
+              <el-table
+                  :data="compoundInfo.functionList"
+                  border
+                  style="width: 100%;">
+                <el-table-column
+                    label="Odour Base"
+                    prop="odourBase">
+                </el-table-column>
+                <el-table-column
+                    label="Function Image">
+                    <template slot-scope="scope">
+                      <el-image
+                        :src="'/api'+scope.row.functionImg"
+                        alt="Function Image"
+                        style="position: relative;width: 300px;"
+                      />
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="Odour Reference">
+                    <template slot-scope="scope">
+                      <el-button @click="viewArticle(scope.row)" v-if="scope.row.articleId >= 0">{{scope.row.articleName}}</el-button>
+                      <el-empty v-if="scope.row.articleId < 0"/>
+                    </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </el-tab-pane>
           <el-tab-pane label="Mass Spectrometry" name="spectrometry">
             <div>
               <b>Orbitrap-MS mass spectrometry:</b><br>

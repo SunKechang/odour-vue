@@ -266,6 +266,124 @@
             <el-button size="small" type="primary" @click="addod">Add Description</el-button>
           </div>
 
+          <!--强度函数-->
+          <el-divider content-position="left"><span class="span">Odour Intensity Function</span></el-divider>
+          <el-card v-for="(item, index) in compoundInfoForm.functionList" :key="index" shadow="hover">
+            <el-row :gutter="10">
+              <el-col :lg="10">
+                <el-form-item class="form-item" label="Odour Base" label-width="90px">
+                  <el-input v-model="item.odourBase" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :lg="2">
+                <i class="el-icon-delete rowBtn" @click="removeIf(item, index)"></i>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col :lg="10">
+                <el-form-item class="form-item" label="原图像" label-width="90px">
+                  <el-image
+                    :src="'/api'+item.functionImg"
+                    alt="Function Image"
+                    style="position: relative;width: 300px;"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :lg="10">
+                <el-form-item class="form-item" label="新图像" label-width="90px">
+                  <el-upload
+                    :auto-upload="false"
+                    :multiple="false"
+                    :limit="1"
+                    :on-change="(file, fileList) => onChangeFunction(file, fileList, index)"
+                    accept=".jpeg,.jpg,.png"
+                    action=""
+                    class="upload-demo"
+                    style="text-align: right;"
+                  >
+                    <el-button slot="trigger" size="small" type="primary">Select Function</el-button>
+                  </el-upload>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col :lg="12">
+                <el-form-item class="form-item" label="Origin Article" v-if="item.article.originParam">
+                  <el-button @click="viewArticle(item.articleId)">{{item.articleName}}</el-button>
+                </el-form-item>
+              </el-col>
+              <el-col>
+                <el-form-item class="form-item" label="Change Article" v-if="item.article.originParam">
+                  <el-switch
+                    v-model="item.article.articleChanged"
+                    active-text="修改文献">
+                  </el-switch>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" v-show="item.article.articleChanged">
+              <el-col :lg="12">
+                <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-switch
+                    v-model="item.article.useExist"
+                    active-text="使用已有文献"
+                    inactive-text="上传新文献"
+                    @change="(val)=>ifArticleChanged(val, index)"
+                    >
+                  </el-switch>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" v-show="item.article.articleChanged && item.article.useExist">
+              <el-col :lg="12">
+                <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-select
+                    filterable
+                    :value="item.article.name"
+                    value-key="name"
+                    remote
+                    reserve-keyword
+                    placeholder="请输入关键词"
+                    :remote-method="remoteSearch"
+                    :loading="articleSearchLoading"
+                    @change="(item)=>ifSelectChange(item, index)">
+                    <el-option
+                      v-for="(item1,index1) in articleList"
+                      :key="item1.pk"
+                      :label="item1.name"
+                      :value="index1">
+                    </el-option>
+                  </el-select>
+                  <el-button size="small" type="primary" style="margin-left: 20px;" @click="ifViewArticle(index)">
+                    View
+                  </el-button>
+                  
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" v-show="item.article.articleChanged && !item.article.useExist">
+              <el-col :lg="12">
+                <el-form-item label="Article Name">
+                <el-input v-model="item.article.name" clearable style="width: 500px" @blur="ifAddArticleBlur(index)"></el-input>
+              </el-form-item>
+              <el-form-item label="Article File">
+                  <el-upload
+                    accept=".pdf"
+                    action="/"
+                    :on-change="(file, fileList) => iffileChange(file, fileList, index)"
+                    :file-list="[]"
+                    :auto-upload="false"
+                    :limit="1">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                  </el-upload>
+              </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+          <div style="text-align: right">
+            <el-button size="small" type="primary" @click="addIf">Add Intensity Function</el-button>
+          </div>
+
           <!--Chemical Structure-->
           <el-divider content-position="left"><span class="span">Chemical Structure</span></el-divider>
           <img width="50%" style="margin: auto" :src="oldChemicalStructure" alt="">
@@ -723,11 +841,13 @@ export default {
   },
   created() {
     let token=this.$store.state.user.Authorization;
-    if (token) {
+    if (token !== 'null') {
       const decode=jwtDecode(token);
       if (decode.role === undefined || decode.role === null) {
         this.admin = true
       }
+    } else {
+      this.$router.push('/v2/home')
     }
     let that = this
     this.$api.product.getAll().then(res => {
@@ -948,6 +1068,41 @@ export default {
         }
       }
 
+      // 检查化合物强度函数文献
+      for(let i=0;i<this.compoundInfoForm.functionList.length;i++) {
+        if(this.compoundInfoForm.functionList[i].newImg !== undefined && this.compoundInfoForm.functionList[i].newImg !== '') {
+          this.compoundInfoForm.functionList[i].functionImg = this.compoundInfoForm.functionList[i].newImg
+        }
+        if(this.compoundInfoForm.functionList[i].functionImg === '') {
+          this.$message({
+            type: 'error',
+            message: '强度函数未选择图像'
+          })
+          return
+        }
+        let article = this.compoundInfoForm.functionList[i].article
+        if(article.originParam && !article.articleChanged) {
+          continue
+        }
+        if(!article.useExist) {
+          if(article.file === null) { 
+            continue
+          }
+          if(!article.judgeName) {
+            this.$message({
+              type: 'error',
+              message: '文献文件名已存在，请修改'
+            })
+            return
+          }
+          await this.uploadOneArticle(article.name, article.file).then(res=> {
+            that.compoundInfoForm.functionList[i].articleId = res
+          })
+        } else {
+          this.compoundInfoForm.functionList[i].articleId = article.pk
+        }
+      }
+
       let token=this.$store.state.user.Authorization;
       let admin = false
       if (token) {
@@ -957,11 +1112,32 @@ export default {
         }
       }
       await this.$refs.compoundInfoForm.validate((valid) => {
-      if (valid) {
-        this.compoundInfoForm.casNo = this.compoundInfoForm.casNo.replace(new RegExp("-", "g"), "");
-        if(admin) {
-          this.$api.compound.update(this.compoundInfoForm)
-            .then(({state}) => {
+        if (valid) {
+          if(this.compoundInfoForm.casNo === undefined) {
+            return false
+          }
+          this.compoundInfoForm.casNo = this.compoundInfoForm.casNo.replace(new RegExp("-", "g"), "");
+          if(admin) {
+            this.$api.compound.update(this.compoundInfoForm)
+              .then(({state}) => {
+                if (state === 0) {
+                  this.dialogVisible = false;
+                  this.$alert("Update " + this.compoundInfoForm.compoundName + " successfully!", "Message", {
+                    confirmButtonText: 'Confirm'
+                  });
+                } else {
+                  this.$alert("Failed!", "Message", {
+                    confirmButtonText: 'Confirm'
+                  });
+                }
+              }).catch(err => {
+                console.error(err);
+                this.$alert("Error!", "Message", {
+                  confirmButtonText: 'Confirm'
+                });
+              });
+          } else {
+            this.$api.compound.userUpdate(this.compoundInfoForm).then(({state}) => {
               if (state === 0) {
                 this.dialogVisible = false;
                 this.$alert("Update " + this.compoundInfoForm.compoundName + " successfully!", "Message", {
@@ -978,27 +1154,7 @@ export default {
                 confirmButtonText: 'Confirm'
               });
             });
-        } else {
-          this.$api.compound.userUpdate(this.compoundInfoForm)
-            .then(({state}) => {
-              if (state === 0) {
-                this.dialogVisible = false;
-                this.$alert("Update " + this.compoundInfoForm.compoundName + " successfully!", "Message", {
-                  confirmButtonText: 'Confirm'
-                });
-              } else {
-                this.$alert("Failed!", "Message", {
-                  confirmButtonText: 'Confirm'
-                });
-              }
-            }).catch(err => {
-              console.error(err);
-              this.$alert("Error!", "Message", {
-                confirmButtonText: 'Confirm'
-              });
-            });
-        }
-        
+          }
         } else {
           return false;
         }
@@ -1112,6 +1268,28 @@ export default {
     removelowMR(item, index) {
       this.compoundInfoForm.lowmrList.splice(index, 1);
     },
+    addIf() {
+      this.compoundInfoForm.functionList.push({
+        id: '',
+        articleId: '',
+        compoundId: '',
+        functionImg: '',
+        odourBase: '',
+        newImg: '',
+        article: {
+                  pk: '0',
+                  name: '',
+                  file: null,
+                  useExist: true,
+                  judgeName: false,
+                  articleChanged: true,
+                  originParam: false
+                }
+      });
+    },
+    removeIf(item, index) {
+      this.compoundInfoForm.functionList.splice(index, 1);
+    },
     remoteSearch(query) {
       let that = this
       this.articleSearchLoading = true
@@ -1144,6 +1322,10 @@ export default {
     procOdSelectChange(productIndex, odIndex, item) {
       this.compoundInfoForm.productList[productIndex].odList[odIndex].article.name = this.articleList[item].name
       this.compoundInfoForm.productList[productIndex].odList[odIndex].article.pk = this.articleList[item].pk
+    },
+    ifSelectChange(item, index) {
+      this.compoundInfoForm.functionList[index].article.name = this.articleList[item].name
+      this.compoundInfoForm.functionList[index].article.pk = this.articleList[item].pk
     },
     viewArticle(_pk) {
       window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
@@ -1192,6 +1374,17 @@ export default {
       }
       this.viewArticle(article.pk)
     },
+    ifViewArticle(index) {
+      let article = this.compoundInfoForm.functionList[index].article
+      if(article.name === '') {
+        this.$message({
+          message: "未选择文献",
+          type: 'error'
+        })
+        return
+      }
+      this.viewArticle(article.pk)
+    },
     fileChange(file, fileList) {
       if(fileList.length == 1) {
           this.uploadArticle.file = fileList[0].raw
@@ -1228,6 +1421,9 @@ export default {
     },
     procOdArticleChanged(val, productIndex, odIndex) {
       this.compoundInfoForm.productList[productIndex].odList[odIndex].article.name = ''
+    },
+    ifArticleChanged(val, index) {
+      this.compoundInfoForm.functionList[index].article.name = ''
     },
     otAddArticleBlur(index) {
       let name = this.compoundInfoForm.otList[index].article.name
@@ -1297,6 +1493,23 @@ export default {
         }
       })
     },
+    ifAddArticleBlur(index) {
+      let name = this.compoundInfoForm.functionList[index].article.name
+      if(name === '') {
+        return
+      }
+      let that = this
+      this.$api.article.judgeName(name)
+      .then(({data}) => {
+        that.compoundInfoForm.functionList[index].article.judgeName = data
+        if(!data) {
+          that.$message({
+            message: "文献文件名已存在，请修改",
+            type: 'error'
+          })
+        }
+      })
+    },
     otfileChange(file, fileList, index) {
       if(fileList.length == 1) {
         this.compoundInfoForm.otList[index].article.file = fileList[0].raw
@@ -1316,7 +1529,25 @@ export default {
       if(fileList.length == 1) {
         this.compoundInfoForm.productList[productIndex].odList[odIndex].article.file = fileList[0].raw
       }
-    }
+    },
+    iffileChange(file, fileList, index) {
+      console.log(fileList)
+      if(fileList.length == 1) {
+        this.compoundInfoForm.functionList[index].article.file = fileList[0].raw
+      }
+    },
+    onChangeFunction(file, fileList, index) {
+      if(fileList.length === 1) {
+        let file = fileList[0].raw
+        convertImgToBase64(file, (base64Str) => {
+          this.compoundInfoForm.functionList[index].newImg = base64Str;
+        }, () => {
+          console.log("convert error");
+        });
+      } else {
+        this.compoundInfoForm.functionList[index].newImg = ''
+      }
+    },
   }
 }
 </script>

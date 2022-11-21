@@ -208,6 +208,34 @@ const routes = [
                 component: ()=>import("@/views/review/List")
             }
         ]
+    },
+    {
+        path: '/v2',
+        name: 'v2',
+        redirect: '/v2/home',
+        component:()=>import("@/layout/v2Index"),
+        children:[
+            {
+                path: 'home',
+                component: ()=>import("@/views/v2Index/Home")
+            },
+            {
+                path: 'compound',
+                component: ()=>import("@/views/v2Index/Compound")
+            },
+            {
+                path: 'oil',
+                component: ()=>import("@/views/v2Index/Oil")
+            },
+            {
+                path: 'download',
+                component: ()=>import("@/views/v2Index/Download")
+            },
+            {
+                path: 'about',
+                component: ()=>import("@/views/v2Index/About")
+            }
+        ]
     }
 ];
 

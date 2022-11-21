@@ -111,5 +111,8 @@ export default {
     },
     searchReviewer(_name) {
         return request.get("/user/review/get_reviewers", {params: {name: _name}})
+    },
+    getBases() {
+        return request.get("/compound/get_base")
     }
 }

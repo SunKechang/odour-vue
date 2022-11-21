@@ -50,6 +50,12 @@ export default {
     onDownload() {
       this.$emit('onDownload')
     }
+  },
+  mounted() {
+    if(this.$route.query.search !== undefined) {
+      this.searchForm.searchValue = this.$route.query.search
+      this.$emit('onSubmit', this.searchForm)
+    }
   }
 }
 </script>

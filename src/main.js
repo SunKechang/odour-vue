@@ -18,13 +18,17 @@ Vue.prototype.$target = 'http://127.0.0.1:8081'
 
 const i18n = new VueI18n({
 
-  locale: 'zh',
+  locale: 'v2zh',
 
   messages: {
 
     'zh': require('@/lang/zh.js'),
 
-    'en': require('@/lang/en.js')
+    'en': require('@/lang/en.js'),
+
+    'v2zh': require('@/lang/v2zh.js'),
+
+    'v2en': require('@/lang/v2en.js')
 
   }
 
