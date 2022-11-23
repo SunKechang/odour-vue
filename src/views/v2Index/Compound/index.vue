@@ -1,7 +1,13 @@
 <template>
     <div class="compounds">
-      <div class="searchPart">
+      <div class="searchPart"
+      >
         <div class="searchForm">
+          <div style="margin-bottom: 20px;">
+            <span v-if="searchForm.searchKind == 0" class="searchTitle">全局检索</span>
+            <span v-else-if="searchForm.searchKind == 1" class="searchTitle">阈值基质检索-{{searchForm.base}}</span>
+            <span v-else class="searchTitle">函数基质检索-{{searchForm.base}}</span>
+          </div>
           <search-form 
           @onSubmit="onSearch" 
           @onDownload='onDownload'/>
@@ -41,29 +47,25 @@
         currentPage: 1,
         size: 10,
         total: 0,
-        base: '',
-        search: '',
+        searchForm: {
+          searchProperty: 'compound_name',
+          searchValue: '',
+          searchKind: 0,
+          base: ''
+        },
+        baseImg: "../../../assets/search_back.jpg",
       }
     },
     methods: {
       getCompoundData() {
-        this.$api.compound.getList({
-          page: this.currentPage,
-          size: this.size
-        }).then(({state, data: {content, totalSize}}) => {
-          if (state === 0) {
-            this.total = totalSize
-            this.compoundList = content
-          }
-        }).catch(err => {
-          console.error(err)
-        })
+        this.onSearch(this.searchForm)
       },
       onSearch(searchForm) {
+        this.searchForm = searchForm
         this.$api.compound.search({
           ...searchForm,
           page: this.currentPage,
-          size: this.size
+          size: this.size,
         }).then(({state, data: {content, totalSize}}) => {
           if (state === 0) {
             this.compoundList = content
@@ -75,10 +77,26 @@
       },
       onDownload() {
         this.$refs.dataTable.downloadTable()
-      }
+      },
+    },
+    watch: {
+      '$route.query.baseImg': {
+        handler(newVal, oldVal) {
+          if(newVal !== undefined) {
+            this.baseImg = 'api/' + newVal
+          } else {
+            this.baseImg = "../../../assets/search_back.jpg"
+          }
+        }
+      },
     },
     created() {
-        this.getCompoundData()
+      if(this.$route.query.baseImg !== undefined) {
+        this.baseImg = 'api/' + this.$route.query.baseImg
+      } else {
+        this.baseImg = "../../../assets/search_back.jpg"
+      }
+      console.log(this.baseImg)
     }
   }
   </script>
@@ -112,8 +130,13 @@
     }
     .searchForm {
       background-color: rgba(226,226,226,0.5);
-      padding: 50px 20px 50px 20px;
+      padding: 30px 20px 50px 20px;
       border-radius: 5px;
+    }
+
+    .searchTitle {
+      font-size: 26px;
+      color: #ffffff;
     }
   </style>
   

@@ -177,6 +177,10 @@ const routes = [
             {
                 path: 'userlog',
                 component: ()=>import("@/views/admin/Log/UserLog")
+            },
+            {
+                path: 'base',
+                component: ()=>import("@/views/admin/Base/index")
             }
         ]
     },
@@ -229,6 +233,14 @@ const routes = [
             {
                 path: 'about',
                 component: ()=>import("@/views/v2Index/About")
+            },
+            {
+                path: 'login',
+                component: ()=>import("@/views/v2Index/Login")
+            },
+            {
+                path: 'register',
+                component: ()=>import("@/views/v2Index/Register")
             }
         ]
     }

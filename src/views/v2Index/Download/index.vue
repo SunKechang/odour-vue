@@ -20,15 +20,6 @@
         <div class="el-upload__tip" slot="tip">只 能 上 传 xlsx / xls 文 件</div>
       </el-upload>
       
-      <h2>请勾选需要下载的信息：</h2>
-      <input id="ri" v-model="checkList" type="checkbox" value="ri">
-      <label for="ri">极性柱</label>
-      <input id="nri" v-model="checkList" type="checkbox" value="nri">
-      <label for="nri">非极性柱</label>
-      <input id="od" v-model="checkList" type="checkbox" value="od">
-      <label for="od">香气描述</label>
-      <input id="ot" v-model="checkList" type="checkbox" value="ot">
-      <label for="ot">香气阈值</label>
       <div>
         <el-button @click="onDownloadpro">下载化合物详细信息</el-button>
       </div>

@@ -847,7 +847,7 @@ export default {
         this.admin = true
       }
     } else {
-      this.$router.push('/v2/home')
+      this.$router.push('/v2/login')
     }
     let that = this
     this.$api.product.getAll().then(res => {

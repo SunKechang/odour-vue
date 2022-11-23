@@ -10,6 +10,7 @@ import oil from "./oil"
 import article from "./article"
 import upload from "./upload"
 import review from "./review"
+import base from "./base"
 
 const api = {
     compound,
@@ -21,7 +22,8 @@ const api = {
     oil,
     upload,
     article,
-    review
+    review,
+    base
 }
 
 Vue.prototype.$api = api

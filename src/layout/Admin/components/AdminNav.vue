@@ -99,6 +99,10 @@
         <i class="el-icon-view"></i>
         <span slot="title">Account Security</span>
       </el-menu-item>
+      <el-menu-item index="/admin/base">
+        <i class="el-icon-view"></i>
+        <span slot="title">Base</span>
+      </el-menu-item>
     </el-menu>
   </el-scrollbar>
 
