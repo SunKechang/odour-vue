@@ -72,6 +72,96 @@
         <el-button size="small" type="primary" @click="addNRI">Add NRI</el-button>
       </div>
 
+      <!--强度函数-->
+      <el-divider content-position="left"><span class="span">Intensity Function</span></el-divider>
+      <el-card v-for="(item, index) in compoundInfoForm.functionList" :key="'function' + index" shadow="hover">
+        <el-row :gutter="10" type="flex">
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Odour Base" label-width="130px">
+              <el-input v-model="item.odourBase" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Odour Function" label-width="130px">
+              <el-upload
+                  :auto-upload="false"
+                  :multiple="false"
+                  :limit="1"
+                  :on-change="(file, fileList) => onChangeFunction(file, fileList, index)"
+                  accept=".jpeg,.jpg,.png"
+                  action=""
+                  class="upload-demo"
+                  style="text-align: right;"
+              >
+                <el-button slot="trigger" size="small" type="primary">Select Function</el-button>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removeFunction(item, index)"></i>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="" label-width="130px">
+              <el-switch
+                v-model="item.article.useExist"
+                active-text="使用已有文献"
+                inactive-text="上传新文献"
+                @change="(val)=>funcArticleChanged(val, index)">
+              </el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article Title" label-width="130px">
+              <el-select
+                filterable
+                :value="item.article.name"
+                value-key="name"
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="remoteSearch"
+                :loading="articleSearchLoading"
+                @change="(item)=>funcSelectChange(item, index)">
+                <el-option
+                  v-for="(item1,index1) in articleList"
+                  :key="item1.pk"
+                  :label="item1.name"
+                  :value="index1">
+                </el-option>
+              </el-select>
+              <el-button size="small" type="primary" style="margin-left: 20px;" @click="funcViewArticle(index)">
+                View
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="!item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article Title" label-width="130px">
+            <el-input v-model="item.article.name" clearable style="width: 500px" @blur="funcAddArticleBlur(index)"></el-input>
+          </el-form-item>
+          <el-form-item label="Article File" class="form-item" label-width="130px">
+              <el-upload
+                accept=".pdf"
+                action="/"
+                :on-change="(file, fileList) => funcFileChange(file, fileList, index)"
+                :file-list="[]"
+                :auto-upload="false"
+                :limit="1">
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
+          </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addFunction">Add Intensity Function</el-button>
+      </div>
+
       <!--香气阈值-->
       <el-divider content-position="left"><span class="span">Odour Threshold</span></el-divider>
       <el-card v-for="(item, index) in compoundInfoForm.otList" :key="index" shadow="hover">
@@ -92,7 +182,7 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :lg="12">
-            <el-form-item class="form-item" label="Article" label-width="80px">
+            <el-form-item class="form-item" label="" label-width="130px">
               <el-switch
                 v-model="item.article.useExist"
                 active-text="使用已有文献"
@@ -104,7 +194,7 @@
         </el-row>
         <el-row :gutter="10" v-show="item.article.useExist">
           <el-col :lg="12">
-            <el-form-item class="form-item" label="Article" label-width="80px">
+            <el-form-item class="form-item" label="Article Title" label-width="130px">
               <el-select
                 filterable
                 :value="item.article.name"
@@ -130,10 +220,10 @@
         </el-row>
         <el-row :gutter="10" v-show="!item.article.useExist">
           <el-col :lg="12">
-            <el-form-item label="Article Name">
+            <el-form-item class="form-item" label="Article Title" label-width="130px">
             <el-input v-model="item.article.name" clearable style="width: 500px" @blur="otAddArticleBlur(index)"></el-input>
           </el-form-item>
-          <el-form-item label="Article File">
+          <el-form-item label="Article File" class="form-item" label-width="130px">
               <el-upload
                 accept=".pdf"
                 action="/"
@@ -166,7 +256,7 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :lg="12">
-            <el-form-item class="form-item" label="Article" label-width="80px">
+            <el-form-item class="form-item" label="" label-width="130px">
               <el-switch
                 v-model="item.article.useExist"
                 active-text="使用已有文献"
@@ -178,7 +268,7 @@
         </el-row>
         <el-row :gutter="10" v-show="item.article.useExist">
           <el-col :lg="12">
-            <el-form-item class="form-item" label="Article" label-width="80px">
+            <el-form-item class="form-item" label="Article Title" label-width="130px">
               <el-select
                 filterable
                 :value="item.article.name"
@@ -204,10 +294,10 @@
         </el-row>
         <el-row :gutter="10" v-show="!item.article.useExist">
           <el-col :lg="12">
-            <el-form-item label="Article Name">
+            <el-form-item class="form-item" label="Article Title" label-width="130px">
             <el-input v-model="item.article.name" clearable style="width: 500px" @blur="odAddArticleBlur(index)"></el-input>
           </el-form-item>
-          <el-form-item label="Article File">
+          <el-form-item label="Article File" class="form-item" label-width="130px">
               <el-upload
                 accept=".pdf"
                 action="/"
@@ -225,95 +315,6 @@
         <el-button size="small" type="primary" @click="addod">Add Description</el-button>
       </div>
 
-      <!--强度函数-->
-      <el-divider content-position="left"><span class="span">Intensity Function</span></el-divider>
-      <el-card v-for="(item, index) in compoundInfoForm.functionList" :key="'function' + index" shadow="hover">
-        <el-row :gutter="10" type="flex">
-          <el-col :lg="10">
-            <el-form-item class="form-item" label="Odour Base" label-width="130px">
-              <el-input v-model="item.odourBase" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="10">
-            <el-form-item class="form-item" label="Odour Function" label-width="130px">
-              <el-upload
-                  :auto-upload="false"
-                  :multiple="false"
-                  :limit="1"
-                  :on-change="(file, fileList) => onChangeFunction(file, fileList, index)"
-                  accept=".jpeg,.jpg,.png"
-                  action=""
-                  class="upload-demo"
-                  style="text-align: right;"
-              >
-                <el-button slot="trigger" size="small" type="primary">Select Function</el-button>
-              </el-upload>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="2">
-            <i class="el-icon-delete rowBtn" @click="removeFunction(item, index)"></i>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :lg="12">
-            <el-form-item class="form-item" label="Article" label-width="80px">
-              <el-switch
-                v-model="item.article.useExist"
-                active-text="使用已有文献"
-                inactive-text="上传新文献"
-                @change="(val)=>funcArticleChanged(val, index)">
-              </el-switch>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10" v-show="item.article.useExist">
-          <el-col :lg="12">
-            <el-form-item class="form-item" label="Article" label-width="80px">
-              <el-select
-                filterable
-                :value="item.article.name"
-                value-key="name"
-                remote
-                reserve-keyword
-                placeholder="请输入关键词"
-                :remote-method="remoteSearch"
-                :loading="articleSearchLoading"
-                @change="(item)=>funcSelectChange(item, index)">
-                <el-option
-                  v-for="(item1,index1) in articleList"
-                  :key="item1.pk"
-                  :label="item1.name"
-                  :value="index1">
-                </el-option>
-              </el-select>
-              <el-button size="small" type="primary" style="margin-left: 20px;" @click="funcViewArticle(index)">
-                View
-              </el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10" v-show="!item.article.useExist">
-          <el-col :lg="12">
-            <el-form-item label="Article Name">
-            <el-input v-model="item.article.name" clearable style="width: 500px" @blur="funcAddArticleBlur(index)"></el-input>
-          </el-form-item>
-          <el-form-item label="Article File">
-              <el-upload
-                accept=".pdf"
-                action="/"
-                :on-change="(file, fileList) => funcFileChange(file, fileList, index)"
-                :file-list="[]"
-                :auto-upload="false"
-                :limit="1">
-                <el-button size="small" type="primary">点击上传</el-button>
-              </el-upload>
-          </el-form-item>
-          </el-col>
-        </el-row>
-      </el-card>
-      <div style="text-align: right">
-        <el-button size="small" type="primary" @click="addFunction">Add Intensity Function</el-button>
-      </div>
 
       <!--Chemical Structure-->
       <el-divider content-position="left"><span class="span">Chemical Structure</span></el-divider>
@@ -438,7 +439,7 @@
         <el-button size="small" type="primary" @click="addlowMR">Add measured and relative abundance</el-button>
       </div>
 
-      <el-divider content-position="left"><span class="span">Products</span></el-divider>
+      <!-- <el-divider content-position="left"><span class="span">Products</span></el-divider>
       <el-form-item class="form-item" label="Products" label-width="80px">
         <el-select v-model="compoundInfoForm.products" multiple placeholder="" @change="selectProduct"
                    @remove-tag="removeProduct">
@@ -472,7 +473,7 @@
             </el-row>
             <el-row :gutter="10">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="" label-width="130px">
                   <el-switch
                     v-model="item.article.useExist"
                     active-text="使用已有文献"
@@ -484,7 +485,7 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.useExist">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                   <el-select
                     filterable
                     :value="item.article.name"
@@ -510,10 +511,10 @@
             </el-row>
             <el-row :gutter="10" v-show="!item.article.useExist">
               <el-col :lg="12">
-                <el-form-item label="Article Name">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                 <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOtAddArticleBlur(productIndex, otIndex)"></el-input>
               </el-form-item>
-              <el-form-item label="Article File">
+              <el-form-item label="Article File" class="form-item" label-width="130px">
                 <el-upload
                   accept=".pdf"
                   action="/"
@@ -552,7 +553,7 @@
             </el-row>
             <el-row :gutter="10">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="" label-width="130px">
                   <el-switch
                     v-model="item.article.useExist"
                     active-text="使用已有文献"
@@ -564,7 +565,7 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.useExist">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                   <el-select
                     filterable
                     :value="item.article.name"
@@ -590,10 +591,10 @@
             </el-row>
             <el-row :gutter="10" v-show="!item.article.useExist">
               <el-col :lg="12">
-                <el-form-item label="Article Name">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                   <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOdAddArticleBlur(productIndex, odIndex)"></el-input>
                 </el-form-item>
-                <el-form-item label="Article File">
+                <el-form-item label="Article File" class="form-item" label-width="130px">
                   <el-upload
                     accept=".pdf"
                     action="/"
@@ -613,7 +614,7 @@
             </el-button>
           </div>
         </div>
-      </div>
+      </div> -->
       <el-divider content-position="left"><span class="span">Uploader & Reviewer</span></el-divider>
       <el-row :gutter="10">
         <el-col :lg="12">

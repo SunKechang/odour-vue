@@ -12,12 +12,12 @@
             <el-option label="NRI" value="compound_nri"></el-option>
             <el-option label="Measured" value="measured"></el-option>
             <el-option label="Low-resolution Measured" value="lowmeasured"></el-option>
-            <el-option label="Product" value="product" v-if="product"></el-option>
+            <!-- <el-option label="Product" value="product" v-if="product"></el-option> -->
           </el-select>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button circle icon="el-icon-search" @click="onSubmit"></el-button>
+        <el-button type="success" circle icon="el-icon-search" @click="onSubmit"></el-button>
       </el-form-item>
       <el-form-item v-if="$store.state.user.Authorization">
         <el-button style="float:right" @click="onDownload">下载化合物表单</el-button>

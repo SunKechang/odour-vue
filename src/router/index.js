@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        redirect:'/home',
+        redirect:'/v2',
         component: ()=>import("@/layout/index"),
         children: [
             {
@@ -17,7 +17,6 @@ const routes = [
                 meta: {
                     isLogin: false
                 }
-
             },
             {
                 path: '/search',
@@ -222,10 +221,6 @@ const routes = [
             {
                 path: 'compound',
                 component: ()=>import("@/views/v2Index/Compound")
-            },
-            {
-                path: 'oil',
-                component: ()=>import("@/views/v2Index/Oil")
             },
             {
                 path: 'download',

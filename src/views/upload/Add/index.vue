@@ -71,6 +71,96 @@
         <div style="text-align: right">
           <el-button size="small" type="primary" @click="addNRI">Add NRI</el-button>
         </div>
+
+        <!--强度函数-->
+      <el-divider content-position="left"><span class="span">Intensity Function</span></el-divider>
+      <el-card v-for="(item, index) in compoundInfoForm.functionList" :key="'function' + index" shadow="hover">
+        <el-row :gutter="10" type="flex">
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Odour Base" label-width="130px">
+              <el-input v-model="item.odourBase" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="10">
+            <el-form-item class="form-item" label="Odour Function" label-width="130px">
+              <el-upload
+                  :auto-upload="false"
+                  :multiple="false"
+                  :limit="1"
+                  :on-change="(file, fileList) => onChangeFunction(file, fileList, index)"
+                  accept=".jpeg,.jpg,.png"
+                  action=""
+                  class="upload-demo"
+                  style="text-align: right;"
+              >
+                <el-button slot="trigger" size="small" type="primary">Select Function</el-button>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="2">
+            <i class="el-icon-delete rowBtn" @click="removeFunction(item, index)"></i>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="" label-width="130px">
+              <el-switch
+                v-model="item.article.useExist"
+                active-text="使用已有文献"
+                inactive-text="上传新文献"
+                @change="(val)=>funcArticleChanged(val, index)">
+              </el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article Title" label-width="130px">
+              <el-select
+                filterable
+                :value="item.article.name"
+                value-key="name"
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="remoteSearch"
+                :loading="articleSearchLoading"
+                @change="(item)=>funcSelectChange(item, index)">
+                <el-option
+                  v-for="(item1,index1) in articleList"
+                  :key="item1.pk"
+                  :label="item1.name"
+                  :value="index1">
+                </el-option>
+              </el-select>
+              <el-button size="small" type="primary" style="margin-left: 20px;" @click="funcViewArticle(index)">
+                View
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10" v-show="!item.article.useExist">
+          <el-col :lg="12">
+            <el-form-item class="form-item" label="Article Title" label-width="130px">
+            <el-input v-model="item.article.name" clearable style="width: 500px" @blur="funcAddArticleBlur(index)"></el-input>
+          </el-form-item>
+          <el-form-item label="Article File" class="form-item" label-width="130px">
+              <el-upload
+                accept=".pdf"
+                action="/"
+                :on-change="(file, fileList) => funcFileChange(file, fileList, index)"
+                :file-list="[]"
+                :auto-upload="false"
+                :limit="1">
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
+          </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <div style="text-align: right">
+        <el-button size="small" type="primary" @click="addFunction">Add Intensity Function</el-button>
+      </div>
   
         <el-divider content-position="left"><span class="span">Odour Threshold</span></el-divider>
         <el-card v-for="(item, index) in compoundInfoForm.otList" :key="index" shadow="hover">
@@ -91,7 +181,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :lg="12">
-              <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-form-item class="form-item" label="" label-width="130px">
                 <el-switch
                   v-model="item.article.useExist"
                   active-text="使用已有文献"
@@ -103,7 +193,7 @@
           </el-row>
           <el-row :gutter="10" v-show="item.article.useExist">
             <el-col :lg="12">
-              <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-form-item class="form-item" label="Article Title" label-width="130px">
                 <el-select
                   filterable
                   :value="item.article.name"
@@ -129,10 +219,10 @@
           </el-row>
           <el-row :gutter="10" v-show="!item.article.useExist">
             <el-col :lg="12">
-              <el-form-item label="Article Name">
+              <el-form-item class="form-item" label="Article Title" label-width="130px">
               <el-input v-model="item.article.name" clearable style="width: 500px" @blur="otAddArticleBlur(index)"></el-input>
             </el-form-item>
-            <el-form-item label="Article File">
+            <el-form-item label="Article File" class="form-item" label-width="130px">
                 <el-upload
                   accept=".pdf"
                   action="/"
@@ -165,7 +255,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :lg="12">
-              <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-form-item class="form-item" label="" label-width="130px">
                 <el-switch
                   v-model="item.article.useExist"
                   active-text="使用已有文献"
@@ -177,7 +267,7 @@
           </el-row>
           <el-row :gutter="10" v-show="item.article.useExist">
             <el-col :lg="12">
-              <el-form-item class="form-item" label="Article" label-width="80px">
+              <el-form-item class="form-item" label="Article Title" label-width="130px">
                 <el-select
                   filterable
                   :value="item.article.name"
@@ -203,10 +293,10 @@
           </el-row>
           <el-row :gutter="10" v-show="!item.article.useExist">
             <el-col :lg="12">
-              <el-form-item label="Article Name">
+              <el-form-item class="form-item" label="Article Title" label-width="130px">
               <el-input v-model="item.article.name" clearable style="width: 500px" @blur="odAddArticleBlur(index)"></el-input>
             </el-form-item>
-            <el-form-item label="Article File">
+            <el-form-item label="Article File" class="form-item" label-width="130px">
                 <el-upload
                   accept=".pdf"
                   action="/"
@@ -348,7 +438,7 @@
           <el-button size="small" type="primary" @click="addlowMR">Add measured and relative abundance</el-button>
         </div>
   
-        <el-divider content-position="left"><span class="span">Products</span></el-divider>
+        <!-- <el-divider content-position="left"><span class="span">Products</span></el-divider>
         <el-form-item class="form-item" label="Products" label-width="80px">
           <el-select v-model="compoundInfoForm.products" multiple placeholder="" @change="selectProduct"
                      @remove-tag="removeProduct">
@@ -382,7 +472,7 @@
               </el-row>
               <el-row :gutter="10">
                 <el-col :lg="12">
-                  <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-form-item class="form-item" label="" label-width="130px">
                     <el-switch
                       v-model="item.article.useExist"
                       active-text="使用已有文献"
@@ -394,7 +484,7 @@
               </el-row>
               <el-row :gutter="10" v-show="item.article.useExist">
                 <el-col :lg="12">
-                  <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-form-item class="form-item" label="Article Title" label-width="130px">
                     <el-select
                       filterable
                       :value="item.article.name"
@@ -420,10 +510,10 @@
               </el-row>
               <el-row :gutter="10" v-show="!item.article.useExist">
                 <el-col :lg="12">
-                  <el-form-item label="Article Name">
+                  <el-form-item class="form-item" label="Article Title" label-width="130px">
                   <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOtAddArticleBlur(productIndex, otIndex)"></el-input>
                 </el-form-item>
-                <el-form-item label="Article File">
+                <el-form-item label="Article File" class="form-item" label-width="130px">
                   <el-upload
                     accept=".pdf"
                     action="/"
@@ -462,7 +552,7 @@
               </el-row>
               <el-row :gutter="10">
                 <el-col :lg="12">
-                  <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-form-item class="form-item" label="" label-width="130px">
                     <el-switch
                       v-model="item.article.useExist"
                       active-text="使用已有文献"
@@ -474,7 +564,7 @@
               </el-row>
               <el-row :gutter="10" v-show="item.article.useExist">
                 <el-col :lg="12">
-                  <el-form-item class="form-item" label="Article" label-width="80px">
+                  <el-form-item class="form-item" label="Article Title" label-width="130px">
                     <el-select
                       filterable
                       :value="item.article.name"
@@ -500,10 +590,10 @@
               </el-row>
               <el-row :gutter="10" v-show="!item.article.useExist">
                 <el-col :lg="12">
-                  <el-form-item label="Article Name">
+                  <el-form-item class="form-item" label="Article Title" label-width="130px">
                     <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOdAddArticleBlur(productIndex, odIndex)"></el-input>
                   </el-form-item>
-                  <el-form-item label="Article File">
+                  <el-form-item label="Article File" class="form-item" label-width="130px">
                     <el-upload
                       accept=".pdf"
                       action="/"
@@ -523,7 +613,7 @@
               </el-button>
             </div>
           </div>
-        </div>
+        </div> -->
         <el-divider content-position="left"><span class="span">Reviewer</span></el-divider>
         <el-row :gutter="10">
           <el-col :lg="12">
@@ -584,6 +674,7 @@
           productList: [],
           article: null,
           reviewer: '',
+          functionList: [],
         },
         rules: {
           compoundName: [
@@ -794,6 +885,27 @@
             } else {
               this.compoundInfoForm.productList[procIndex].odList[i].articleId = article.pk
             }
+          }
+        }
+        //检查强度函数的文献
+        for(let i=0;i<this.compoundInfoForm.functionList.length;i++) {
+          let article = this.compoundInfoForm.functionList[i].article
+          if(!article.useExist) {
+            if(article.file === null) {
+              continue
+            }
+            if(!article.judgeName) {
+              this.$message({
+                type: 'error',
+                message: '文献文件名已存在，请修改'
+              })
+              return
+            }
+            await this.uploadOneArticle(article.name, article.file).then(res=> {
+              that.compoundInfoForm.functionList[i].articleId = res
+            })
+          } else {
+            this.compoundInfoForm.functionList[i].articleId = article.pk
           }
         }
         await this.$refs.compoundInfoForm.validate((valid) => {
@@ -1176,7 +1288,76 @@
       },
       procOdArticleChanged(val, productIndex, odIndex) {
         this.compoundInfoForm.productList[productIndex].odList[odIndex].article.name = ''
-      }
+      },
+      onChangeFunction(file, fileList, index) {
+        if(fileList.length === 1) {
+          let file = fileList[0].raw
+          convertImgToBase64(file, (base64Str) => {
+            this.compoundInfoForm.functionList[index].functionImg = base64Str;
+          }, () => {
+            console.log("convert error");
+          });
+        }
+      },
+      removeFunction(item, index) {
+        this.compoundInfoForm.functionList.splice(index, 1);
+      },
+      funcArticleChanged(val, index) {
+        this.compoundInfoForm.functionList[index].article.name = ''
+      },
+      funcSelectChange(item, index) {
+        this.compoundInfoForm.functionList[index].article.name = this.articleList[item].name
+        this.compoundInfoForm.functionList[index].article.pk = this.articleList[item].pk
+      },
+      funcViewArticle(index) {
+        let selectArticle = this.compoundInfoForm.functionList[index].article
+        
+        if(selectArticle.name === undefined || selectArticle.name === '') {
+          this.$message("未选择文献")
+          return
+        }
+        let _pk = selectArticle.pk
+        window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+      },
+      funcAddArticleBlur(index) {
+        let name = this.compoundInfoForm.functionList[index].article.name
+        if(name === '') {
+          return
+        }
+        let that = this
+        this.$api.article.judgeName(name)
+        .then(({data}) => {
+          that.compoundInfoForm.functionList[index].article.judgeName = data
+          console.log(that.compoundInfoForm.functionList[index].article.judgeName)
+          if(!data) {
+            that.$message({
+              message: "文献文件名已存在，请修改",
+              type: 'error'
+            })
+          }
+        })
+      },
+      funcFileChange(file, fileList, index) {
+        if(fileList.length == 1) {
+          this.compoundInfoForm.functionList[index].article.file = fileList[0].raw
+        }
+      },
+      addFunction() {
+        this.compoundInfoForm.functionList.push({
+          id: '',
+          odourBase: '',
+          functionImg: '',
+          compoundId: '',
+          articleId: '-1',
+          article: {
+            pk: '-1',
+            name: '',
+            file: File,
+            useExist: true,
+            judgeName: false,
+          }
+        });
+      },
     }
   }
   </script>

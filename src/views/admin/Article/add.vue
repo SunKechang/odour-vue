@@ -5,10 +5,10 @@
         <img :src="lineUrl" alt="line" style="width: 100%">
       </div>
       <el-form ref="artInfoForm" :model="artInfoForm" :rules="rules" label-width="200px">
-        <el-form-item label="Article Name" prop="articleName">
+        <el-form-item label="Article Title" prop="articleName" class="form-item" label-width="130px">
           <el-input v-model="artInfoForm.articleName" clearable style="width: 500px"></el-input>
         </el-form-item>
-        <el-form-item label="Article File">
+        <el-form-item label="Article File" class="form-item" label-width="130px">
             <el-upload
                 action="/"
                 :on-change="fileChange"

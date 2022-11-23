@@ -1,8 +1,8 @@
 <template>
     <div>
       <!--limit:最大上传数，on-exceed：超过最大上传数量时的操作  -->
-      <h1>上传含有一列CAS号的表格来获取化合物详细信息</h1>
-  
+      <h1>上传含有一列CAS号的表格来获取多个化合物的详细信息</h1>
+      <el-button size="small" @click="downloadTemplate">下载模板</el-button>
       <el-upload
           :auto-upload="false"
           :limit="1"
@@ -19,7 +19,7 @@
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         <div class="el-upload__tip" slot="tip">只 能 上 传 xlsx / xls 文 件</div>
       </el-upload>
-      <el-button size="small" @click="downloadTemplate">下载模板</el-button>
+      
       <h2>请勾选需要下载的信息：</h2>
       <input id="ri" v-model="checkList" type="checkbox" value="ri">
       <label for="ri">极性柱</label>

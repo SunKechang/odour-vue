@@ -115,7 +115,7 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="" label-width="130px">
                   <el-switch
                     v-model="item.article.useExist"
                     active-text="使用已有文献"
@@ -128,7 +128,7 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged && item.article.useExist">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                   <el-select
                     filterable
                     :value="item.article.name"
@@ -155,10 +155,10 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged && !item.article.useExist">
               <el-col :lg="12">
-                <el-form-item label="Article Name">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                 <el-input v-model="item.article.name" clearable style="width: 500px" @blur="otAddArticleBlur(index)"></el-input>
               </el-form-item>
-              <el-form-item label="Article File">
+              <el-form-item label="Article File" class="form-item" label-width="130px">
                   <el-upload
                     accept=".pdf"
                     action="/"
@@ -206,7 +206,7 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="" label-width="130px">
                   <el-switch
                     v-model="item.article.useExist"
                     active-text="使用已有文献"
@@ -219,7 +219,7 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged && item.article.useExist">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                   <el-select
                     filterable
                     :value="item.article.name"
@@ -245,10 +245,10 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged && !item.article.useExist">
               <el-col :lg="12">
-                <el-form-item label="Article Name">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                 <el-input v-model="item.article.name" clearable style="width: 500px" @blur="odAddArticleBlur(index)"></el-input>
               </el-form-item>
-              <el-form-item label="Article File">
+              <el-form-item label="Article File" class="form-item" label-width="130px">
                   <el-upload
                     accept=".pdf"
                     action="/"
@@ -323,7 +323,7 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="" label-width="130px">
                   <el-switch
                     v-model="item.article.useExist"
                     active-text="使用已有文献"
@@ -336,7 +336,7 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged && item.article.useExist">
               <el-col :lg="12">
-                <el-form-item class="form-item" label="Article" label-width="80px">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                   <el-select
                     filterable
                     :value="item.article.name"
@@ -363,10 +363,10 @@
             </el-row>
             <el-row :gutter="10" v-show="item.article.articleChanged && !item.article.useExist">
               <el-col :lg="12">
-                <el-form-item label="Article Name">
+                <el-form-item class="form-item" label="Article Title" label-width="130px">
                 <el-input v-model="item.article.name" clearable style="width: 500px" @blur="ifAddArticleBlur(index)"></el-input>
               </el-form-item>
-              <el-form-item label="Article File">
+              <el-form-item label="Article File" class="form-item" label-width="130px">
                   <el-upload
                     accept=".pdf"
                     action="/"
@@ -510,7 +510,7 @@
             <el-button size="small" type="primary" @click="addlowMR">Add measured and relative abundance</el-button>
           </div>
 
-          <el-divider content-position="left"><span class="span">Products</span></el-divider>
+          <!-- <el-divider content-position="left"><span class="span">Products</span></el-divider>
           <el-form-item class="form-item" label="Products" label-width="80px">
             <el-select v-model="compoundInfoForm.products" multiple placeholder="" @change="selectProduct"
                        @remove-tag="removeProduct">
@@ -559,7 +559,7 @@
                 </el-row>
                 <el-row :gutter="10" v-show="item.article.articleChanged">
                   <el-col :lg="12">
-                    <el-form-item class="form-item" label="Article" label-width="80px">
+                    <el-form-item class="form-item" label="" label-width="130px">
                       <el-switch
                         v-model="item.article.useExist"
                         active-text="使用已有文献"
@@ -572,7 +572,7 @@
                 </el-row>
                 <el-row :gutter="10" v-show="item.article.articleChanged && item.article.useExist">
                   <el-col :lg="12">
-                    <el-form-item class="form-item" label="Article" label-width="80px">
+                    <el-form-item class="form-item" label="Article Title" label-width="130px">
                       <el-select
                         filterable
                         :value="item.article.name"
@@ -598,10 +598,10 @@
                 </el-row>
                 <el-row :gutter="10" v-show="item.article.articleChanged && !item.article.useExist">
                   <el-col :lg="12">
-                    <el-form-item label="Article Name">
+                    <el-form-item class="form-item" label="Article Title" label-width="130px">
                     <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOtAddArticleBlur(productIndex, otIndex)"></el-input>
                   </el-form-item>
-                  <el-form-item label="Article File">
+                  <el-form-item label="Article File" class="form-item" label-width="130px">
                       <el-upload
                         accept=".pdf"
                         action="/"
@@ -650,7 +650,7 @@
                 </el-row>
                 <el-row :gutter="10" v-show="item.article.articleChanged">
                   <el-col :lg="12">
-                    <el-form-item class="form-item" label="Article" label-width="80px">
+                    <el-form-item class="form-item" label="" label-width="130px">
                       <el-switch
                         v-model="item.article.useExist"
                         active-text="使用已有文献"
@@ -663,7 +663,7 @@
                 </el-row>
                 <el-row :gutter="10" v-show="item.article.articleChanged && item.article.useExist">
                   <el-col :lg="12">
-                    <el-form-item class="form-item" label="Article" label-width="80px">
+                    <el-form-item class="form-item" label="Article Title" label-width="130px">
                       <el-select
                         filterable
                         :value="item.article.name"
@@ -689,10 +689,10 @@
                 </el-row>
                 <el-row :gutter="10" v-show="item.article.articleChanged && !item.article.useExist">
                   <el-col :lg="12">
-                    <el-form-item label="Article Name">
+                    <el-form-item class="form-item" label="Article Title" label-width="130px">
                     <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOdAddArticleBlur(productIndex, odIndex)"></el-input>
                   </el-form-item>
-                  <el-form-item label="Article File">
+                  <el-form-item label="Article File" class="form-item" label-width="130px">
                       <el-upload
                         accept=".pdf"
                         action="/"
@@ -712,7 +712,7 @@
                 </el-button>
               </div>
             </div>
-          </div>
+          </div> -->
           <el-divider content-position="left"><span class="span">Uploader & Reviewer</span></el-divider>
           <el-row :gutter="10">
             <el-col :lg="12">

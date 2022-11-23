@@ -16,6 +16,8 @@
             <div>
               <b>Information</b>
               <el-table
+                :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                :cell-style="{'text-align':'center'}"
                   :data="[{
                   compoundName: compoundInfo.compoundName,
                   synonym: compoundInfo.synonym,
@@ -33,6 +35,8 @@
             <div>
               <b>Uploader & Reviewer : </b>
               <el-table
+                :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                :cell-style="{'text-align':'center'}"
                   :data="[{
                   uploader: compoundInfo.uploader,
                   reviewer: compoundInfo.reviewer
@@ -60,18 +64,23 @@
             <div>
               <b>(polar)RI : </b>
               <el-table
+                  :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                  :cell-style="{'text-align':'center'}"
                   :data="compoundInfo.riList"
                   border
                   style="width: 100%">
                 <el-table-column
+                    min-width="150"
                     label="RI"
                     prop="compoundRi">
                 </el-table-column>
                 <el-table-column
+                    min-width="250"
                     label="Chromatographic Column"
                     prop="chromatographicColumn">
                 </el-table-column>
                 <el-table-column
+                    min-width="400"
                     label="Ri Resource"
                     prop="riResource">
                 </el-table-column>
@@ -81,18 +90,23 @@
             <div>
               <b>(non polar)RI : </b>
               <el-table
+                  :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                  :cell-style="{'text-align':'center'}"
                   :data="compoundInfo.nriList"
                   border
                   style="width: 100%">
                 <el-table-column
+                    min-width="150"
                     label="NRi"
                     prop="compoundNri">
                 </el-table-column>
                 <el-table-column
+                    min-width="250"
                     label="Chromatographic Column"
                     prop="chromatographicColumn">
                 </el-table-column>
                 <el-table-column
+                    min-width="400"
                     label="Nri Resource"
                     prop="nriResource">
                 </el-table-column>
@@ -101,23 +115,28 @@
           </el-tab-pane>
           <el-tab-pane label="Threshold & Description" name="threshold">
             <div>
-              <b>Odour Threshold : </b>
+              <b>Odor Threshold : </b>
               <el-table
+                  :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                  :cell-style="{'text-align':'center'}"
                   :data="compoundInfo.otList"
                   border
                   style="width: 100%;">
                 <el-table-column
-                    label="Odour Threshold(μg/kg) "
+                    min-width="120"
+                    label="Odor Threshold(μg/kg) "
                     prop="odourThreshold">
                 </el-table-column>
                 <el-table-column
-                    label="Odour Base"
+                    min-width="120"
+                    label="Odor Base"
                     prop="odourBase">
                 </el-table-column>
                 <el-table-column
-                    label="Odour Reference">
+                    min-width="400"
+                    label="Odor Reference">
                     <template slot-scope="scope">
-                      <el-button @click="viewArticle(scope.row)">{{scope.row.articleName}}</el-button>
+                      <el-link :href="viewArticleUrl(scope.row)" target="_blank" type="primary">{{scope.row.articleName}}</el-link>
                     </template>
                 </el-table-column>
 
@@ -125,19 +144,23 @@
             </div>
             <br/>
             <div>
-              <b>Odour Description : </b>
+              <b>Odor Description : </b>
               <el-table
+                  :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                  :cell-style="{'text-align':'center'}"
                   :data="compoundInfo.odList"
                   border
                   style="width: 100%;">
                 <el-table-column
-                    label="Odour Description"
+                    min-width="240"
+                    label="Odor Description"
                     prop="odourDescription">
                 </el-table-column>
                 <el-table-column
-                    label="Odour Description Reference">
+                    min-width="400"
+                    label="Odor Description Reference">
                   <template slot-scope="scope">
-                    <el-button @click="viewArticle(scope.row)">{{scope.row.articleName}}</el-button>
+                    <el-link :href="viewArticleUrl(scope.row)" target="_blank" type="primary">{{scope.row.articleName}}</el-link>
                   </template>
                 </el-table-column>
               </el-table>
@@ -145,29 +168,38 @@
           </el-tab-pane>
           <el-tab-pane label="Intensity Function" name="intensity function">
             <div>
-              <b>Odour Intensity Function: </b>
+              <b>Odor Intensity Function: </b>
               <el-table
+                  :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                  :cell-style="{'text-align':'center'}"
                   :data="compoundInfo.functionList"
                   border
                   style="width: 100%;">
                 <el-table-column
-                    label="Odour Base"
+                    label="Odor Base"
                     prop="odourBase">
                 </el-table-column>
                 <el-table-column
                     label="Function Image">
                     <template slot-scope="scope">
                       <el-image
+                        :preview-src-list="['/api'+scope.row.functionImg]"
                         :src="'/api'+scope.row.functionImg"
                         alt="Function Image"
-                        style="position: relative;width: 300px;"
+                        style="position: relative;width: 100px;"
                       />
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="Odour Reference">
+                    label="Odor Reference">
                     <template slot-scope="scope">
-                      <el-button @click="viewArticle(scope.row)" v-if="scope.row.articleId >= 0">{{scope.row.articleName}}</el-button>
+                      <el-link 
+                        :href="viewArticleUrl(scope.row)" 
+                        v-if="scope.row.articleId >= 0" 
+                        target="_blank" 
+                        type="primary">
+                        {{scope.row.articleName}}
+                      </el-link>
                       <el-empty v-if="scope.row.articleId < 0"/>
                     </template>
                 </el-table-column>
@@ -189,9 +221,11 @@
             <div>
               <b>High-solution Measured & Relative Abundance : </b>
               <el-table
+                  :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                  :cell-style="{'text-align':'center'}"
                   :data="compoundInfo.mrList"
                   border
-                  style="width: 100%;margin-left: 100px">
+                  style="width: 100%">
                 <el-table-column
                     label="Measured m/z"
                     prop="measured">
@@ -206,9 +240,11 @@
             <div>
               <b>Low-solution Measured & Relative Abundance : </b>
               <el-table
+                  :header-cell-style="{'text-align':'center', 'background-color': '#fafafa', 'font-weight': 'bold'}"
+                  :cell-style="{'text-align':'center'}"
                   :data="compoundInfo.lowmrList"
                   border
-                  style="width: 100%;margin-left: 100px">
+                  style="width: 100%">
                 <el-table-column
                     label="Measured m/z"
                     prop="measured">
@@ -220,7 +256,7 @@
               </el-table>
             </div>
           </el-tab-pane >
-          <el-tab-pane label="Production" name="Production">
+          <!-- <el-tab-pane label="Production" name="Production">
             <div v-for="product in compoundInfo.productList" :key="'Proc' + product.id">
               <b>{{product.productName}}</b>
               <div>Product Threshold</div>
@@ -262,7 +298,7 @@
             </div>
 
 
-          </el-tab-pane>
+          </el-tab-pane> -->
         </el-tabs>
         <br>
       </div>
@@ -294,6 +330,9 @@ export default {
     viewArticle(row) {
       let _pk = row.articleId
       window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+    },
+    viewArticleUrl(row) {
+      return this.$target + '/article/getFile?pk=' + row.articleId
     }
   },
   computed: {

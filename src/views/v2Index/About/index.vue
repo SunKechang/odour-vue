@@ -1,64 +1,106 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="6" style="position: fixed;">
+            <el-col :span="6" style="position: fixed; z-index: 9;">
                 <el-menu
                 default-active="2"
                 class="el-menu-vertical-demo">
-                    <el-submenu index="1">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span>{{ $t("about.title") }}</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item index="1-1" @click="toTeam">{{ $t("about.team.title") }}</el-menu-item>
-                            <el-menu-item index="1-2" @click="toField">{{ $t("about.field.title") }}</el-menu-item>
-                            <el-menu-item index="1-3" @click="toPaper">{{ $t("about.papers") }}</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>
+                <el-menu-item index="1" @click="toWebsite">
+                    <i class="el-icon-thumb"></i>
+                    <span slot="title">{{ $t("about.website.title") }}</span>
+                </el-menu-item>
                     <el-submenu index="2">
                         <template slot="title">
-                            <i class="el-icon-document"></i>
-                            <span>{{ $t("agency.title") }}</span>
+                            <i class="el-icon-cold-drink"></i>
+                            <span>{{ $t("about.labTeam.bigTitle") }}</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="2-1" @click="toThermoFisher">{{ $t("agency.ThermoFisher.title") }}</el-menu-item>
-                            <el-menu-item index="2-2" @click="toGCOrbitrapMS">{{ $t("agency.GCOrbitrapMS.title") }}</el-menu-item>
+                            <el-menu-item index="2-1" @click="toTeam">{{ $t("about.labTeam.introduction.title") }}</el-menu-item>
+                            <el-menu-item index="2-2" @click="toMember">{{ $t("about.labTeam.member.title") }}</el-menu-item>
+                            <el-menu-item index="2-3" @click="toField">{{ $t("about.labTeam.field.title") }}</el-menu-item>
+                            <el-menu-item index="2-4" @click="toPaper">{{ $t("about.labTeam.papers.title") }}</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-menu-item index="3">
+                        <i class="el-icon-brush"></i>
+                        <span slot="title" @click="toWorkTeam">{{ $t("about.workTeam.title") }}</span>
+                    </el-menu-item>
+                    <el-submenu index="4">
+                        <template slot="title">
+                            <i class="el-icon-bangzhu"></i>
+                            <span>{{ $t("about.agency.bigTitle") }}</span>
+                        </template>
+                        <el-menu-item-group>
+                            <el-menu-item index="2-1" @click="toThermoFisher">{{ $t("about.agency.company.title") }}</el-menu-item>
+                            <el-menu-item index="2-2" @click="toGCOrbitrapMS">{{ $t("about.agency.tech.title") }}</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>
             </el-col>
             <el-col :span="13" :offset="7">
-                <div id="teamPart">
+                <div id="websitePart">
                     <div class="itemTitle">
-                        <p>{{$t("about.team.title")}}</p>
+                        <p>{{$t("about.website.title")}}</p>
                         <img src="../../../assets/line.png" width="100%" alt="">
                     </div>
                     <div class="contentPart">
-                        {{ $t("about.team.introduction") }}
+                        {{ $t("about.website.content[0]") }}
+                    </div>
+                    <div class="contentPart">
+                        {{ $t("about.website.content[1]") }}
+                    </div>
+                </div>
+                <div id="teamPart">
+                    <div class="itemTitle">
+                        <p>{{$t("about.labTeam.introduction.title")}}</p>
+                        <img src="../../../assets/line.png" width="100%" alt="">
+                    </div>
+                    <div class="contentPart">
+                        {{ $t("about.labTeam.introduction.content") }}
+                    </div>
+                </div>
+                <div id="memberPart">
+                    <div class="itemTitle">
+                        <p>{{$t("about.labTeam.member.title")}}</p>
+                        <img src="../../../assets/line.png" width="100%" alt="">
+                    </div>
+                    <div class="contentPart">
+                        {{ $t("about.labTeam.member.content[0]") }}
+                    </div>
+                    <div class="contentPart">
+                        {{ $t("about.labTeam.member.content[1]") }}
+                    </div>
+                    <div class="contentPart">
+                        {{ $t("about.labTeam.member.content[2]") }}
+                    </div>
+                    <div class="contentPart">
+                        {{ $t("about.labTeam.member.content[3]") }}
+                    </div>
+                    <div class="contentPart">
+                        {{ $t("about.labTeam.member.content[4]") }}
                     </div>
                 </div>
                 <div id="fieldPart">
                     <div class="itemTitle">
-                        <p>{{$t("about.field.title")}}</p>
+                        <p>{{$t("about.labTeam.field.title")}}</p>
                         <img src="../../../assets/line.png" width="100%" alt="">
                     </div>
                     <div class="contentPart">
-                        {{$t("about.field.fields[0]")}}
+                        {{$t("about.labTeam.field.content[0]")}}
                     </div>
                     <div class="contentPart">
-                        {{$t("about.field.fields[1]")}}
+                        {{$t("about.labTeam.field.content[1]")}}
                     </div>
                     <div class="contentPart">
-                        {{$t("about.field.fields[2]")}}
+                        {{$t("about.labTeam.field.content[2]")}}
                     </div>
                     <div class="contentPart">
-                        {{$t("about.field.fields[3]")}}
+                        {{$t("about.labTeam.field.content[3]")}}
                     </div>
                 </div>
                 <div id="paperPart">
                     <div class="itemTitle">
-                        <p>{{$t("about.papers")}}</p>
+                        <p>{{$t("about.labTeam.papers.title")}}</p>
                         <img src="../../../assets/line.png" width="100%" alt="">
                     </div>
                     <div v-for="(item,index) in papers.slice((this.currentPage - 1) * this.size, (this.currentPage - 1) * this.size + this.size)" v-bind:key="index">
@@ -75,33 +117,42 @@
                             :total="total">
                     </el-pagination>
                 </div>
-                <div id="thermoFisherPart">
+                <div id="workTeamPart">
                     <div class="itemTitle">
-                        <p>{{$t("agency.title")}}</p>
+                        <p>{{$t("about.workTeam.title")}}</p>
                         <img src="../../../assets/line.png" width="100%" alt="">
                     </div>
-                    <h1>{{ $t("agency.ThermoFisher.title") }}</h1>
                     <div class="contentPart">
-                        {{ $t("agency.ThermoFisher.introduction[0]") }}
+                        {{ $t("about.workTeam.content") }}
+                    </div>
+                </div>
+                <div id="thermoFisherPart">
+                    <div class="itemTitle">
+                        <p>{{$t("about.agency.bigTitle")}}</p>
+                        <img src="../../../assets/line.png" width="100%" alt="">
+                    </div>
+                    <h1>{{ $t("about.agency.company.title") }}</h1>
+                    <div class="contentPart">
+                        {{ $t("about.agency.company.content[0]") }}
                     </div>
                     <div class="contentPart">
-                        {{ $t("agency.ThermoFisher.introduction[1]") }}
+                        {{ $t("about.agency.company.content[1]") }}
                     </div>
                 </div>
                 <div id="gCOrbitrapMSPart">
                     <div class="itemTitle">
-                        <p>{{$t("agency.GCOrbitrapMS.title")}}</p>
+                        <p>{{$t("about.agency.tech.title")}}</p>
                         <img src="../../../assets/line.png" width="100%" alt="">
                     </div>
                     <div class="contentPart">
-                        {{ $t("agency.GCOrbitrapMS.introduction[0]") }}
+                        {{ $t("about.agency.tech.introduction[0]") }}
                     </div>
                     <div class="GCOrbitrapMS-img">
                         <img style="margin:0 auto" src="../../../assets/GCOrbitrapMS.png" alt=""><br>
                         <span>Q Exactive™ GC Orbitrap™ GC-MSMS</span>
                     </div>
                     <div class="contentPart">
-                        {{ $t("agency.GCOrbitrapMS.introduction[1]") }}
+                        {{ $t("about.agency.tech.introduction[1]") }}
                         <a  href="http://www.thermofisher.com" class="hrefPart">www.thermofisher.com</a><br/>
                         <a href="resource/download/BR10445 Q Exactive GC Orbitrap GC-MS_MS Brochure 2015-05-15.pdf" 
                         class="hrefPart"
@@ -257,6 +308,15 @@ export default {
         },
         toGCOrbitrapMS() {
             document.getElementById('gCOrbitrapMSPart').scrollIntoView({ behavior: 'smooth' })
+        },
+        toWebsite() {
+            document.getElementById('websitePart').scrollIntoView({ behavior: 'smooth' })
+        },
+        toMember() {
+            document.getElementById('memberPart').scrollIntoView({ behavior: 'smooth' })
+        },
+        toWorkTeam() {
+            document.getElementById('workTeamPart').scrollIntoView({ behavior: 'smooth' })
         },
         // 修改页大小
         handleSizeChange(val) {

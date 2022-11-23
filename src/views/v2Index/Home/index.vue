@@ -3,12 +3,12 @@
         <div class="searchPart">
             <h1 style="font-size: 30px; color: #ffffff;">{{ $t("home.title") }}</h1>
             <div style="margin-top: 40px;" class="flexContainer">
-                <el-input placeholder="请输入搜索内容" v-model="searchText" style="width: 60%;">
+                <el-input placeholder="请输入化合物名称" v-model="searchText" style="width: 60%;">
                     <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                 </el-input>
             </div>
         </div>
-        <div style="padding: 80px 0 200px 0;">
+        <!-- <div style="padding: 80px 0 200px 0;">
             <h1 style="font-size: 30px">{{ $t("compounds.title") }}</h1>
             <div class="introductionPart">
                 {{ $t("compounds.introduction[0]") }}
@@ -16,7 +16,7 @@
             <div class="introductionPart">
                 {{ $t("compounds.introduction[1]") }}
             </div>
-        </div>
+        </div> -->
     </div>
     
 </template>
@@ -59,7 +59,7 @@ export default {
         width: 100%;
         height: 100%;
         margin: 0;
-        padding: 140px 0 300px 0;
+        padding: 140px 0 400px 0;
     }
 
     .introductionPart {

@@ -1,8 +1,9 @@
 <template>
     <div style="display: flex; justify-content: space-between; background-color: #529287;">
-        <a :href="url">
+        <span style="font-size: 20px;line-height: 60px;color: #ffffff;margin-left: 20px;">BFU 食品风味数据库2.0</span>
+        <!-- <a :href="url">
           <el-image alt="bjfu" style="height: 60px;width: 200px" :src="bjfu"/>
-        </a>
+        </a> -->
         <div style="display: flex; flex-direction: row;">
             <el-menu
                 :default-active="$route.path" 
@@ -16,9 +17,15 @@
                 <el-submenu index="">
                     <template slot="title" class="singleTab">{{ $t("nav.search") }}</template>
                     <el-menu-item index="/v2/compound">{{ $t("nav.allSearch") }}</el-menu-item>
-                    <el-menu-item v-for="(base, index) in baseList" :key="index">{{base}}</el-menu-item>
+                    <el-submenu index="threshold">
+                      <template slot="title">阈值基质</template>
+                      <el-menu-item v-for="(threshold, index) in thresholdBases" :key="'threshold' + index">{{threshold}}</el-menu-item>
+                    </el-submenu>
+                    <el-submenu index="func">
+                      <template slot="title">函数基质</template>
+                      <el-menu-item v-for="(func, index2) in functionBases" :key="'function' + index2">{{func}}</el-menu-item>
+                    </el-submenu>
                 </el-submenu>
-                <el-menu-item index="/v2/oil" class="singleTab">{{ $t("nav.oils") }}</el-menu-item>
                 <el-menu-item index="/v2/download" class="singleTab">{{ $t("nav.download") }}</el-menu-item>
                 <el-menu-item index="/v2/about" class="singleTab">{{ $t("nav.about") }}</el-menu-item>
             </el-menu>
@@ -43,14 +50,17 @@
       return {
         url: 'http://www.bjfu.edu.cn/',
         bjfu: bjfu,
-        baseList: []
+        baseList: [],
+        thresholdBases: [],
+        functionBases: []
       }
     },
     created() {
         let that = this
         this.$api.compound.getBases()
         .then(({data, success}) => {
-            that.baseList = data
+            that.thresholdBases = data.thresholdBase
+            that.functionBases = data.functionBase
         })
     }
   }

@@ -3,6 +3,7 @@
     <el-scrollbar>
       <el-table
           ref="table"
+          id="compoundTable"
           :data="compoundList"
           :max-height="$store.state.user.Authorization ? tableHeight : null"
           :row-key="getRowKey"
@@ -15,13 +16,6 @@
             type="selection"
         />
         <el-table-column
-            :index="getIndex"
-            label="Index"
-            type="index"
-            width="60"
-            align="center"
-        />
-        <el-table-column
             label="Compound Name"
             min-width="150"
             prop="compoundName"
@@ -32,9 +26,22 @@
             prop="casNo"
         />
         <el-table-column
-            :width="getColumnWidth('updateTime', 'UpdateTime')"
-            label="UpdateTime"
-            prop="updateTime"
+            min-width="200"
+            v-if="descriptionShow"
+            label="Odor Description"
+            prop="description"
+        />
+        <el-table-column
+            min-width="200"
+            v-if="thresholdShow"
+            label="Odor Base"
+            prop="odourBase"
+        />
+        <el-table-column
+            min-width="120"
+            v-if="thresholdShow"
+            label="Odor Threshold"
+            prop="odourThreshold"
         />
         <el-table-column
             :width="$store.state.user.Authorization ? 220 : 90"
@@ -87,7 +94,7 @@
 import {flexColumnWidth, flexTableHeight} from "@/utils/table";
 import CompoundInfoView from "@/components/Compound/CompoundInfoView"
 import CompoundInfoEdit from "@/components/Compound/CompoundInfoEdit"
-
+import { exportTable2 } from "@/utils/tableTool";
 
 export default {
   name: "CompoundTable",
@@ -127,6 +134,8 @@ export default {
       viewDialogVisible: false,
       editDialogVisible: false,
       tableHeight: flexTableHeight(),
+      descriptionShow: false,
+      thresholdShow: false,
     }
   },
   methods: {
@@ -262,12 +271,31 @@ export default {
         }
       }
       return data
-    }
+    },
+    downloadTable() {
+      exportTable2('compoundTable')
+    },
   },
   watch: {
     compoundData: {
       handler(val) {
         this.compoundList = val
+      }
+    },
+    compoundList(val) {
+      if(val.length === 0) {
+        return
+      }else {
+        if(val[0].description !== null) {
+          this.descriptionShow = true
+        } else {
+          this.descriptionShow = false
+        }
+        if(val[0].odourBase !== null) {
+          this.thresholdShow = true
+        } else {
+          this.thresholdShow = false
+        }
       }
     }
   },

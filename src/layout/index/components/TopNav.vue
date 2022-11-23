@@ -17,7 +17,7 @@
       <el-submenu index="2">
         <template slot="title">{{ $t("nav.compounds") }}</template>
         <el-menu-item index="/compound">所有化合物</el-menu-item>
-        <el-menu-item v-for="(item) in productList" :index="'/product?product='+item.id">
+        <el-menu-item v-for="(item, indexx) in productList" :index="'/product?product='+item.id" :key="indexx">
           {{item.productName}}
         </el-menu-item>
       </el-submenu>

@@ -1,22 +1,24 @@
 <template>
     <div class="compounds">
-      <div class="itemTitle">
-        <p>{{ $t("compounds.title") }}</p>
-        <el-image :src="line" alt="line" style="margin-bottom: 20px;width: 100%"></el-image>
+      <div class="searchPart">
+        <div class="searchForm">
+          <search-form 
+          @onSubmit="onSearch" 
+          @onDownload='onDownload'/>
+        </div>
       </div>
-      <span style="line-height: 50px">{{ $t("compounds.introduction")[0] }}</span><br>
-      <span style="line-height: 50px">{{ $t("compounds.introduction")[1] }}</span>
-      <el-image :src="line" alt="line" style="margin: 50px 0;width: 100%"></el-image>
-      <search-form @onSubmit="onSearch"/>
-      <compound-table
-          :permission="false"
-          :compound-data="compoundList"
-          :current-page.sync="currentPage"
-          :size="size"
-          :total="total"
-          @closeEditDialog="getCompoundData"
-          @pageChange="getCompoundData"
-      />
+      <div style="width: 80%; margin-top: 80px;">
+        <compound-table
+            ref="dataTable"
+            :permission="false"
+            :compound-data="compoundList"
+            :current-page.sync="currentPage"
+            :size="size"
+            :total="total"
+            @closeEditDialog="getCompoundData"
+            @pageChange="getCompoundData"
+        />
+      </div>
     </div>
   </template>
   
@@ -24,6 +26,7 @@
   import line from "@/assets/line.png"
   import CompoundTable from '@/components/Compound/CompoundTable'
   import CompoundSearchForm from "@/components/Compound/CompoundSearchForm"
+
   export default {
     name: "Compound",
     component: [CompoundTable, CompoundSearchForm],
@@ -69,6 +72,9 @@
         }).catch(err => {
           console.log(err)
         })
+      },
+      onDownload() {
+        this.$refs.dataTable.downloadTable()
       }
     },
     created() {
@@ -79,8 +85,10 @@
   
   <style scoped>
   .compounds {
-    text-align: left;
-    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   
   .itemTitle p {
@@ -88,5 +96,24 @@
     font-size: 30px;
     color: #529287;
   }
+
+  .searchPart {
+        background: url("../../../assets/search_back.jpg") no-repeat;
+        background-position: center;
+        background-size: cover;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 50px 0 40px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .searchForm {
+      background-color: rgba(226,226,226,0.5);
+      padding: 50px 20px 50px 20px;
+      border-radius: 5px;
+    }
   </style>
   

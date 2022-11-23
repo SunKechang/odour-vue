@@ -3,7 +3,7 @@
       <el-form :inline="true" style="float: left;position: relative;top: 30%">
         <el-form-item>
           <el-select v-model="chosen">
-            <el-option label="Article Name" value="article_name"></el-option>
+            <el-option label="Article Title" value="article_name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -33,7 +33,7 @@
         </el-table-column>
         <el-table-column :reserve-selection="true" type="selection"></el-table-column>
         <el-table-column
-            label="Article Name"
+            label="Article Title"
             prop="name"
             width="250">
         </el-table-column>
