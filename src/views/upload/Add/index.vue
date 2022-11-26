@@ -928,7 +928,7 @@
           return
         }
         let _pk = this.selectedArticle.pk
-        window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+        window.open('/article/getFile?pk='+_pk, '_blank');
       },
       fileChange(file, fileList) {
         if(fileList.length == 1) {
@@ -979,7 +979,7 @@
           return
         }
         let _pk = selectArticle.pk
-        window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+        window.open('/article/getFile?pk='+_pk, '_blank');
       },
       viewProcArticle(productIndex, otIndex) {
         let selectArticle = this.compoundInfoForm.productList[productIndex].otList[otIndex].article
@@ -989,7 +989,7 @@
           return
         }
         let _pk = selectArticle.pk
-        window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+        window.open('/article/getFile?pk='+_pk, '_blank');
       },
       odViewArticle(index) {
         let selectArticle = this.compoundInfoForm.odList[index].article
@@ -999,7 +999,7 @@
           return
         }
         let _pk = selectArticle.pk
-        window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+        window.open('/article/getFile?pk='+_pk, '_blank');
       },
       viewProcOdArticle(productIndex, otIndex) {
         let selectArticle = this.compoundInfoForm.productList[productIndex].odList[otIndex].article
@@ -1009,7 +1009,7 @@
           return
         }
         let _pk = selectArticle.pk
-        window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+        window.open('/article/getFile?pk='+_pk, '_blank');
       },
       otfileChange(file, fileList, index) {
         if(fileList.length == 1) {
@@ -1139,7 +1139,7 @@
           return
         }
         let _pk = selectArticle.pk
-        window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+        window.open('/article/getFile?pk='+_pk, '_blank');
       },
       funcAddArticleBlur(index) {
         let name = this.compoundInfoForm.functionList[index].article.name

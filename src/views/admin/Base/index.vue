@@ -109,7 +109,7 @@
       },
       handleView(index) {
         let _pk = this.articleData.list[index].pk
-         window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+         window.open('/article/getFile?pk='+_pk, '_blank');
       },
       fileChange(file, fileList) {
         this.baseList[this.curRowIndex].fileList = fileList

@@ -1060,10 +1060,10 @@ export default {
       this.compoundInfoForm.functionList[index].article.pk = this.articleList[item].pk
     },
     viewArticle(_pk) {
-      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+      window.open('/article/getFile?pk='+_pk, '_blank');
     },
     viewArticleUrl(id) {
-      return this.$target + '/article/getFile?pk=' + id
+      return '/article/getFile?pk=' + id
     },
     otViewArticle(index) {
       let article = this.compoundInfoForm.otList[index].article

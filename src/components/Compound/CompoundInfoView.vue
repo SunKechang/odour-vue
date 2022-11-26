@@ -329,10 +329,10 @@ export default {
   methods: {
     viewArticle(row) {
       let _pk = row.articleId
-      window.open(this.$target + '/api/article/getFile?pk='+_pk, '_blank');
+      window.open('/api/article/getFile?pk='+_pk, '_blank');
     },
     viewArticleUrl(row) {
-      return this.$target + '/api/article/getFile?pk=' + row.articleId
+      return '/api/article/getFile?pk=' + row.articleId
     }
   },
   computed: {

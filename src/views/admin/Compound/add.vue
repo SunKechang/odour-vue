@@ -1138,7 +1138,7 @@ export default {
         return
       }
       let _pk = selectArticle.pk
-      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+      window.open('/article/getFile?pk='+_pk, '_blank');
     },
     viewProcArticle(productIndex, otIndex) {
       let selectArticle = this.compoundInfoForm.productList[productIndex].otList[otIndex].article
@@ -1148,7 +1148,7 @@ export default {
         return
       }
       let _pk = selectArticle.pk
-      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+      window.open('/article/getFile?pk='+_pk, '_blank');
     },
     odViewArticle(index) {
       let selectArticle = this.compoundInfoForm.odList[index].article
@@ -1158,7 +1158,7 @@ export default {
         return
       }
       let _pk = selectArticle.pk
-      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+      window.open('/article/getFile?pk='+_pk, '_blank');
     },
     funcViewArticle(index) {
       let selectArticle = this.compoundInfoForm.functionList[index].article
@@ -1168,7 +1168,7 @@ export default {
         return
       }
       let _pk = selectArticle.pk
-      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+      window.open('/article/getFile?pk='+_pk, '_blank');
     },
     viewProcOdArticle(productIndex, otIndex) {
       let selectArticle = this.compoundInfoForm.productList[productIndex].odList[otIndex].article
@@ -1178,7 +1178,7 @@ export default {
         return
       }
       let _pk = selectArticle.pk
-      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+      window.open('/article/getFile?pk='+_pk, '_blank');
     },
     otfileChange(file, fileList, index) {
       if(fileList.length == 1) {
