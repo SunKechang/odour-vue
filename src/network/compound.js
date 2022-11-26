@@ -106,6 +106,9 @@ export default {
     userUpdate(data) {
         return request.post("/user/compound/update", data)
     },
+    userDelete(id) {
+        return request.delete("/user/compound/delete/"+ id)
+    },
     userAddCompound(data) {
         return request.post("/user/compound/add", data)
     },

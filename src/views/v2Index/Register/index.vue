@@ -93,12 +93,21 @@
                     alert("姓名不能为空")
                     return
                 }
-                let authForm=new FormData();
+                if(!this.authEmail(this.authForm.userEmail)) {
+                    this.$message({
+                        message: '请输入正确格式邮箱',
+                        type: 'error'
+                    })
+                    return
+                }
+                let data= {
+                    userEmail: this.authForm.userEmail,
+                    userPassword: this.authForm.userPassword,
+                    name: this.authForm.name
+                };
                 const v=this;
-                authForm.append("userEmail",this.authForm.userEmail);
-                authForm.append("userPassword",this.authForm.userPassword);
-                authForm.append("name",this.authForm.name);
-                request.post('/user/register',authForm)
+                
+                request.post('/user/register',data)
                 .then(function (res) {
                     console.log(res);
                     if(res=='1') {
@@ -114,27 +123,15 @@
                         confirmButtonText: 'Confirm'
                     });
                 });
+            },
+            authEmail(email) {
+                let reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                if(reg.test(email)) {
+                    return true
+                } else {
+                    return false
+                }
             }
-
-            // blur() {
-            //     if (this.authForm.userEmail.length <= 0) {
-            //         this.authForm.msg = '<span style="color: red">用户名不能为空</span>'
-            //     }
-            //     else{
-            //             request.post('/user/select', this.authForm.userEmail)
-            //                 .then(function (res) {
-            //                     console.log(res);
-            //                     if (res.data == '0')
-            //                         alert("用户名可用")
-            //                     else if (res.data == "1")
-            //                         alert("用户已存在")
-            //
-            //                 })
-            //         }
-            // },
-            // // focus:function () {
-            // //     pang.msg = null
-            // // },
 
         }
     }

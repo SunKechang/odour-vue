@@ -6,8 +6,8 @@
           <el-select slot="prepend" v-model="searchForm.searchProperty">
             <el-option label="Compound Name" value="compound_name"></el-option>
             <el-option label="CAS NO." value="cas_no"></el-option>
-            <el-option label="Odour Description" value="odour_description"></el-option>
-              <el-option label="Odour Threshold" value="odour_threshold" v-show="searchForm.searchKind == 0"></el-option>
+            <el-option label="Odour Description" value="odour_description" v-show="searchForm.searchKind == 0"></el-option>
+              <el-option label="Odour Threshold" value="odour_threshold" v-show="searchForm.searchKind !== 2"></el-option>
               <!-- <el-option label="RI" value="compound_ri"></el-option>
               <el-option label="NRI" value="compound_nri"></el-option>
               <el-option label="Measured" value="measured"></el-option>
@@ -19,7 +19,7 @@
       <el-form-item>
         <el-button type="success" circle icon="el-icon-search" @click="onSubmit"></el-button>
       </el-form-item>
-      <el-form-item v-if="$store.state.user.Authorization">
+      <el-form-item v-if="$store.state.user.Authorization && !admin">
         <el-button style="float:right" @click="onDownload">下载化合物表单</el-button>
       </el-form-item>
     </el-form>
@@ -41,8 +41,9 @@ export default {
         searchProperty: 'compound_name',
         searchValue: '',
         searchKind: 0,
-        base: ''
-      }
+        base: '',
+      },
+      admin: false,
     }
   },
   methods: {
@@ -71,6 +72,9 @@ export default {
       this.searchForm.searchKind = 0
     }
     this.$emit('onSubmit', this.searchForm)
+    if(this.$route.path.includes('admin')) {
+      this.admin = true
+    }
   },
   watch: {
     '$route.query.base': {

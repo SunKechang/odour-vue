@@ -8,13 +8,17 @@ import VueI18n from 'vue-i18n'
 import 'lib-flexible'
 import './network'
 import Plugin from 'v-fit-columns';
+
+import VueAwesomeSwiper from 'vue-awesome-swiper';
+Vue.use(VueAwesomeSwiper);
+
 Vue.use(Plugin);
 
 Vue.use(ElementUI)
 Vue.use(VueI18n)
 Vue.config.productionTip = false
 Vue.prototype.$target = 'http://127.0.0.1:8081'
-
+// http://81.68.94.80:8088
 
 const i18n = new VueI18n({
 

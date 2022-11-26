@@ -23,38 +23,6 @@
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-      <el-submenu index="2">
-        <template slot="title">
-          <i class="el-icon-menu"></i>
-          <span>Products</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="/admin/editproduct">
-            <i class="el-icon-edit-outline"></i>
-            <span>Edit Product</span>
-          </el-menu-item>
-          <el-menu-item index="/admin/addproduct">
-            <i class="el-icon-plus"></i>
-            <span>Add Product</span>
-          </el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-      <el-submenu index="3">
-        <template slot="title">
-          <i class="el-icon-menu"></i>
-          <span>Oil</span>
-        </template>
-        <el-menu-item-group>
-          <el-menu-item index="/admin/editoil">
-            <i class="el-icon-edit-outline"></i>
-            <span>Edit Oil</span>
-          </el-menu-item>
-          <el-menu-item index="/admin/addoil">
-            <i class="el-icon-plus"></i>
-            <span>Add Oil</span>
-          </el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
       <el-submenu index="4">
         <template slot="title">
           <i class="el-icon-menu"></i>
@@ -71,6 +39,10 @@
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
+      <el-menu-item index="/admin/base">
+        <i class="el-icon-view"></i>
+        <span slot="title">Base</span>
+      </el-menu-item>
       <el-menu-item index="/admin/user">
         <i class="el-icon-view"></i>
         <span slot="title">User</span>
@@ -98,10 +70,6 @@
       <el-menu-item index="/admin/security">
         <i class="el-icon-view"></i>
         <span slot="title">Account Security</span>
-      </el-menu-item>
-      <el-menu-item index="/admin/base">
-        <i class="el-icon-view"></i>
-        <span slot="title">Base</span>
       </el-menu-item>
     </el-menu>
   </el-scrollbar>

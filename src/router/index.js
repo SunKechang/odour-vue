@@ -197,6 +197,10 @@ const routes = [
             {
                 path: 'add',
                 component: ()=>import("@/views/upload/Add")
+            },
+            {
+                path: 'review',
+                component: ()=>import("@/views/review/List/upload&reviewer")
             }
         ]
     },
@@ -236,11 +240,15 @@ const routes = [
             },
             {
                 path: 'login',
-                component: ()=>import("@/views/v2Index/Login")
+                component: ()=>import("@/views/v2Index/Login/index")
             },
             {
                 path: 'register',
                 component: ()=>import("@/views/v2Index/Register")
+            },
+            {
+                path: 'forget',
+                component: ()=>import("@/views/v2Index/Login/forget")
             }
         ]
     }

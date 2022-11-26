@@ -37,7 +37,7 @@
                     <el-image
                         v-if="scope.row.imgPath !== null"
                         :preview-src-list="['/api'+scope.row.imgPath]"
-                        :src="'/api'+scope.row.imgPath"
+                        :src="scope.row.imgPath"
                         alt="Base Image"
                         style="position: relative;width: 100px;"
                     />

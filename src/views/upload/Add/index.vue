@@ -437,183 +437,6 @@
         <div style="text-align: right">
           <el-button size="small" type="primary" @click="addlowMR">Add measured and relative abundance</el-button>
         </div>
-  
-        <!-- <el-divider content-position="left"><span class="span">Products</span></el-divider>
-        <el-form-item class="form-item" label="Products" label-width="80px">
-          <el-select v-model="compoundInfoForm.products" multiple placeholder="" @change="selectProduct"
-                     @remove-tag="removeProduct">
-            <el-option
-                v-for="{id, productName} in productOptions"
-                :key="id"
-                :label="productName"
-                :value="id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <div v-for="({id, productName}, productIndex) in compoundInfoForm.productList" :key="productName">
-          <div v-if="id">
-            <el-divider content-position="center">{{ productName }}</el-divider>
-            <el-card v-for="(item, otIndex) in compoundInfoForm.productList[productIndex].otList"
-                     :key="productIndex + 'threshold' +otIndex" shadow="hover">
-              <el-row :gutter="10" type="flex">
-                <el-col :lg="11">
-                  <el-form-item class="form-item" label="Odour Threshold(μg/kg) ">
-                    <el-input v-model="item.odourThreshold" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :lg="11">
-                  <el-form-item class="form-item" label="Odour Threshold Base">
-                    <el-input v-model="item.odourThresholdBase" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :lg="2">
-                  <i class="el-icon-delete rowBtn" @click="removeProductThreshold(productIndex, otIndex)"></i>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10">
-                <el-col :lg="12">
-                  <el-form-item class="form-item" label="" label-width="130px">
-                    <el-switch
-                      v-model="item.article.useExist"
-                      active-text="使用已有文献"
-                      inactive-text="上传新文献"
-                      @change="(val)=>procOtArticleChanged(val, productIndex, otIndex)">
-                    </el-switch>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10" v-show="item.article.useExist">
-                <el-col :lg="12">
-                  <el-form-item class="form-item" label="Article Title" label-width="130px">
-                    <el-select
-                      filterable
-                      :value="item.article.name"
-                      value-key="name"
-                      remote
-                      reserve-keyword
-                      placeholder="请输入关键词"
-                      :remote-method="remoteSearch"
-                      :loading="articleSearchLoading"
-                      @change="(item)=>procOtSelectChange(productIndex, otIndex, item)">
-                      <el-option
-                        v-for="(item1,index1) in articleList"
-                        :key="item1.pk"
-                        :label="item1.name"
-                        :value="index1">
-                      </el-option>
-                    </el-select>
-                    <el-button size="small" type="primary" style="margin-left: 20px;" @click="viewProcArticle(productIndex, otIndex)">
-                      View
-                    </el-button>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10" v-show="!item.article.useExist">
-                <el-col :lg="12">
-                  <el-form-item class="form-item" label="Article Title" label-width="130px">
-                  <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOtAddArticleBlur(productIndex, otIndex)"></el-input>
-                </el-form-item>
-                <el-form-item label="Article File" class="form-item" label-width="130px">
-                  <el-upload
-                    accept=".pdf"
-                    action="/"
-                    :on-change="(file, fileList) => procOtFileChange(file, fileList, productIndex, otIndex)"
-                    :file-list="[]"
-                    :auto-upload="false"
-                    :limit="1">
-                    <el-button size="small" type="primary">点击上传</el-button>
-                  </el-upload>
-                </el-form-item>
-                </el-col>
-              </el-row>
-            </el-card>
-            <div style="text-align: right">
-              <el-button size="small" type="primary" @click="addProductThreshold(productIndex, id)">
-                {{ 'Add Threshold for ' + productName }}
-              </el-button>
-            </div>
-            <br>
-            <el-card v-for="(item, odIndex) in compoundInfoForm.productList[productIndex].odList"
-                     :key="productIndex + 'description' +odIndex" shadow="hover">
-              <el-row :gutter="10" type="flex">
-                <el-col :lg="11">
-                  <el-form-item class="form-item" label="Odour Description">
-                    <el-input v-model="item.odourDescription" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :lg="11">
-                  <el-form-item class="form-item" label="Odour Description Reference">
-                    <el-input v-model="item.odourDescriptionReference" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :lg="2">
-                  <i class="el-icon-delete rowBtn" @click="removeProductDescription(productIndex, odIndex)"></i>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10">
-                <el-col :lg="12">
-                  <el-form-item class="form-item" label="" label-width="130px">
-                    <el-switch
-                      v-model="item.article.useExist"
-                      active-text="使用已有文献"
-                      inactive-text="上传新文献"
-                      @change="(val)=>procOdArticleChanged(val, productIndex, odIndex)">
-                    </el-switch>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10" v-show="item.article.useExist">
-                <el-col :lg="12">
-                  <el-form-item class="form-item" label="Article Title" label-width="130px">
-                    <el-select
-                      filterable
-                      :value="item.article.name"
-                      value-key="name"
-                      remote
-                      reserve-keyword
-                      placeholder="请输入关键词"
-                      :remote-method="remoteSearch"
-                      :loading="articleSearchLoading"
-                      @change="(item)=>procOdSelectChange(productIndex, odIndex, item)">
-                      <el-option
-                        v-for="(item1,index1) in articleList"
-                        :key="item1.pk"
-                        :label="item1.name"
-                        :value="index1">
-                      </el-option>
-                    </el-select>
-                    <el-button size="small" type="primary" style="margin-left: 20px;" @click="viewProcOdArticle(productIndex, odIndex)">
-                      View
-                    </el-button>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10" v-show="!item.article.useExist">
-                <el-col :lg="12">
-                  <el-form-item class="form-item" label="Article Title" label-width="130px">
-                    <el-input v-model="item.article.name" clearable style="width: 500px" @blur="procOdAddArticleBlur(productIndex, odIndex)"></el-input>
-                  </el-form-item>
-                  <el-form-item label="Article File" class="form-item" label-width="130px">
-                    <el-upload
-                      accept=".pdf"
-                      action="/"
-                      :on-change="(file, fileList) => procOdFileChange(file, fileList, productIndex, odIndex)"
-                      :file-list="[]"
-                      :auto-upload="false"
-                      :limit="1">
-                      <el-button size="small" type="primary">点击上传</el-button>
-                    </el-upload>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-card>
-            <div style="text-align: right">
-              <el-button size="small" type="primary" @click="addProductDescription(productIndex, id)">
-                {{ 'Add Description for ' + productName }}
-              </el-button>
-            </div>
-          </div>
-        </div> -->
         <el-divider content-position="left"><span class="span">Reviewer</span></el-divider>
         <el-row :gutter="10">
           <el-col :lg="12">
@@ -1049,9 +872,9 @@
         param.append("mrExcel", v.$refs.uploadMRExcel.$refs['upload-inner'].$refs.input.files[0]);
         request.post('/compound/mr', param)
             .then(res => {
-              if (res.data.state === 0) {
-                console.log(res.data.data);
-                v.compoundInfoForm.mrList = res.data.data;
+              if (res.state === 0) {
+                console.log(res.data);
+                v.compoundInfoForm.mrList = res.data;
               } else {
                 v.$alert("Failed!", "Message", {
                   confirmButtonText: 'Confirm'
@@ -1068,9 +891,8 @@
   
         request.post('/compound/lowmr', param)
             .then(res => {
-              if (res.data.state === 0) {
-                console.log(res.data.data);
-                v.compoundInfoForm.lowmrList = res.data.data;
+              if (res.state === 0) {
+                v.compoundInfoForm.lowmrList = res.data;
               } else {
                 v.$alert("Failed!", "Message", {
                   confirmButtonText: 'Confirm'

@@ -14,6 +14,7 @@
                 :on-change="fileChange"
                 :file-list="emptyList"
                 :auto-upload="false"
+                accept=".pdf"
                 :limit="1">
                 <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>

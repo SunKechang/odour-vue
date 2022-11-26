@@ -60,7 +60,7 @@ export default {
         if(res) {
           let token=this.$store.state.user.Authorization
           const decode=jwtDecode(token)
-          if(decode.role === '1') {
+          if(decode.role === '1' || decode.role === '3') {
             this.$router.push('/upload')
           } else if(decode.role === '2'){
             this.$router.push('/review')

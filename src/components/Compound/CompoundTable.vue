@@ -21,8 +21,8 @@
             prop="compoundName"
         />
         <el-table-column
-            :width="getColumnWidth('casNo', 'CAS NO.')"
             label="CAS NO."
+            min-width="120"
             prop="casNo"
         />
         <el-table-column
@@ -241,33 +241,6 @@ export default {
           judgeName: false,
           articleChanged: false,
           originParam: true
-        }
-      }
-      for(let i=0;i<data.productList.length;i++) {
-        for(let j=0;j<data.productList[i].otList.length;j++) {
-          data.productList[i].otList[j].article = 
-          {
-            pk: '0',
-            name: '',
-            file: null,
-            useExist: true,
-            judgeName: false,
-            articleChanged: false,
-            originParam: true
-          }
-        }
-
-        for(let j=0;j<data.productList[i].odList.length;j++) {
-          data.productList[i].odList[j].article = 
-          {
-            pk: '0',
-            name: '',
-            file: null,
-            useExist: true,
-            judgeName: false,
-            articleChanged: false,
-            originParam: true
-          }
         }
       }
       return data

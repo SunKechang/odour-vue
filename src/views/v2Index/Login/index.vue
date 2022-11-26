@@ -17,7 +17,8 @@
                 </div>
             </el-form>
             <div style="padding-left: 20px;padding-top: 20px">
-                <el-link href="/#/Register"  style="margin-right: 20px">注册账户</el-link>
+                <el-link href="/#/v2/register"  style="margin-right: 20px">注册账户</el-link>
+                <el-link href="/#/v2/forget"  style="margin-right: 20px">忘记密码</el-link>
             </div>
         </el-main>
         <el-footer></el-footer>
@@ -39,26 +40,6 @@
         },
         methods: {
             async submitForm() {
-
-                // request.post('/user/login',authForm)
-                //     .then(function (res) {
-                //         console.log(res);
-                //         if(res.data=='0')
-                //             alert("用户不存在")
-                //         else if (res.data == '1')
-                //             alert("登录失败，账号或密码错误")
-                //         else if (res.data == '2')
-                //         //当前窗体跳转
-                //             alert("登录成功")
-
-                //         v.$router.push("/");
-
-                //     }).catch(err=>{
-                //     console.log(err);
-                //     v.$alert("Error!", "Message", {
-                //         confirmButtonText: 'Confirm'
-                //     });
-                // });
                 let authForm = {
                     account: this.authForm.userEmail,
                     password: this.authForm.userPassword,

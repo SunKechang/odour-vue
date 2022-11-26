@@ -38,6 +38,7 @@
                         <h3 class="contentText">{{ $t("footer.links") }}</h3>
                         <router-link to="/login" class="contentText singleFooter"><i class="el-icon-user"></i>{{ $t("footer.admin") }}</router-link>
                         <router-link to="/v2/register" class="contentText singleFooter"><i class="el-icon-edit-outline"></i>{{ $t("footer.regist") }}</router-link>
+                        <router-link to="/v2/login" class="contentText singleFooter"><i class="el-icon-edit-outline"></i>{{ $t("footer.login") }}</router-link>
                     </div>
                 </el-col>
             </el-row>

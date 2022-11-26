@@ -6,6 +6,7 @@
             <el-option label="normal" value="0"></el-option>
             <el-option label="uploader" value="1"></el-option>
             <el-option label="reviewer" value="2"></el-option>
+            <el-option label="uploader&reviewer" value="3"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -62,12 +63,12 @@
                     @click="setNormal(scope.$index)">设为普通用户
                 </el-button>
                 <el-button
-                    v-if="userList[scope.$index].role !== 1"
+                    v-if="userList[scope.$index].role !== 1 && userList[scope.$index].role !== 3"
                     size="mini"
                     @click="setUploader(scope.$index)">设为上传员
                 </el-button>
                 <el-button
-                    v-if="userList[scope.$index].role !== 2"
+                    v-if="userList[scope.$index].role !== 2 && userList[scope.$index].role !== 3"
                     size="mini"
                     @click="setReviewer(scope.$index)">设为审批员
                 </el-button>
@@ -168,9 +169,20 @@
         });
       },
       setUploader(index) {
+        let originRole = this.userList[index].role
+        let nextRole = 0
+        if(originRole == 0) {
+          nextRole = 1
+        } else if(originRole == 1) {
+          return
+        } else if(originRole == 2) {
+          nextRole = 3
+        } else {
+          return
+        }
         let x = {
             email: this.userList[index].userEmail,
-            role: 1
+            role: nextRole
         }
         let that = this
         this.$api.admin.setRole(x)
@@ -185,9 +197,20 @@
         });
       },
       setReviewer(index) {
+        let originRole = this.userList[index].role
+        let nextRole = 0
+        if(originRole == 0) {
+          nextRole = 2
+        } else if(originRole == 1) {
+          nextRole = 3
+        } else if(originRole == 2) {
+          return
+        } else {
+          return
+        }
         let x = {
             email: this.userList[index].userEmail,
-            role: 2
+            role: nextRole
         }
         let that = this
         this.$api.admin.setRole(x)

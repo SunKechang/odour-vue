@@ -53,7 +53,7 @@
             <div>
               <b>Chemical Structure: </b><br/>
               <el-image
-                  :src="'/api'+compoundInfo.chemicalStructure"
+                  :src="compoundInfo.chemicalStructure"
                   alt="Chemical Structure"
                   style="position: relative;width: 300px;"
               />
@@ -184,7 +184,7 @@
                     <template slot-scope="scope">
                       <el-image
                         :preview-src-list="['/api'+scope.row.functionImg]"
-                        :src="'/api'+scope.row.functionImg"
+                        :src="scope.row.functionImg"
                         alt="Function Image"
                         style="position: relative;width: 100px;"
                       />
@@ -200,7 +200,7 @@
                         type="primary">
                         {{scope.row.articleName}}
                       </el-link>
-                      <el-empty v-if="scope.row.articleId < 0"/>
+                      <!-- <el-empty v-if="scope.row.articleId < 0"/> -->
                     </template>
                 </el-table-column>
               </el-table>
@@ -209,12 +209,12 @@
           <el-tab-pane label="Mass Spectrometry" name="spectrometry">
             <div>
               <b>Orbitrap-MS mass spectrometry:</b><br>
-              <img :src="'/api'+compoundInfo.massSpectrogram" alt="" style="position: relative;" width="700">
+              <img :src="compoundInfo.massSpectrogram" alt="" style="position: relative;" width="700">
             </div>
             <br/>
             <div>
               <b>low-resolution mass spectrometry:</b><br>
-              <img :src="'/api'+compoundInfo.massSpectrogramNist" alt="" style="position: relative;" width="700">
+              <img :src="compoundInfo.massSpectrogramNist" alt="" style="position: relative;" width="700">
             </div>
           </el-tab-pane>
           <el-tab-pane label="Measured & Relative Abundance" name="abundance">
@@ -329,10 +329,10 @@ export default {
   methods: {
     viewArticle(row) {
       let _pk = row.articleId
-      window.open(this.$target + '/article/getFile?pk='+_pk, '_blank');
+      window.open(this.$target + '/api/article/getFile?pk='+_pk, '_blank');
     },
     viewArticleUrl(row) {
-      return this.$target + '/article/getFile?pk=' + row.articleId
+      return this.$target + '/api/article/getFile?pk=' + row.articleId
     }
   },
   computed: {
