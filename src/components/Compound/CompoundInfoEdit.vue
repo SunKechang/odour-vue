@@ -163,7 +163,7 @@
                     accept=".pdf"
                     action="/"
                     :on-change="(file, fileList) => otfileChange(file, fileList, index)"
-                    :file-list="[]"
+                    :file-list="item.fileList"
                     :auto-upload="false"
                     :limit="1">
                     <el-button size="small" type="primary">点击上传</el-button>
@@ -253,7 +253,7 @@
                     accept=".pdf"
                     action="/"
                     :on-change="(file, fileList) => odfileChange(file, fileList, index)"
-                    :file-list="[]"
+                    :file-list="item.fileList"
                     :auto-upload="false"
                     :limit="1">
                     <el-button size="small" type="primary">点击上传</el-button>
@@ -371,7 +371,7 @@
                     accept=".pdf"
                     action="/"
                     :on-change="(file, fileList) => iffileChange(file, fileList, index)"
-                    :file-list="[]"
+                    :file-list="item.fileList"
                     :auto-upload="false"
                     :limit="1">
                     <el-button size="small" type="primary">点击上传</el-button>
@@ -931,7 +931,9 @@ export default {
                   judgeName: false,
                   articleChanged: true,
                   originParam: false
-                }
+                },
+
+        fileList: []
       });
     },
     removeot(item, index) {
@@ -950,7 +952,8 @@ export default {
                   judgeName: false,
                   articleChanged: true,
                   originParam: false
-                }
+                },
+        fileList: [],
       });
     },
     removeod(item, index) {
@@ -1016,7 +1019,8 @@ export default {
                   judgeName: false,
                   articleChanged: true,
                   originParam: false
-                }
+                },
+        fileList: []
       });
     },
     removeIf(item, index) {

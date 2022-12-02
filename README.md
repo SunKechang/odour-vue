@@ -21,7 +21,7 @@ npm run lint
 ```
 
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+See [Configuration Reerence](https://cli.vuejs.org/config/).
 
 ### 修改后端地址
 1、vue.config.js中的target需要修改

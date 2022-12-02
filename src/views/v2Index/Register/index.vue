@@ -9,7 +9,7 @@
                         <el-input v-model="authForm.userEmail" style="width: 250px" type="text" placeholder="邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="姓名" style="margin-top:-15px">
-                        <el-input v-model="authForm.name" style="width: 250px" type="text" placeholder="邮箱" @input="userNameLimit"></el-input>
+                        <el-input v-model="authForm.name" style="width: 250px" type="text" placeholder="姓名" @input="userNameLimit"></el-input>
                     </el-form-item>
                     <el-form-item label="密码" style="margin-top:-25px">
                         <el-input v-model="authForm.userPassword" style="width: 250px"  type="password" placeholder="密码" @input="userPasswordLimit" ></el-input>

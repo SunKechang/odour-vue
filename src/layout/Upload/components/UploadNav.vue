@@ -25,7 +25,7 @@
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="2">
+        <el-submenu index="2" v-if="role === '3'">
           <template slot="title">
             <i class="el-icon-menu"></i>
             <span>Review Compounds</span>
@@ -36,7 +36,6 @@
               <span>List Compound</span>
             </el-menu-item>
           </el-menu-item-group>
-          </el-menu-item-group>
         </el-submenu>
       </el-menu>
     </el-scrollbar>
@@ -44,8 +43,19 @@
   </template>
   
   <script>
+    import jwtDecode from "jwt-decode"
   export default {
-    name: "UploadNav"
+    name: "UploadNav",
+    data() {
+      return {
+        role: '1',
+      }
+    },
+    created() {
+      let token =this.$store.state.user.Authorization;
+      let decode = jwtDecode(token);
+      this.role = decode.role
+    }
   }
   </script>
   
